@@ -1,0 +1,191 @@
+  <header class="header-contents">
+    <div class="context-header">
+      <p>Header context here</p>
+    </div>
+  </header>
+
+  <div class="input-route-url">
+    <div class="input-group">
+      <input type="hidden" id="route-id" value="" />
+      <input type="hidden" id="project-id" value="" />
+      <input type="hidden" id="project-name" value="" />
+      <div class="input-group-prepend">
+        <select class="custom-select" id="inputTypeSelect">
+          <option value="">Route Type...</option>
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+          <option value="PATCH">PATCH</option>
+        </select>
+      </div>
+      <span class="input-group-text middle-input-part" id="project-url-value">https://example.com/users/</span>
+      <input type="text" class="input-field" id="basic-url" aria-describedby="basic-addon3">
+    </div>
+  </div>
+
+  <div class="route-options">
+  
+    <div
+      id="documentWrapper"
+      class="flex-fill">
+        <div id='documentTextarea'></div>
+
+        <script>
+          const editor = ace.edit("documentTextarea")
+
+          editor.resize()
+          editor.getSession().setMode("ace/mode/json")
+          editor.setTheme("ace/theme/monokai")
+          editor.setFontSize(14)
+          editor.focus();
+
+        </script>
+    </div>
+
+    <div class="show-hints">
+      <script src="/vendor/prism/prism.js"  type="text/javascript"></script>
+      
+<pre class="show-code">
+  <code class="language-javascript">
+{
+  "variable-1": "return-Type",
+  "variable-2": ["fixed value 1", "fixed value 2"],
+  "singla-Array-Variable": ["return-Type"],
+  "object-Variable": {
+    "variable-11": "return-Type" // add variables
+  },
+  "array-Object-Variable-1": [{
+    "variable-22": "return-Type" // add variables
+  }],
+  "variable-3": {
+    "__type": "return-Type" 
+  },                   
+  "variable-4": {
+    "__fixedValue": "fixed value" 
+  },                     
+  "singleArrayVariable-2": {
+    "__valueList": [   
+      "fixed value 11"  // add fixed values
+    ]
+  },
+  "arrayObjectVariable-1": {
+    "__type": "array",
+    "__limit": "lenghtOfArrayObject" 
+    "__property": {       
+      "variable-33": "return-Type" // add variables
+    }
+  }
+}
+  </code>
+</pre>
+    </div>
+
+  </div>
+
+  <script type="text/javascript">
+    const inputTypeSelectDivId = "inputTypeSelect";
+    const baseUrlDivId = "basic-url";
+    const schemaDivId = "documentTextarea";
+    const routeIdDiv = "route-id";
+    let routeData = {};
+
+    function showProjectNameInInput() {
+      const projectId = "project-id";
+      const projectName = "project-name";
+
+      const { id, name, isActive } = getActiveProjectDetails();
+      const element = document.getElementById("project-url-value");
+      const fakeUrl = document.getElementById("fake-url").value;
+      element.innerHTML = `${fakeUrl}${name}`;
+
+      const projectIdElement = document.getElementById(projectId);
+      projectIdElement.value = id;
+      routeData.projectId = id;
+
+      const projectNameElement = document.getElementById(projectName);
+      projectNameElement.value = name;
+      routeData.projectName = name;
+    } 
+
+    const contextEventList = [
+      {
+        identifier: inputTypeSelectDivId, 
+        name: "change",
+        functionReference: inputSelector 
+      },
+      {
+        identifier: baseUrlDivId,
+        name: "blur",
+        functionReference: baseUrlSelector
+      }
+    ];
+
+    createEventListener( contextEventList );
+
+    async function inputSelector(event) {
+      event.preventDefault();
+      routeData.routeType = event.target.value;
+      await saveRouteData (routeData)
+    }
+
+    async function baseUrlSelector(event) {
+      event.preventDefault();
+      routeData.routeName = event.target.value;
+      await saveRouteData (routeData)
+    }
+
+    editor.on("blur", async function(event) {
+      const schema = editor.getValue();
+      if( schema !== "" ) {
+        routeData.schema = JSON.parse(schema);
+        await saveRouteData (routeData)
+      }
+    })
+
+    async function saveRouteData (routeData) {
+      try {
+        const { id=null, projectId, projectName, schema, routeName, routeType } = routeData;
+        if( id &&  routeType && routeName  ) {
+          await axios.put(`__route/update`, { id, projectId, projectName, schema, routeName, routeType })
+        } else if( routeType && routeName ) {
+          const result =  await axios.post("__route/save", {  projectId, projectName, schema, routeName, routeType });
+          const { _id: routeId = ""} = result.data;
+          routeData.id = routeId;
+          document.getElementById(routeIdDiv).value = routeId;
+        }
+
+        await getProjectRouteList( projectId );
+      }
+      catch(err) {
+        console.log({err})
+      }
+    }
+
+    function updateRouteFormData(data) {
+      const { _id: id, projectId, projectName, routeType, routeName, schema } = data || {};
+      const routeTypeList = ["", "GET", "POST", "PUT", "DELETE", "PATCH"];
+
+      const routeIdDivElement = document.getElementById(routeIdDiv);
+      routeIdDivElement.value = id;
+      const inputTypeSelectDivIdElement = document.getElementById(inputTypeSelectDivId);
+      inputTypeSelectDivIdElement.value = routeType;
+      inputTypeSelectDivIdElement.selectedIndex = routeTypeList.indexOf(routeType);
+
+      const baseUrlDivIdElement = document.getElementById(baseUrlDivId);
+      baseUrlDivIdElement.value = routeName;
+
+      const newSchema = schema && schema !== "" ? JSON.stringify(schema, null, 2) : "";
+
+      routeData.id = id;
+      routeData.projectId = projectId;
+      routeData.projectName = projectName;
+      routeData.routeType = routeType;
+      routeData.routeName = routeName;
+      routeData.schema = newSchema;
+
+      editor.setValue( newSchema );
+    }
+  </script>
+
+<div class="clear-both"></div>

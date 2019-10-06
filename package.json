@@ -1,0 +1,42 @@
+{
+  "name": "fake-server-local",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shsaucorp/fake-server-local.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shsaucorp/fake-server-local/issues"
+  },
+  "homepage": "https://github.com/shsaucorp/fake-server-local#readme",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.8.1",
+    "koa-body": "^4.1.1",
+    "koa-ejs": "^4.2.0",
+    "koa-mount": "^4.0.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "koa2-cors": "^2.0.6",
+    "nedb": "^1.8.0",
+    "q": "^1.5.1",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.2",
+    "rewire": "^4.0.1",
+    "sinon": "^7.4.2",
+    "sinon-chai": "^3.3.0",
+    "supertest": "^4.0.2"
+  }
+}

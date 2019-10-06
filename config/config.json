@@ -1,0 +1,8 @@
+{
+  "appPort": 9920,
+  "database":{
+    "filename": "./data/store.db",
+     "autoload": true  
+  },
+  "tokenSecret": "thisIsSupreSecret"
+}
