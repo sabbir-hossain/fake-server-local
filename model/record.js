@@ -15,11 +15,11 @@ const update = async (
   id = throwErrorForEmptyValue("record/update/id"),
   data
 ) => {
-  const { projectId, projectName, schema, routeName, routeType } = data;
+  const { schema } = data;
   return await db.update(
     { _id: id },
     {
-      $set: { collection, projectId, projectName, schema, routeName, routeType }
+      $set: { schema }
     }
   );
 };

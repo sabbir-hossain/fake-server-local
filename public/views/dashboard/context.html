@@ -91,6 +91,7 @@
     let routeData = {};
 
     function showProjectNameInInput() {
+      console.log("showProjectNameInInput is called");
       const projectId = "project-id";
       const projectName = "project-name";
 
@@ -106,6 +107,24 @@
       const projectNameElement = document.getElementById(projectName);
       projectNameElement.value = name;
       routeData.projectName = name;
+
+      routeData.schema = "";
+      routeData.routeType = "";
+      routeData.routeName = "";
+
+      editor.setValue( "" );
+
+      const routeTypeElement = document.getElementById(inputTypeSelectDivId);
+      routeTypeElement.selectedIndex = 0;
+      routeTypeElement.value = "";
+      routeTypeElement.disabled = false;
+
+      const routeNameElement = document.getElementById(baseUrlDivId);
+      routeNameElement.value = "";
+      routeNameElement.disabled = false;
+
+      const selectedRoute = document.querySelector('.route-title-selected');
+      selectedRoute && selectedRoute.classList.remove('route-title-selected');
     } 
 
     const contextEventList = [
@@ -126,7 +145,7 @@
     async function inputSelector(event) {
       event.preventDefault();
       routeData.routeType = event.target.value;
-      await saveRouteData (routeData)
+      await saveRouteData (routeData);
     }
 
     async function baseUrlSelector(event) {
@@ -147,12 +166,13 @@
       try {
         const { id=null, projectId, projectName, schema, routeName, routeType } = routeData;
         if( id &&  routeType && routeName  ) {
-          await axios.put(`__route/update`, { id, projectId, projectName, schema, routeName, routeType })
+          const result  = await axios.put(`__route/update`, { id, schema })
         } else if( routeType && routeName ) {
-          const result =  await axios.post("__route/save", {  projectId, projectName, schema, routeName, routeType });
+          const result =  await axios.post("__route/save", {  id, projectId, projectName, schema, routeName, routeType  });
           const { _id: routeId = ""} = result.data;
           routeData.id = routeId;
           document.getElementById(routeIdDiv).value = routeId;
+          makeReadOnly();
         }
 
         await getProjectRouteList( projectId );
@@ -160,6 +180,14 @@
       catch(err) {
         console.log({err})
       }
+    }
+
+    function makeReadOnly() {
+      const routeTypeElement = document.getElementById(inputTypeSelectDivId);
+      routeTypeElement.disabled = true;
+
+      const routeNameElement = document.getElementById(baseUrlDivId);
+      routeNameElement.disabled = true;
     }
 
     function updateRouteFormData(data) {
@@ -185,7 +213,9 @@
       routeData.schema = newSchema;
 
       editor.setValue( newSchema );
+      makeReadOnly()
     }
+
   </script>
 
 <div class="clear-both"></div>

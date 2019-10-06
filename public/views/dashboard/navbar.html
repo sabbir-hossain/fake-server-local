@@ -1,8 +1,7 @@
 <div class="app-list">
   <div class="app-name" id="active-project-id"></div>
 
-  <ul class="other-app-list toggle-content" id="other-project-list">
-  </ul>
+  <ul class="other-app-list toggle-content" id="other-project-list"></ul>
 </div>
 
 <div class="clear-both"></div>
@@ -208,6 +207,30 @@
   function generateRouteList(routes) {
     const childElementList = [];
     const eventObjList = [];
+    const addNewRoute = "add-new-route";
+    childElementList.push({
+      name: "li",
+      attributes: {
+        class: "route-list",
+      },
+      childElement: [
+        {
+          name: "button",
+          text: "add new route",
+          attributes: {
+            class: "fake-btn",
+            id: addNewRoute
+          }
+        }
+      ]
+    });
+
+    eventObjList.push(
+      {
+        identifier: addNewRoute,
+        functionReference: showProjectNameInInput
+      }
+    )
 
     for( let { _id, projectId, projectName, routeType, routeName } of routes ) {
       childElementList.push({
@@ -218,7 +241,7 @@
         childElement: [
           {
             name: "div",
-            text: `${routeType}${routeName}`,
+            text: `${routeType} - ${routeName}`,
             attributes: {
               id: _id,
               class: "route-title",
@@ -386,7 +409,8 @@
 
     routeId && axios.put(`/__route/delete`, { id: routeId})
       .then(resp => {
-        getProjectRouteList( projectId )
+        getProjectRouteList( projectId );
+        showProjectNameInInput();
       })
       .catch(err => {
         console.log({err});

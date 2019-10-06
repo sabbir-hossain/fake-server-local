@@ -24,19 +24,11 @@ const save = async ctx => {
 const update = async ctx => {
   const {
     id = throwErrorForEmptyValue("routes/update/id"),
-    projectId,
-    projectName,
-    schema,
-    routeName,
-    routeType
+    schema
   } = ctx.request.body;
 
   const response = await RecordModel.update(id, {
-    projectId,
-    projectName,
-    schema,
-    routeName,
-    routeType
+    schema
   });
   ctx.body = response;
 };
