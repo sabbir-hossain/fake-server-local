@@ -10,10 +10,19 @@ const schema = {
     __property: {
       id: "id",
       schoolId: "uuid",
-      schoolName: "title",
+      schoolName: {
+        __type: "title",
+        __limit: 2
+      },
       provider: ["ZIMIA", "PROSPEX"],
       email: "email",
-      revenue: "number",
+      revenue: {
+        __tofix: 3,
+        __type: "float",
+        __max: 100000,
+        __min: 1111
+      },
+      d: "integer",
       widgetId: "uuid"
     }
   },
@@ -25,7 +34,8 @@ const schema = {
       id: "uuid",
       val: ["4...10"],
       ipAddress: "ipaddress",
-      profile: "image"
+      profile: "image",
+      document: "pdf"
     }
   },
   message: "Successful",
