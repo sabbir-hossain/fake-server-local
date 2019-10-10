@@ -39,8 +39,22 @@ const randomNumberGenerator = (max = 0, min = 0) => {
     : Math.round(Math.random());
 };
 
+const getMinMax = (__range = "") => {
+  if (!__range || __range === "" || isNaN(__range)) {
+    let [max, min = 1] = __range.split(",");
+    return {
+      max: max && max !== "" ? parseInt(max, 10) : 10,
+      min: parseInt(min, 10)
+    };
+  } else {
+    let max = parseInt(__range, 10);
+    return { max };
+  }
+};
+
 module.exports = {
   uuid,
+  getMinMax,
   tokenEncode,
   tokenDecode,
   randomNumberGenerator,
