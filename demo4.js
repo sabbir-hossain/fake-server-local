@@ -1,6 +1,7 @@
 const { process } = require("./lib/generator");
 
 const schema = {
+  value: [["text"]],
   category_id: {
     __type: "array",
     __range: "1,3",
