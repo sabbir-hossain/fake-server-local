@@ -20,7 +20,7 @@
         </select>
       </div>
       <span class="input-group-text middle-input-part" id="project-url-value">https://example.com/users/</span>
-      <input type="text" class="input-field" id="basic-url" aria-describedby="basic-addon3">
+      <input type="text" class="input-field" id="basic-url"  placeholder="/route/name" aria-describedby="basic-addon3">
     </div>
   </div>
 
@@ -110,8 +110,12 @@
       routeData.schema = "";
       routeData.routeType = "";
       routeData.routeName = "";
+      routeData.id = "";
 
       editor.setValue( "" );
+
+      const routeIdElement = document.getElementById(routeIdDiv);
+      routeIdElement.value = "";
 
       const routeTypeElement = document.getElementById(inputTypeSelectDivId);
       routeTypeElement.selectedIndex = 0;
@@ -164,9 +168,12 @@
     async function saveRouteData (routeData) {
       try {
         const { id=null, projectId, projectName, schema, routeName, routeType } = routeData;
+        console.log({id, projectId, projectName, schema, routeName, routeType})
         if( id &&  routeType && routeName  ) {
+          console.log("updating .........................");
           const result  = await axios.put(`__route/update`, { id, schema })
         } else if( routeType && routeName ) {
+          console.log("creating. ..............................");
           const result =  await axios.post("__route/save", {  id, projectId, projectName, schema, routeName, routeType  });
           const { _id: routeId = ""} = result.data;
           routeData.id = routeId;

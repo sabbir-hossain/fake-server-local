@@ -21,8 +21,17 @@
   width: 16px;
 }
 
+.btn-icon {
+  float: left;
+}
+
+.btn-txt{
+  font-size: 16px;
+  margin-left: 7px;
+}
+
 .nav-icon-black {
-  width: 13px;
+  width: 15px;
 }
 
 #app-title-id {
@@ -55,6 +64,10 @@ ul.other-app-list {
   padding: 0;
   float: none !important;
   margin: 7.5px 0px;
+  overflow-y: auto;
+  /* overflow: hidden; */
+  height: 250px;
+  z-index: 99999;
 }
 
 .other-app-title {
@@ -108,6 +121,10 @@ ul.other-app-list {
 #route-list-id {
   padding-left: 0;
   width: 100%;
+  overflow-y: auto;
+  position: -webkit-sticky;
+  position: sticky;
+  height: 85%;
 }
 
 .route-list {

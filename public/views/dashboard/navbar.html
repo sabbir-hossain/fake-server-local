@@ -216,11 +216,26 @@
       childElement: [
         {
           name: "button",
-          text: "add new route",
           attributes: {
             class: "fake-btn",
             id: addNewRoute
-          }
+          },
+          childElement: [
+            {
+              name: "img",
+              attributes: {
+                src: "/assets/icons/plus.svg",
+                class: "nav-icon-white btn-icon"
+              } 
+            },
+            {
+              name: "span",
+              text: "add new route",
+              attributes: {
+                class: "btn-txt"
+              }
+            },
+          ]
         }
       ]
     });
@@ -241,7 +256,7 @@
         childElement: [
           {
             name: "div",
-            text: `${routeType} - ${routeName}`,
+            text: formatRouteText(`${routeType} - ${routeName}`),
             attributes: {
               id: _id,
               class: "route-title",
@@ -272,6 +287,12 @@
     }
 
     return { htmlObjectList: { childElement: childElementList }, eventObjList }
+  } 
+
+  function formatRouteText( routeName="", len = 25 ) {
+    return routeName.length > len
+      ? `${routeName.substr(0, len)}....`
+      : routeName; 
   } 
 
   function generateOtherProjectList( projects ) {
@@ -464,6 +485,10 @@
     const eventList = [
       {
         identifier: toggleAppListDivId, 
+        functionReference: toggleAppList 
+      },
+      {
+        identifier: appTitleDivId, 
         functionReference: toggleAppList 
       },
       /*

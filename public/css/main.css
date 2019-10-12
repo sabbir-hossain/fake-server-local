@@ -191,9 +191,8 @@ button, input, optgroup, select, textarea {
 #documentWrapper {
   position: relative; 
   margin-top: 16px; 
-  width: 45%; 
+  width: 50%; 
   height: 500px; 
-  /* float: left; */
 }
 
 #documentTextarea {
