@@ -8,7 +8,9 @@ const index = async ctx => {
 };
 
 const helper = async ctx => {
-  return ctx.render("views/helper/index", {});
+  return ctx.render("views/helper/index", {
+    projectUrl: `http://localhost:${config.appPort}/`
+  });
 };
 
 module.exports = {
