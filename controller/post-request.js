@@ -1,5 +1,5 @@
 const RecordModel = require("../model/record");
-const { process } = require("../lib/generator");
+const { processReqeust } = require("../lib/generateMatch");
 
 const routeType = "POST";
 
@@ -9,9 +9,9 @@ module.exports = async ctx => {
   const result = await RecordModel.getById(_id);
 
   const { schema } = result;
-  const data = process(schema);
-
   const body = ctx.request.body;
+
+  const data = processReqeust(body, schema);
 
   ctx.body = data;
 };

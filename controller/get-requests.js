@@ -10,7 +10,7 @@ module.exports = async ctx => {
     const result = await RecordModel.getById(_id);
 
     const { schema } = result;
-    console.log(_id, JSON.stringify(schema, null, 2));
+
     const data = process(schema);
 
     ctx.body = data;

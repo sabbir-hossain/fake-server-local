@@ -147,15 +147,16 @@ ul.header-menu {
 }
 
 .route-name > a {
-  color: #f9f9f9;
+  color: #fff;
+  opacity: 0.6;
   text-decoration: none;
 }
 
-.route-name:hover {
-  opacity: 0.6;
+.route-name:hover, .route-name > a:hover {
+  opacity: 1;
   cursor: pointer;
 }
 
-.active-route {
-  opacity: 0.6;
+.active-route, .active-route > a {
+  opacity:1;
 }
