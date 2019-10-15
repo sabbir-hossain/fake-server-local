@@ -1,7 +1,7 @@
 const RecordModel = require("../model/record");
 const { processReqeust } = require("../lib/generateMatch");
 
-const routeType = "POST";
+const routeType = "DELETE";
 
 module.exports = async ctx => {
   const urlModel = ctx.request.url.split("?")[0];
