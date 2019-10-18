@@ -1,6 +1,8 @@
 const Router = require("koa-router");
 const router = new Router();
 
+const patchRequestController = require("./controller/patch-request");
+const deleteRequestController = require("./controller/delete-request");
 const postRequestController = require("./controller/post-request");
 const getRequestsController = require("./controller/get-requests");
 const views = require("./controller/views");
@@ -36,5 +38,7 @@ router.put("/__route/delete", routeController.remove);
 
 router.post("/*", postRequestController);
 router.get("/*", getRequestsController);
+router.patch("/*", patchRequestController);
+router.delete("/*", deleteRequestController);
 
 module.exports = router;

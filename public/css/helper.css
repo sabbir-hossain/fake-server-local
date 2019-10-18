@@ -1,0 +1,50 @@
+.help-html {
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
+  height: 100%;
+}
+
+.helper-menu-li {
+  margin-right: 0 !important;
+  margin-left: 20px;
+}
+
+.proj-title {
+  color: #f0f0f0;
+  float: left;
+  margin-left: 15%;
+  margin-top: -15px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.helper-menu{
+  margin-right: 15% !important;
+}
+
+.help-content {
+  margin:0 15%;
+  display: flex;
+  margin-top: 20px;
+}
+
+.paragraph-content {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.paragraph-text {
+  text-align: left;
+  margin-right: 5px;
+}
+
+.paragraph-image {
+
+}
+
+.paragraph-image-value {
+  widows: 250px;
+  height: 250px;
+}
