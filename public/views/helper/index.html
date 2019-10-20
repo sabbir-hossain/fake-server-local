@@ -13,42 +13,19 @@
   </div>
 
   <div class="help-content">
-      <!--      
-        <div class="paragraph-content">
-        <h2 class="help-title">What is it?</h2>
-
-        <img src="/assets/images/image1.png" class="paragraph-image-value p-image-width-200" />
-
-        <div class="paragraph-text">
-          
-          <p class="help-text">
-            <span class="highlight-text">fake server local</span> is a <span class="highlight-text">REST api server</span> 
-            which return random lorem-ipsum data based on user schema. It might be helpfull for 
-            <span class="highlight-text">Front-end/App developers</span>, who don't have sufficient data (might be REST 
-            api is not ready or not enough data in databse) to test their project. All you need, just create an api 
-            endpoint and output schema. You will get your sufficient data to test your project.
-
-            <span class="highlight-text">fake server local</span> is a <span class="highlight-text">REST api server</span> 
-            which return random lorem-ipsum data based on user schema. It might be helpfull for 
-            <span class="highlight-text">Front-end/App developers</span>, who don't have sufficient data (might be REST 
-            api is not ready or not enough data in databse) to test their project. All you need, just create an api endpoint 
-            and output schema. You will get your sufficient data to test your project.
-          </p>
-        </div>
-      </div>
-
-      -->
-
+ 
     <h2 class="help-title">What is <span class="highlight-text">fake server local</span>?</h2>
     <div class="paragraph-content">
       <div class="paragraph-text">
         <p class="help-text">
-          <span class="highlight-text">fake server local</span> is a <strong>REST api server</strong> 
+          <span class="highlight-text">fake server local</span> is a <strong>local REST api server</strong> 
           which return random lorem-ipsum data based on user schema. It might be helpful for 
           <strong>Front-end/App developers</strong>, who don't have sufficient data (might be REST 
           api is not ready or not enough data in database) to test their projects. All you need, 
           just create an api endpoint and output schema. You will get your sufficient data to test your project.
         </p>
+       
+        <p class="help-text"> Technologies used: <span class="highlight-text">Node.js, neDB, JS</span>. It take zero external configuration. So it also works without internet </p>
       </div>
     </div>
 
@@ -56,9 +33,12 @@
     <div class="paragraph-content">
       <p class="help-text">
         Suppose you have a <strong>REST api server</strong> (for example <strong>http://api.example.com</strong>) and you have api end-point like <strong>/some/api</strong>.
-        You are expecting a <strong>JSON object</strong> for that api and ofcourse you know expected <strong>JSON object</strong> schema. <strong>Object</strong> key might be <span class="highlight-text">text|boolean|integer|textarea|array|object-array</span>.
-        Using <span class="highlight-text">fake server local</span>, all you need just replace your <strong>REST api endpint</strong> and add expected output <strong>schema</strong>. You will get lorem-ipsum data based on your expected schema.
-
+        You are expecting a <strong>JSON object</strong> for that api and ofcourse you know expected 
+        <strong>JSON object</strong> schema. <strong>Object</strong> value might be contained 
+        <span class="highlight-text"> text | boolean | integer | textarea | array | object-array </span> etc.
+        Using <span class="highlight-text">fake server local</span>, all you need just replace
+        your <strong>REST api endpint</strong> and add expected output <strong>schema</strong>. 
+        You will get lorem-ipsum data based on your expected schema.
       </p>
     </div>
 
@@ -99,7 +79,8 @@
         left navbar on cursor moved.
         Now add returned schema. It has to be a <strong>JSON object</strong> as like as shown on image. Here  <span class="highlight-text">object-key-*</span> are user's
         object key and <span class="highlight-text">return-Type</span> can be  <span class="highlight-text">id | uuid | boolean | text | title | textarea | integer | float | phone | zipcode | date | time | date-time | url | email | image | pdf | csv | doc |  ipaddress</span>.
-        I believe, we all understand <strong>return-Type</strong>'s value.
+        <span class="highlight-text"> image | pdf | csv | doc </span> value will be some fixed default files which are attached with this project. <span class="highlight-text"> title </span> value will be 2-5 words.
+        I believe, all other <strong>return-Type</strong> will be return data as it is named.
       </p>
       
     </div>
@@ -145,10 +126,72 @@
           That means, if <strong>return-Type</strong>'s value is comma-separated, then returned value will be one of  comma-separated value.
         </p>
 
-        <p  class="help-text more-details">
-          We might have expected random array value. 
-          To get array value, try <span class="highlight-text">"object-key-name": ["return-Type"]</span>
-        </p>
+        <div  class="help-text more-details">
+            <p class="obj-text">
+                We might have expected random array value. 
+                To get array value, try <span class="highlight-text">"object-key-name": ["return-Type"]</span> (only one value and have to matched with <strong>return-Type</strong>). , see to bellow image.
+            </p>
+            <p class="obj-text">
+                In first image, It will return an array of <span class="highlight-text">["return-Type"]</span> and returned array contains about 1-10 results. 
+            </p>
+            <p class="obj-text">
+                We create a special object, which contains <span class="highlight-text">"__type": "array"</span> 
+                (means it return array value), <span class="highlight-text">"__range": "minRange,maxRange"</span>
+                return array data between <strong>__range</strong>.
+                <strong>__range</strong> can also be fixed number, which means, it return fixed array length.
+                <span class="highlight-text">"__property": "return-Type | object"</span>
+                array value will be based on <strong>__property</strong>.
+                <strong>__property</strong> can be any <strong>return-Type</strong> or <strong>object</strong>
+            </p>
+            <p class="obj-text">
+              In third image, we add multiple array values, it will return a array, which contains one of array values.
+            </p>
+            <div class="multi-image">
+              <img src="/assets/images/help-page/array-values.png" class="paragraph-image-value p-image-height-200" />
+              <img src="/assets/images/help-page/array-values-2.png" class="paragraph-image-value p-image-height-200" />
+              <img src="/assets/images/help-page/array-values-3.png" class="paragraph-image-value p-image-height-200" />
+            </div>
+        </div>
+
+       
+        <div  class="help-text more-details">
+          <p class="obj-text">
+            We might want to expect random array object values. 
+            To get array object value, see to bellow image. 
+            In first image, we create an object array, 
+            and it will return 1-10 object array random values.
+          </p>
+
+          <p class="obj-text">
+            But sometimes, we want more data. In second image, we special object, which contains <span class="highlight-text">"__type": "array"</span> 
+            (means it return array value), <span class="highlight-text">"__range": "minRange,maxRange"</span>
+            return array data between <strong>__range</strong>.
+            <strong>__range</strong> can also be fixed number, which means, it return fixed array length.
+            <span class="highlight-text">"__property": "return-Type | object"</span>
+            array value will be based on <strong>__property</strong>.
+            <strong>__property</strong> can be any <strong>return-Type</strong> or <strong>object</strong>
+          </p>
+
+          <div class="multi-image">
+            <img src="/assets/images/help-page/object-array-values.png" class="paragraph-image-value p-image-height-200" />
+            <img src="/assets/images/help-page/object-array-value-2.png" class="paragraph-image-value p-image-height-200" />
+          </div>
+        </div>
+
+        <img src="/assets/images/help-page/token-values.png" class="paragraph-image-value  p-image-height-200" />
+
+        <div class="paragraph-content">
+          <p  class="help-text">
+            We also need <span class="highlight-text">token</span> data. see right images.
+            Here we create a special object where <strong>__type</strong> is <strong>token</strong> and it required <strong>__property</strong>, <strong>__property</strong>
+            can be <strong>object</strong>, <strong>array</strong> or <strong>return-Type</strong>
+          </p>
+
+          <p  class="help-text">
+            In <span class="highlight-text">POST | PUT | PATCH </span> type <strong>api</strong>, 
+            if <strong>request.body</strong>'s parameter match with <strong>user schema</strong> parameter, then <strong>request.body</strong> data will be returned
+          </p>
+        </div>
     </div>
 
   </div>

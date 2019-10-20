@@ -118,3 +118,13 @@ img.help-image-full-width {
 .more-details {
   margin-left: 10px;
 }
+
+.multi-image {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+}
+
+.obj-text {
+  margin-top: 15px;
+}
