@@ -1,5 +1,8 @@
   <header class="header-contents">
     <div class="context-header">
+        <div class="toastr-msg">
+            <span id="toastr-title"></span>
+          </div>
       <ul class="header-menu">
         <li class="route-name active-route"> <a href="/dashboard">Dashboard</a> </li>
         <li class="route-name"> <a href="/helper">Help</a></li>
@@ -167,9 +170,11 @@
     editor.on("blur", async function(event) {
       const schema = editor.getValue();
       if( schema !== "" ) {
-        routeData.schema = JSON.parse(schema);
-        await saveRouteData (routeData)
-      }
+        if( !checkObject( JSON.parse(schema), JSON.parse(routeData.schema) ) ) {
+          routeData.schema = JSON.parse(schema);
+          await saveRouteData (routeData)
+        }
+      } 
     })
 
     async function saveRouteData (routeData) {
@@ -177,18 +182,28 @@
         const { id=null, projectId, projectName, schema, routeName, routeType } = routeData;
         if( id &&  routeType && routeName  ) {
           const result  = await axios.put(`__route/update`, { id, schema })
+          if(result.data) {
+            showToastr("route is updated successfully :)")
+          } else {
+            showToastr("route cannot be updated :(")
+          }
         } else if( routeType && routeName ) {
           const result =  await axios.post("__route/save", {  id, projectId, projectName, schema, routeName, routeType  });
           const { _id: routeId = ""} = result.data;
           routeData.id = routeId;
           document.getElementById(routeIdDiv).value = routeId;
           makeReadOnly();
+          if( routeId !== "") {
+            showToastr("route is created successfully :)");
+          } else {
+            showToastr("route cannot be created :(")
+          }
         }
 
         await getProjectRouteList( projectId );
       }
       catch(err) {
-        console.log({err})
+        showToastr("internal server error :(");
       }
     }
 
@@ -226,6 +241,16 @@
       makeReadOnly()
     }
 
+    function showToastr(message="", showTime=3000) {
+      const toastrDivId = "toastr-title";
+      const element = document.getElementById(toastrDivId);
+      createTextElement(element, message);
+      element.classList.toggle("display");
+      setTimeout( () => {
+        element.classList.toggle("display-none");
+        element.classList.toggle("display");
+      }, showTime);
+    }
   </script>
 
 <div class="clear-both"></div>

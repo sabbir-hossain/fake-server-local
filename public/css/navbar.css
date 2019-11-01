@@ -118,6 +118,10 @@ ul.other-app-list {
   overflow: hidden;
 }
 
+.display {
+  display: block;
+}
+
 #route-list-id {
   padding-left: 0;
   width: 100%;

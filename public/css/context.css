@@ -160,3 +160,16 @@ ul.header-menu {
 .active-route, .active-route > a {
   opacity:1;
 }
+
+.toastr-msg {
+  color: #f0f0f0;
+  float: left;
+  margin-left: 10%;
+  margin-top: 5px;
+}
+
+#toastr-title {
+  font-style: oblique;
+  letter-spacing: 1px;
+  color: #c7c20b;
+}
