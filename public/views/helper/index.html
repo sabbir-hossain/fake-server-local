@@ -25,14 +25,14 @@
           just create an api endpoint and output schema. You will get your sufficient data to test your project.
         </p>
        
-        <p class="help-text"> Technologies used: <span class="highlight-text">Node.js, neDB, JS</span>. It take zero external configuration. So it also works without internet </p>
+        <p class="help-text"> Technologies used: <span class="highlight-text">Node.js, Koa.js, neDB, JS</span>. It take zero external configuration. So it also works without internet </p>
       </div>
     </div>
 
     <h2 class="help-title">How is it works?</h2>
     <div class="paragraph-content">
       <p class="help-text">
-        Suppose you have a <strong>REST api server</strong> (for example <strong>http://api.example.com</strong>) and you have api end-point like <strong>/some/api</strong>.
+        Suppose you have a <strong>REST api server</strong> (for example <strong>http://api.example.com</strong>) and you have an api end-point like <strong>/some/api</strong>.
         You are expecting a <strong>JSON object</strong> for that api and ofcourse you know expected 
         <strong>JSON object</strong> schema. <strong>Object</strong> value might be contained 
         <span class="highlight-text"> text | boolean | integer | textarea | array | object-array </span> etc.
@@ -45,15 +45,30 @@
     <h2 class="help-title">Setup</h2>
     <div class="paragraph-content">
 
-      <p  class="help-text">
-        First clone project from <a href="https://github.com/shsaucorp/fake-server-local" 
-        target="_blank" class="help-text-url">github <img src="/assets/icons/link-external.svg" class="help-text-icon" /></a>, 
-        run <span class="highlight-text">npm install</span> (<strong>node.js</strong> required) to install dependency. 
-        Now go to <span class="highlight-text"><a href="https://github.com/shsaucorp/fake-server-local" target="_blank" class="help-text-url">
+      <p  class="help-text setup-step">
+        <strong>Step 1.</strong> First clone project from <a href="https://github.com/shsaucorp/fake-server-local" 
+        target="_blank" class="help-text-url">github <img src="/assets/icons/link-external.svg" class="help-text-icon" /></a>
+      </p>
+
+      <p  class="help-text setup-step">
+          <strong>Step 2.</strong> Run <span class="highlight-text">npm install</span> (<strong>node.js</strong> required) to install dependency.
+      </p>
+
+      <p  class="help-text setup-step">
+          <strong>Step 3.</strong> Run <span class="highlight-text">npm start</span> 
+      </p>
+
+      <p  class="help-text setup-step">
+          <strong>Step 4.</strong> Now go to <span class="highlight-text"><a href="https://github.com/shsaucorp/fake-server-local" target="_blank" class="help-text-url">
           http://localhost:9920/dashboard</a></span>. You should see the following image.
       </p>
 
       <img src="/assets/images/help-page/init-screen.png" class="help-image-full-width" />
+
+      <p  class="help-text setup-step">
+          <strong>Step 5.</strong> Create a new project. Now your api endpoint will be <span class="highlight-text">http://localhost:9920/${your-project-title}</span>.
+      </p>
+
 
       <p  class="help-text">
         Initially you have to create a project. Why? 

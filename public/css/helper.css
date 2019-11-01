@@ -128,3 +128,8 @@ img.help-image-full-width {
 .obj-text {
   margin-top: 15px;
 }
+
+.setup-step {
+  line-height: 0.85;
+  padding-left: 10px;
+}
