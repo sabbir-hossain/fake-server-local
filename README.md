@@ -11,14 +11,14 @@ just create an api endpoint and output schema. You will get your sufficient data
 `Node.js, Koa.js, neDB, JavaScript, HTML, CSS`
 
 ## Setup
-> - setup `node.js` environment in your local machine
-> - Clone this project 
-> - open project directory using terminal/command prompt
-> - run `npm install`
-> - run `npm start`
-> - now go to `http://localhost:9920/dashboard`
-> - create a project
-> - your fake api endpoint will be `http://localhost:9920/${your-project-title}`
+- setup `node.js` environment in your local machine
+- Clone this project 
+- open project directory using terminal/command prompt
+- run `npm install`
+- run `npm start`
+- now go to `http://localhost:9920/dashboard`
+- create a project
+- your fake api endpoint will be `http://localhost:9920/${your-project-title}`
 
 ## Creating Fake Api
 > Select `Route type` (`GET|POST|PUT|PATCH|DELETE`) and type your route name. Now your route will be  `http://localhost:9920/${your-project-title}/${your-route-name}`
