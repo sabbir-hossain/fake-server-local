@@ -11,9 +11,8 @@ just create an api endpoint and output schema. You will get your sufficient data
 `Node.js, Koa.js, neDB, JavaScript, HTML, CSS`
 
 ## Setup
-- setup `node.js` environment in your local machine
-- Clone this project 
-- open project directory using terminal/command prompt
+- Clone this project (must have `node.js` installed in your machine )
+- open project directory using terminal/Command Prompt
 - run `npm install`
 - run `npm start`
 - now go to `http://localhost:9920/dashboard`
@@ -27,7 +26,10 @@ just create an api endpoint and output schema. You will get your sufficient data
 >> schema will be json object, which will be as like as given below (`JSON`)
 
 `return-Type` can be 
-```id | uuid | boolean | text | title | textarea | integer | float | phone | zipcode | date | time | date-time | url | email | image | pdf | csv | doc |  ipaddress```
+
+```
+id | uuid | boolean | text | title | textarea | integer | float | phone | zipcode | date | time | date-time | url | email | image | pdf | csv | doc |  ipaddress
+```
 
 ```JSON
 {
