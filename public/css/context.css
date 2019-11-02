@@ -172,4 +172,9 @@ ul.header-menu {
   font-style: oblique;
   letter-spacing: 1px;
   color: #c7c20b;
+  cursor: pointer;
+}
+
+#toastr-title:hover {
+  opacity: 0.7;
 }

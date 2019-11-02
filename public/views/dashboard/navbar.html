@@ -123,87 +123,6 @@
     element.classList.toggle("is-visible");
   }
 
-  function generateInputField( {name="", isActive=false} ) {
-    const closeDivId= "app-title-input-close";
-    const updateAppTitleDivId = "app-title-input-okay";
-
-    const htmlObject = {
-      name: "div",
-      attributes: {
-        class:  "input-group"  
-      },
-      childElement: [
-        {
-          name: "input",
-          attributes: {
-            type: "text",
-            value: name,
-            class: "input-field",
-            placeholder: "Add new Project",
-            id: activeProjectInputDiv
-          }
-        }, 
-        {
-          name:"div",
-          attributes: {
-            class: "input-group-append"
-          },
-          childElement: [
-            {
-              name: "button",
-              attributes: {
-                class: "btn btn-outline-secondary",
-                id: updateAppTitleDivId,
-                [`${dataActive}`]: isActive
-              },
-              childElement: [
-                {
-                  name: "img",
-                  attributes: {
-                    src: "/assets/icons/checkmark.svg",
-                    class: "nav-icon-black",
-                    [`${dataActive}`]: isActive
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ] 
-    };
-
-    const eventList = [
-      {
-        identifier: updateAppTitleDivId,
-        functionReference: handleProjectCreateClick
-      }
-    ];
-    
-    return { htmlObject, eventList };
-  }
-
-  async function handleProjectCreateClick(event) {
-    event.preventDefault();
-    const targetElement = event.target;
-    let { isActive:projActive } = getDataAttributes( targetElement, dataAttributeObj);
-    const searchObj = {
-      className: "input-field",
-      nodeName: "INPUT"
-    };
-    projActive = projActive === "true";
-    const element = document.getElementById(activeProjectInputDiv);
-    const titleValue = element.value;
-    const response = await axios.post(`/__project/create`, { name: titleValue, isActive:projActive });
-    const { _id: id, name, isActive} = response.data;
-    const titleElement = searchElementByAttribute(targetElement, { id: activeProjectDivId });
-    let { htmlObject, eventList } = createAppTitleObject( { id, name, isActive } ); 
-    removeAllChildElement( titleElement );
-    createHtmlChildElement( titleElement, htmlObject.childElement );
-    createEventListener( eventList );
-
-    id && showProjectNameInInput();
-  }
- 
   function generateRouteList(routes) {
     const childElementList = [];
     const eventObjList = [];
@@ -395,12 +314,19 @@
     
     const element = document.getElementById(otherProjectInputDiv);
     const titleValue = element.value;
-    const response = await axios.post(`/__project/create`, { name: titleValue, isActive })
+    if( titleValue && titleValue.length > 0 ) {
+      const response = await axios.post(`/__project/create`, { name: titleValue, isActive });
+      const { _id: id} = response.data;
+      if( id ) {
+        showToastr("project is created successfully :)");
+      }
 
-    const result =  await axios.get(`/__project/list?isActive=${isActive}`)
-
-    const projectList = result.data || [];
-    showInactiveProjectList(projectList);
+      const result =  await axios.get(`/__project/list?isActive=${isActive}`)
+      const projectList = result.data || [];
+      showInactiveProjectList(projectList);
+    } else {
+      showToastr("project title cannot be empty :(");
+    }
   }
 
   async function handleShowRouteDetailsClick(event) {
@@ -512,4 +438,96 @@
     const activeProjElement = document.getElementById(appTitleDivId);
     return getDataAttributes(activeProjElement, mapObj);
   }
+
+  function generateInputField( {name="", isActive=false} ) {
+    const closeDivId= "app-title-input-close";
+    const updateAppTitleDivId = "app-title-input-okay";
+    const htmlObject = {
+      name: "div",
+      attributes: {
+        class:  "input-group"  
+      },
+      childElement: [
+        {
+          name: "input",
+          attributes: {
+            type: "text",
+            value: name,
+            class: "input-field",
+            placeholder: "Add new Project",
+            id: activeProjectInputDiv
+          }
+        }, 
+        {
+          name:"div",
+          attributes: {
+            class: "input-group-append"
+          },
+          childElement: [
+            {
+              name: "button",
+              attributes: {
+                class: "btn btn-outline-secondary",
+                id: updateAppTitleDivId,
+                [`${dataActive}`]: isActive
+              },
+              childElement: [
+                {
+                  name: "img",
+                  attributes: {
+                    src: "/assets/icons/checkmark.svg",
+                    class: "nav-icon-black",
+                    [`${dataActive}`]: isActive
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ] 
+    };
+    const eventList = [
+      {
+        identifier: updateAppTitleDivId,
+        functionReference: handleProjectCreateClick
+      }
+    ];
+    
+    return { htmlObject, eventList };
+  }
+
+  async function handleProjectCreateClick(event) {
+    event.preventDefault();
+    const targetElement = event.target;
+    let { isActive:projActive } = getDataAttributes( targetElement, dataAttributeObj);
+
+    const searchObj = {
+      className: "input-field",
+      nodeName: "INPUT"
+    };
+
+    projActive = projActive === "true";
+    const element = document.getElementById(activeProjectInputDiv);
+    const titleValue = element.value;
+
+    if( titleValue && titleValue.length > 0 ) {
+      const response = await axios.post(`/__project/create`, { name: titleValue, isActive:projActive });
+      const { _id: id, name, isActive} = response.data;
+      
+      if( id ) {
+        showToastr("project is created successfully :)");
+      }
+
+      const titleElement = searchElementByAttribute(targetElement, { id: activeProjectDivId });
+      let { htmlObject, eventList } = createAppTitleObject( { id, name, isActive } ); 
+      removeAllChildElement( titleElement );
+      createHtmlChildElement( titleElement, htmlObject.childElement );
+      createEventListener( eventList );
+      id && showProjectNameInInput();
+    } else {
+      showToastr("project title cannot be empty :(");
+    }
+
+  }
+
 </script>

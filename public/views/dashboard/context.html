@@ -207,6 +207,12 @@
       }
     }
 
+    document.getElementById("toastr-title").addEventListener("click", (evt) => {
+      evt.preventDefault();
+      const element = evt.target;
+      hideElement(element);
+    })
+
     function makeReadOnly() {
       const routeTypeElement = document.getElementById(inputTypeSelectDivId);
       routeTypeElement.disabled = true;
@@ -241,16 +247,6 @@
       makeReadOnly()
     }
 
-    function showToastr(message="", showTime=3000) {
-      const toastrDivId = "toastr-title";
-      const element = document.getElementById(toastrDivId);
-      createTextElement(element, message);
-      element.classList.toggle("display");
-      setTimeout( () => {
-        element.classList.toggle("display-none");
-        element.classList.toggle("display");
-      }, showTime);
-    }
   </script>
 
 <div class="clear-both"></div>
