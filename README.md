@@ -28,7 +28,9 @@ just create an api endpoint and output schema. You will get your sufficient data
 `return-Type` can be 
 
 ```
-id | uuid | boolean | text | title | textarea | integer | float | phone | zipcode | date | time | date-time | url | email | image | pdf | csv | doc |  ipaddress
+id | uuid | boolean | text | title | textarea | integer | 
+float | phone | zipcode | date | time | date-time | url | 
+email | image | pdf | csv | doc |  ipaddress
 ```
 
 ```JSON
