@@ -30,7 +30,7 @@ just create an api endpoint and output schema. You will get your sufficient data
 ```
 id | uuid | boolean | text | title | textarea | integer | 
 float | phone | zipcode | date | time | date-time | url | 
-email | image | pdf | csv | doc |  ipaddress
+email | image | pdf | csv | doc |  ipaddress | token
 ```
 
 ```JSON
@@ -62,6 +62,20 @@ email | image | pdf | csv | doc |  ipaddress
     "__property": {
       "original-array-property-01": "return-Type"
     }
+  },
+  "original-token-property-09": {
+    "__type": "token",
+    "__property": {
+       "token-key-01": "return-Type",
+       "token-key-02": "return-Type"
+    }
   }
 }
 ```
+
+### Sample 
+
+![alt text](https://raw.githubusercontent.com/shsaucorp/fake-server-local/master/public/assets/images/help-page/token-values.png) ![alt text](https://raw.githubusercontent.com/shsaucorp/fake-server-local/master/public/assets/images/help-page/array-values.png) 
+
+![alt text](https://raw.githubusercontent.com/shsaucorp/fake-server-local/master/public/assets/images/help-page/array-values-2.png) 
+
