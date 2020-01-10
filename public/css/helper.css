@@ -133,3 +133,29 @@ img.help-image-full-width {
   line-height: 0.85;
   padding-left: 10px;
 }
+
+.ln-1 {
+  line-height: 1.5 !important;
+}
+
+.help-text-left-part {
+  position: relative; 
+  margin-top: 16px; 
+  width: 48%; 
+  float: left;
+  margin-right: 5px;
+}
+
+ul.ul-help-step {
+  margin-left: -15px;
+}
+
+li.li-help-step {
+  text-align: left;
+  padding-bottom: 10px;
+}
+
+.display-sample {
+  width: 49%;
+  justify-content: flex-end;
+}

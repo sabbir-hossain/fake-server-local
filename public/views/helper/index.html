@@ -79,28 +79,61 @@
     </div>
 
     <h2 class="help-title">Create <span class="highlight-text">fake api</span></h2>
-    <img src="/assets/images/help-page/initial-schema-format.png" class="paragraph-image-value" />
+    <!-- <img src="/assets/images/help-page/initial-schema-format.png" class="paragraph-image-value" /> -->
 
     <div class="paragraph-content">
       <p  class="help-text">
         Assume you have already created project. 
         If yes, then your api server will be <span class="highlight-text">http://localhost:9920/your-project-name</span>. 
-        Now you can create your first <strong>fake api</strong>. 
-        First select <strong>Route type</strong> from dropdown. Route type can be 
-        <span class="highlight-text">GET | POST | PUT | PATCH | DELETE</span>. 
-        Then add your route name, for example <span class="highlight-text">/some/api/name</span>.
-        You might be noticed, there is no save button. So if you select <strong>Route type</strong> and add 
-        <strong>route name</strong>, it will be saved and shown on 
-        left navbar on cursor moved.
+        Now you can create your first <strong>fake api</strong>. Now try following steps.
+      </p>
+
+      <div class="help-text-left-part flex">
+        <ul class="ul-help-step">
+          <li class="li-help-step"> select <strong>Route type</strong> from dropdown. 
+            Route type can be 
+            <span class="highlight-text">GET | POST | PUT | PATCH | DELETE</span>. </li>
+          <li class="li-help-step"> create route. For example <span class="highlight-text">/some/api/name</span>. So your first <strong>fake api</strong> api will be like <span class="highlight-text">http://localhost:9920/${your-project-name}${/some/api/name}</span> and it will be <strong>Route type</strong> type. </li>
+
+          <li class="li-help-step"> create returned schema. It has to be a <strong>JSON object</strong>. </li>
+        </ul>
+      </div>
+
+      <div class="display-sample flex">
+        <script src="/vendor/prism/prism.js"  type="text/javascript"></script>
+              
+<pre class="show-code">
+  <code class="language-javascript">
+// JSON object
+{
+  "response-key-01": "return-Type",
+  "response-key-02": ["return-Type"],
+  "response-key-05": {
+    "child-response-key-01": "return-Type"
+  }
+}
+
+// Sample Data
+{
+  "id": "uuid",
+  "name": "text",
+  "email": "email"
+}
+  </code>
+</pre>
+      </div>
+
+<!-- 
+      <p  class="help-text">
         Now add returned schema. It has to be a <strong>JSON object</strong> as like as shown on image. Here  <span class="highlight-text">object-key-*</span> are user's
         object key and <span class="highlight-text">return-Type</span> can be  <span class="highlight-text">id | uuid | boolean | text | title | textarea | integer | float | phone | zipcode | date | time | date-time | url | email | image | pdf | csv | doc |  ipaddress</span>.
         <span class="highlight-text"> image | pdf | csv | doc </span> value will be some fixed default files which are attached with this project. <span class="highlight-text"> title </span> value will be 2-5 words.
         I believe, all other <strong>return-Type</strong> will be return data as it is named.
       </p>
-      
+       -->
     </div>
-
-    <img src="/assets/images/help-page/very-basic-schema.png" class="paragraph-image-value" />
+    <div class="clear-both"></div>
+    <!-- <img src="/assets/images/help-page/very-basic-schema.png" class="paragraph-image-value" /> -->
 
     <div class="paragraph-content">
       <p  class="help-text">
