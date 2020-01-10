@@ -11,7 +11,6 @@ const getRequestsController = require("./get-requests");
 const RecordModel = require("../model/record");
 const Generator = require("../lib/generator");
 
-// GET/backoffice/test01
 const sandbox = sinon.createSandbox();
 // createSandbox
 
