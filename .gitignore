@@ -16,3 +16,5 @@ build
 package-lock.json
 
 data/*
+
+.nyc_output
