@@ -8,8 +8,8 @@ const find = util.promisify(db.find);
 const modify = util.promisify(db.update);
 const deleteValue = util.promisify(db.remove);
 
-const create = async data => {
-  return await Q.ninvoke(db, "insert", data)
+const create = data => {
+  return Q.ninvoke(db, "insert", data)
     .then(resp => {
       return resp;
     })
@@ -18,8 +18,8 @@ const create = async data => {
     });
 };
 
-const get = async (query = {}) => {
-  return await Q.ninvoke(db, "find", query)
+const get = (query = {}) => {
+  return Q.ninvoke(db, "find", query)
     .then(resp => {
       return resp;
     })
@@ -28,8 +28,8 @@ const get = async (query = {}) => {
     });
 };
 
-const update = async (query, data) => {
-  return await Q.ninvoke(db, "update", query, data)
+const update = (query, data) => {
+  return Q.ninvoke(db, "update", query, data)
     .then(resp => {
       return resp;
     })
@@ -38,8 +38,8 @@ const update = async (query, data) => {
     });
 };
 
-const remove = async query => {
-  return await Q.ninvoke(db, "remove", query)
+const remove = query => {
+  return Q.ninvoke(db, "remove", query)
     .then(resp => {
       return resp;
     })
