@@ -9,15 +9,7 @@ chai.use(sinonChai);
 
 const jwt = require("jsonwebtoken");
 
-const {
-  uuid,
-  getMinMax,
-  tokenEncode,
-  tokenDecode,
-  checkObject,
-  randomNumberGenerator,
-  throwErrorForEmptyValue
-} = require("./util");
+const { tokenEncode, tokenDecode, checkObject } = require("./util");
 
 // createSandbox
 const sandbox = sinon.createSandbox();
@@ -44,8 +36,27 @@ describe("Util Helper", () => {
     const token = tokenEncode({ payload });
     expect(token).to.be.not.null;
     expect(stub).to.have.been.called;
+    jwtStub.restore();
     done();
   });
 
-  //
+  it("should throw error for empty token", done => {
+    tokenDecode("").catch(error => {
+      expect(error.status).to.be.equal(404);
+      done();
+    });
+  });
+
+  it("should decoded token", done => {
+    tokenDecode(encodedToken).then(decoded => {
+      expect(decoded).to.have.property("payload");
+      done();
+    });
+  });
+
+  it("should equal two object", done => {
+    const val = checkObject({ a: 1, b: { c: 2 } }, { a: 1, b: { c: 2 } });
+    expect(val).to.be.equal(true);
+    done();
+  });
 });
