@@ -11,8 +11,8 @@ const db = require("./connect");
 const { create, get, update, remove } = require("./db");
 const Q = require("q");
 
-const sandbox = sinon.createSandbox();
 // createSandbox
+const sandbox = sinon.createSandbox();
 
 describe("DB spec", () => {
   let qStub;
