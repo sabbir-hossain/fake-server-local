@@ -61,4 +61,35 @@ describe("DB spec", () => {
     await get(query);
     expect(stub).to.have.been.called;
   });
+
+  it("should update data", async () => {
+    const query = {};
+    const data = { id: "id-1", name: "name-1" };
+    const stub = qStub.resolves(data);
+    await update(query, data);
+    expect(stub).to.have.been.called;
+  });
+
+  it("should throw error for update data", async () => {
+    const query = {};
+    const data = { id: "id-1", name: "name-1" };
+    const stub = qStub.rejects("something went wrong");
+    await update(query, data);
+    expect(stub).to.have.been.called;
+  });
+
+  it("should remove data", async () => {
+    const query = {};
+    const data = { id: "id-1", name: "name-1" };
+    const stub = qStub.resolves(data);
+    await remove(query);
+    expect(stub).to.have.been.called;
+  });
+
+  it("should throw error for remove data", async () => {
+    const query = {};
+    const stub = qStub.rejects("something went wrong");
+    await remove(query);
+    expect(stub).to.have.been.called;
+  });
 });
