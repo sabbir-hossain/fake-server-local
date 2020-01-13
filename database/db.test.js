@@ -34,7 +34,7 @@ describe("DB spec", () => {
       name: "name-1"
     };
     const stub = qStub.resolves(data);
-    const result = await create(data);
+    await create(data);
     expect(stub).to.have.been.called;
   });
 
@@ -44,22 +44,21 @@ describe("DB spec", () => {
       name: "name-1"
     };
     const stub = qStub.rejects("something went wrong");
-    const result = await create(data);
+    await create(data);
     expect(stub).to.have.been.called;
   });
 
   it("should get data", async () => {
     const query = {};
     const stub = qStub.resolves([{ id: "id-1", name: "name-1" }]);
-    const result = await create(query);
-    console.log({ result });
+    await get(query);
     expect(stub).to.have.been.called;
   });
 
-  // it("should throw error for return data", async () => {
-  //   const query = {};
-  //   const stub = qStub.rejects("something went wrong");
-  //   const result = await create(query);
-  //   expect(stub).to.have.been.called;
-  // });
+  it("should throw error for return data", async () => {
+    const query = {};
+    const stub = qStub.rejects("something went wrong");
+    await get(query);
+    expect(stub).to.have.been.called;
+  });
 });
