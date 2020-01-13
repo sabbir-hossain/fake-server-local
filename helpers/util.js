@@ -6,6 +6,7 @@ const config = require("../config");
 
 const throwErrorForEmptyValue = name => {
   throw `missing parameter value for ${name}`;
+  // throw new Error(`missing parameter value for ${name}`);
 };
 
 const uuid = () => {
