@@ -172,18 +172,27 @@
     }
 
     editor.on("blur", async function(event) {
-      const schema = editor.getValue();
+      try {
+        const schema = editor.getValue();
+        if( schema !== "" ) {
+          if(
+            typeof routeData.schema === 'object' && 
+            (routeData.schema !== null ||  Object.keys(routeData.schema).length === 0 ) ) {
+              console.log("routeData.schema : ", routeData.schema);
+            if(checkObject( JSON.parse(schema), routeData.schema) ) {
+              return;
+            }
+          } 
 
-      if( schema !== "" ) {
-        if(typeof routeData.schema === 'object' && routeData.schema !== null ) {
-          if(checkObject( JSON.parse(schema), JSON.parse(routeData.schema)) ) {
-            return;
-          }
-        } 
-
-        routeData.schema = JSON.parse(schema);
-        await saveRouteData (routeData)
-      } 
+          routeData.schema = JSON.parse(schema);
+          await saveRouteData (routeData)
+        }
+      }
+      catch(error) {
+        console.error(error);
+        showToastr("something went wrong :(")
+      }
+ 
     })
 
     async function saveRouteData (routeData) {

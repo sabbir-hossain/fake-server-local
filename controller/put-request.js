@@ -1,4 +1,5 @@
 const RecordModel = require("../model/record");
+const { validateAuth } = require("../helpers/util");
 const { processReqeust } = require("../lib/generateMatch");
 
 const routeType = "PUT";
@@ -10,6 +11,11 @@ module.exports = async ctx => {
     const result = await RecordModel.getById(_id);
   
     const { schema } = result;
+    
+    if(!schema) {
+      ctx.throw(404);
+    }
+
     validateAuth(schema, ctx);
     
     const body = ctx.request.body;
@@ -19,6 +25,6 @@ module.exports = async ctx => {
     ctx.body = data;
   }
   catch(error) {
-    ctx.body = err;
+    ctx.body = error;
   }
 };

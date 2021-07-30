@@ -1,4 +1,5 @@
 const RecordModel = require("../model/record");
+const { validateAuth } = require("../helpers/util");
 const { processReqeust } = require("../lib/generateMatch");
 
 const routeType = "PATCH";
@@ -19,7 +20,7 @@ module.exports = async ctx => {
     ctx.body = data;
   }
   catch(error) {
-    ctx.body = err;
+    ctx.body = error;
   }
 
 };
