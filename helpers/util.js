@@ -97,6 +97,18 @@ function checkObject(obj1, obj2) {
   }
 }
 
+const validateAuth = (schema, ctx) => {
+  if(typeof schema["__auth"] === "undefined") {
+    return true;
+  }
+
+  if( typeof ctx.req.header[schema["__auth"]] !== "undefined") {
+    return true;
+  } else {
+    ctx.throw(400);
+  }
+}
+
 module.exports = {
   uuid,
   getMinMax,
@@ -104,5 +116,6 @@ module.exports = {
   tokenDecode,
   checkObject,
   randomNumberGenerator,
-  throwErrorForEmptyValue
+  throwErrorForEmptyValue,
+  validateAuth
 };

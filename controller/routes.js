@@ -30,6 +30,9 @@ const update = async ctx => {
   const response = await RecordModel.update(id, {
     schema
   });
+
+  console.log("route update : ", {response})
+
   ctx.body = response;
 };
 

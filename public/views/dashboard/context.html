@@ -30,6 +30,10 @@
     </div>
   </div>
 
+  <!-- <div class="route-options">
+    <input type="checkbox" name="isAuthenticate" /> Authenticate 
+  </div> -->
+
   <div class="route-options">
   
     <div
@@ -169,11 +173,16 @@
 
     editor.on("blur", async function(event) {
       const schema = editor.getValue();
+
       if( schema !== "" ) {
-        if( !checkObject( JSON.parse(schema), JSON.parse(routeData.schema) ) ) {
-          routeData.schema = JSON.parse(schema);
-          await saveRouteData (routeData)
-        }
+        if(typeof routeData.schema === 'object' && routeData.schema !== null ) {
+          if(checkObject( JSON.parse(schema), JSON.parse(routeData.schema)) ) {
+            return;
+          }
+        } 
+
+        routeData.schema = JSON.parse(schema);
+        await saveRouteData (routeData)
       } 
     })
 
