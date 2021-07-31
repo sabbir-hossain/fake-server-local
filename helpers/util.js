@@ -97,15 +97,20 @@ function checkObject(obj1, obj2) {
   }
 }
 
-const validateAuth = (schema, ctx) => {
-  if(typeof schema["__auth"] === "undefined") {
+const validateAuth = (options=null, ctx) => {
+  
+  if(!options || typeof options["__auth"] === "undefined" || !options["__auth"]) {
     return true;
   }
 
-  if( typeof ctx.req.header[schema["__auth"]] !== "undefined") {
+  if( typeof ctx.request.header["authorization"] !== "undefined" && ctx.request.header["authorization"] !== "") {
+    return true;
+  } else if(typeof ctx.request.header["x-access-token"] !== "undefined" && ctx.request.header["x-access-token"] !== "") {
+    return true;
+  } else if(typeof ctx.request.header["x-auth-token"] !== "undefined" && ctx.request.header["x-auth-token"] !== "") {
     return true;
   } else {
-    ctx.throw(400);
+    ctx.throw(400, "Un-authorize");
   }
 }
 

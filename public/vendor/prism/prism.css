@@ -1,5 +1,5 @@
-/* PrismJS 1.17.1
-https://prismjs.com/download.html#themes=prism-twilight&languages=markup+css+clike+javascript */
+/* PrismJS 1.24.1
+https://prismjs.com/download.html#themes=prism-twilight&languages=clike+javascript&plugins=jsonp-highlight */
 /**
  * prism.js Twilight theme
  * Based (more or less) on the Twilight theme originally of Textmate fame.
@@ -87,7 +87,7 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 	opacity: .7;
 }
 
-.namespace {
+.token.namespace {
 	opacity: .7;
 }
 

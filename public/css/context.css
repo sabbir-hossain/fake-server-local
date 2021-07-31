@@ -128,7 +128,9 @@ pre > code {
 .show-code {
   width: 100%;
   /* float: right; */
-  margin-top: 16px !important;
+  /* margin-top: 16px !important; */
+  margin-top: 5px !important;
+  height: 475px;
 }
 
 code[class*="language-"], pre[class*="language-"] {
@@ -177,4 +179,59 @@ ul.header-menu {
 
 #toastr-title:hover {
   opacity: 0.7;
+}
+
+.input-option {
+  /* padding: 7px 0 ; */
+  /* padding-bottom: 5px; */
+  margin-left: 3px;
+}
+
+.input-checkbox {
+  margin: auto;
+  position: relative;
+  margin-left: 5px;
+}
+
+.auth-input-part {
+  padding-left: 25px;
+  margin-left: -20px;
+}
+
+.right-input {
+  margin-left: 20px;
+  margin-top: 6px;
+}
+
+.button-input-part {
+  margin-right: 20px;
+  cursor: pointer;
+  padding: 7px 35px;
+}
+
+.button-input-part:hover {
+  opacity: 0.7;
+}
+
+.selected-btn {
+  background-color: #121212;
+  color: #ced4da;
+}
+
+.hide {
+  display: none;
+}
+
+.input-group-header {
+  text-align: left;
+  background-color: #e9ecef;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  margin-top: 3px;
+  margin-left: -3px;
+}
+
+.input-group-header > span {
+  margin-left: 7px;
 }

@@ -7,7 +7,8 @@ const save = async ctx => {
     projectName = throwErrorForEmptyValue("routes/save"),
     schema,
     routeName = throwErrorForEmptyValue("routes/routeName"),
-    routeType = throwErrorForEmptyValue("routes/routeType")
+    routeType = throwErrorForEmptyValue("routes/routeType"),
+    options
   } = ctx.request.body;
 
   const response = await RecordModel.save({
@@ -15,7 +16,8 @@ const save = async ctx => {
     projectName,
     schema,
     routeName,
-    routeType
+    routeType,
+    options
   });
 
   ctx.body = response;
@@ -24,16 +26,22 @@ const save = async ctx => {
 const update = async ctx => {
   const {
     id = throwErrorForEmptyValue("routes/update/id"),
-    schema
+    schema,
+    options
   } = ctx.request.body;
 
-  const response = await RecordModel.update(id, {
-    schema
-  });
+  try {
+    const response = await RecordModel.update(id, {
+      schema,
+      options
+    });
+  
+    ctx.body = response;
+  }
+  catch(error) {
+    ctx.throw(error);
+  }
 
-  console.log("route update : ", {response})
-
-  ctx.body = response;
 };
 
 const list = async ctx => {

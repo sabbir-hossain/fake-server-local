@@ -1,8 +1,8 @@
-const RecordModel = require("../model/record");
-const { validateAuth } = require("../helpers/util");
-const { processReqeust } = require("../lib/generateMatch");
+const RecordModel = require("../../model/record");
+const { validateAuth } = require("../../helpers/util");
+const { processReqeust } = require("../../lib/generateMatch");
 
-const routeType = "PUT";
+const routeType = "PATCH";
 
 module.exports = async ctx => {
   try {
@@ -10,21 +10,17 @@ module.exports = async ctx => {
     const _id = `${routeType}${urlModel}`;
     const result = await RecordModel.getById(_id);
   
-    const { schema } = result;
+    const { schema, options={} } = result;
     
-    if(!schema) {
-      ctx.throw(404);
-    }
+    validateAuth(options, ctx);
 
-    validateAuth(schema, ctx);
-    
     const body = ctx.request.body;
-  
     const data = processReqeust(body, "", schema);
   
     ctx.body = data;
   }
   catch(error) {
-    ctx.body = error;
+    ctx.throw(error);
   }
+
 };

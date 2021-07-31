@@ -8,8 +8,8 @@ const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 
 const getRequestsController = require("./get-requests");
-const RecordModel = require("../model/record");
-const Generator = require("../lib/generator");
+const RecordModel = require("../../model/record");
+const Generator = require("../../lib/generator");
 
 const sandbox = sinon.createSandbox();
 // createSandbox

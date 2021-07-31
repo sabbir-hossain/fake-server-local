@@ -1,14 +1,14 @@
 const Router = require("koa-router");
 const router = new Router();
 
-const patchRequestController = require("./controller/patch-request");
-const deleteRequestController = require("./controller/delete-request");
-const postRequestController = require("./controller/post-request");
-const getRequestsController = require("./controller/get-requests");
-const views = require("./controller/views");
+const patchRequestController = require("./controller/mock-api/patch-request");
+const deleteRequestController = require("./controller/mock-api/delete-request");
+const postRequestController = require("./controller/mock-api/post-request");
+const getRequestsController = require("./controller/mock-api/get-requests");
+const views = require("./controller/front-end-views");
 
 const projectController = require("./controller/projects");
-const routeController = require("./controller/routes");
+const routeController = require("./controller/mock-api-routes-crud");
 
 const { ignoreRoutes = [] } = require("./config");
 
