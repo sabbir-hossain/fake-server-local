@@ -39,10 +39,12 @@ function showSchemaFormat() {
 
   const element1 = document.getElementById("btn-1");
   const element2 = document.getElementById("btn-2");
-  console.log({element2})
+
   element1.classList.add("selected-btn");
   element2.classList.remove("selected-btn");
+
   element2.children[0].classList.remove("nav-icon-white");
+  element2.children[0].classList.remove("nav-icon-black");
   element2.children[0].classList.add("nav-icon-black");
 }
 
@@ -59,8 +61,10 @@ function showSampleResponse() {
 
   element1.classList.remove("selected-btn");
   element2.classList.add("selected-btn");
-  element2.children[0].classList.add("nav-icon-white");
+
   element2.children[0].classList.remove("nav-icon-black");
+  element2.children[0].classList.remove("nav-icon-white");
+  element2.children[0].classList.add("nav-icon-white");
   // nav-icon-black
 
   routeData.id !== "" && routeData.routeName !== "" && displaySampleData(routeData)

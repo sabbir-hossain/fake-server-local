@@ -20,7 +20,7 @@
         <p class="help-text">
           <span class="highlight-text">fake server local</span> is a <strong>local REST api server</strong> 
           which return random lorem-ipsum data based on user schema. It might be helpful for 
-          <strong>Front-end/App developers</strong>, who don't have sufficient data (might be REST 
+          <strong>Front-end/App developers or developers who are building microservices</strong>, who don't have sufficient data (might be REST 
           api is not ready or not enough data in database) to test their projects. All you need, 
           just create an api endpoint and output schema. You will get your sufficient data to test your project.
         </p>
@@ -30,17 +30,67 @@
     </div>
 
     <h2 class="help-title">How is it works?</h2>
+
     <div class="paragraph-content">
-      <p class="help-text">
+      <div class="help-text-left-part flex">
+        <p class="help-text">
+          Assume you have an e-commerce app and it's REST Api endpoint is <span class="highlight-text">https://api.awesome-ecommerce.com</span>.
+        </p> 
+        <p class="help-text">
+          You can get list of products by calling <span class="highlight-text">https://api.awesome-ecommerce.com/products/list</span>. Here you are getting an object array that contains id and name. So your output schema is <span class="highlight-text">{ id: 'number', name: 'text' }</span>. It might be possible that your api is not ready or it shows error or you don't have sufficient data.
+        </p>
+
+        <p class="help-text">
+          By using <span class="highlight-text">fake server local</span>, you can create mock server that can send random data based on your schema.
+        </p>
+      </div>
+
+      <div class="display-sample flex">
+              
+<pre class="show-code">
+  <code class="language-javascript">
+// response from "https://api.awesome-ecommerce.com/products/list"
+[
+    {id: 1, name: "phone"},
+    {id: 2, name: "computer"}, 
+    {id: 2, name: "books"}   
+]
+
+// Create a schema
+[{ id: "id", name: "text" }]
+
+// mock response
+[
+    {id: 1, name: "lorem"},
+    {id: 2, name: "ipsum"},
+    {id: 3, name: "sit"},
+]
+  </code>
+</pre>
+      </div>
+
+<!-- 
+      <p  class="help-text">
+        Now add returned schema. It has to be a <strong>JSON object</strong> as like as shown on image. Here  <span class="highlight-text">object-key-*</span> are user's
+        object key and <span class="highlight-text">return-Type</span> can be  <span class="highlight-text">id | uuid | boolean | text | title | textarea | integer | float | phone | zipcode | date | time | date-time | url | email | image | pdf | csv | doc |  ipaddress</span>.
+        <span class="highlight-text"> image | pdf | csv | doc </span> value will be some fixed default files which are attached with this project. <span class="highlight-text"> title </span> value will be 2-5 words.
+        I believe, all other <strong>return-Type</strong> will be return data as it is named.
+      </p>
+       -->
+    </div>
+    <div class="clear-both"></div>
+
+    <!-- <div class="paragraph-content">
+       <p class="help-text">
         Suppose you have a <strong>REST api server</strong> (for example <strong>http://api.example.com</strong>) and you have an api end-point like <strong>/some/api</strong>.
-        You are expecting a <strong>JSON object</strong> for that api and ofcourse you know expected 
+        You are expecting a <strong>JSON object</strong> for that api and of-course you know expected 
         <strong>JSON object</strong> schema. <strong>Object</strong> value might be contained 
         <span class="highlight-text"> text | boolean | integer | textarea | array | object-array </span> etc.
         Using <span class="highlight-text">fake server local</span>, all you need just replace
         your <strong>REST api endpint</strong> and add expected output <strong>schema</strong>. 
         You will get lorem-ipsum data based on your expected schema.
-      </p>
-    </div>
+      </p> 
+    </div> -->
 
     <h2 class="help-title">Setup</h2>
     <div class="paragraph-content">
@@ -100,7 +150,6 @@
       </div>
 
       <div class="display-sample flex">
-        <script src="/vendor/prism/prism.js"  type="text/javascript"></script>
               
 <pre class="show-code">
   <code class="language-javascript">
