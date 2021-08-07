@@ -31,17 +31,21 @@
 
     <h2 class="help-title">How is it works?</h2>
 
-    <div class="paragraph-content">
-      <div class="help-text-left-part flex">
+    <div class="paragraph-content flex">
+      <div class="help-text-left-part">
         <p class="help-text">
           Assume you have an e-commerce app and it's REST Api endpoint is <span class="highlight-text">https://api.awesome-ecommerce.com</span>.
         </p> 
         <p class="help-text">
-          You can get list of products by calling <span class="highlight-text">https://api.awesome-ecommerce.com/products/list</span>. Here you are getting an object array that contains id and name. So your output schema is <span class="highlight-text">{ id: 'number', name: 'text' }</span>. It might be possible that your api is not ready or it shows error or you don't have sufficient data.
+          Assume you get list of products by calling <span class="highlight-text">https://api.awesome-ecommerce.com/products/list</span> and you are getting an object array that contains id and name. So your output schema is <span class="highlight-text">[{ id: 'number', name: 'text' }]</span>.
         </p>
 
         <p class="help-text">
-          By using <span class="highlight-text">fake server local</span>, you can create mock server that can send random data based on your schema.
+          By using <span class="highlight-text">fake server local</span>, you can create mock server that can send fake data based on your schema.
+        </p>
+
+        <p class="help-text">
+          Now you can create a mock server. For example <span class="highlight-text">http://localhost:9920/e-commerce</span>. Now your list of products api will be like <span class="highlight-text">http://localhost:9920/e-commerce/products/list</span> and your output response schema will be <span class="highlight-text">[{ id: 'number', name: 'text' }]</span>. You will get a fake response for calling your fake api.
         </p>
       </div>
 
@@ -49,7 +53,8 @@
               
 <pre class="show-code">
   <code class="language-javascript">
-// response from "https://api.awesome-ecommerce.com/products/list"
+// response from 
+// "https://api.awesome-ecommerce.com/products/list"
 [
     {id: 1, name: "phone"},
     {id: 2, name: "computer"}, 
@@ -96,12 +101,12 @@
     <div class="paragraph-content">
 
       <p  class="help-text setup-step">
-        <strong>Step 1.</strong> First clone project from <a href="https://github.com/shsaucorp/fake-server-local" 
-        target="_blank" class="help-text-url">github <img src="/assets/icons/link-external.svg" class="help-text-icon" /></a>
+        <strong>Step 1.</strong> First clone project from <a href="https://github.com/sabbir-hossain/fake-server-local"
+        target="_blank" class="help-text-url">github <img src="/assets/icons/link-external.svg" class="help-text-icon" /></a>  or clone <span class="highlight-text">git@github.com:sabbir-hossain/fake-server-local.git</span>
       </p>
 
       <p  class="help-text setup-step">
-          <strong>Step 2.</strong> Run <span class="highlight-text">npm install</span> (<strong>node.js</strong> required) to install dependency.
+          <strong>Step 2.</strong> Run <span class="highlight-text">npm i</span> (<strong>node.js</strong> required) to install dependency.
       </p>
 
       <p  class="help-text setup-step">
@@ -109,65 +114,55 @@
       </p>
 
       <p  class="help-text setup-step">
-          <strong>Step 4.</strong> Now go to <span class="highlight-text"><a href="https://github.com/shsaucorp/fake-server-local" target="_blank" class="help-text-url">
-          http://localhost:9920/dashboard</a></span>. You should see the following image.
+          <strong>Step 4.</strong> Now go to <span class="highlight-text">
+          http://localhost:9920/dashboard</span>. You should see the following image.
       </p>
 
       <img src="/assets/images/help-page/init-screen.png" class="help-image-full-width" />
 
-      <p  class="help-text setup-step">
-          <strong>Step 5.</strong> Create a new project. Now your api endpoint will be <span class="highlight-text">http://localhost:9920/${your-project-title}</span>.
-      </p>
-
-
-      <p  class="help-text">
-        Initially you have to create a project. Why? 
-        Sometimes you have to create same api endpoint for multiple projects <strong>/login</strong>, 
-        <strong>/signup</strong> etc. and you are expecting different response data 
-        based on project. You can get different response data for same api endpont based on your project.    
-      </p>
     </div>
 
     <h2 class="help-title">Create <span class="highlight-text">fake api</span></h2>
     <!-- <img src="/assets/images/help-page/initial-schema-format.png" class="paragraph-image-value" /> -->
 
     <div class="paragraph-content">
-      <p  class="help-text">
-        Assume you have already created project. 
-        If yes, then your api server will be <span class="highlight-text">http://localhost:9920/your-project-name</span>. 
-        Now you can create your first <strong>fake api</strong>. Now try following steps.
-      </p>
 
       <div class="help-text-left-part flex">
         <ul class="ul-help-step">
+          <li class="li-help-step">
+            Create a new project. Now your api endpoint will be <span class="highlight-text">http://localhost:9920/${your-project-title}</span>. you can create multiple project for multiple server.
+          </li>
+
           <li class="li-help-step"> select <strong>Route type</strong> from dropdown. 
             Route type can be 
-            <span class="highlight-text">GET | POST | PUT | PATCH | DELETE</span>. </li>
-          <li class="li-help-step"> create route. For example <span class="highlight-text">/some/api/name</span>. So your first <strong>fake api</strong> api will be like <span class="highlight-text">http://localhost:9920/${your-project-name}${/some/api/name}</span> and it will be <strong>Route type</strong> type. </li>
+            <span class="highlight-text">GET | POST | PUT | PATCH | DELETE</span>. 
+          </li>
 
-          <li class="li-help-step"> create returned schema. It has to be a <strong>JSON object</strong>. </li>
+          <li class="li-help-step"> 
+            create route. For example <span class="highlight-text">/some/api/name</span>. So your first <strong>fake api</strong> api will be like <span class="highlight-text">http://localhost:9920/${your-project-name}${/some/api/name}</span> and it will be <strong>Route type</strong> type.
+          </li>
+
+          <li class="li-help-step">
+            create returned schema. It has to be a <strong>JSON object</strong>. <strong>key</strong> will be expected output response's key and <strong>value</strong> will be output response's type.
+          </li>
+
+          <li class="li-help-step">There are no save/update button. Once you move your cursor, value will be updated</li>
         </ul>
       </div>
 
       <div class="display-sample flex">
               
-<pre class="show-code">
+<pre class="show-code" style="height: 100%;">
   <code class="language-javascript">
-// JSON object
-{
-  "response-key-01": "return-Type",
-  "response-key-02": ["return-Type"],
-  "response-key-05": {
-    "child-response-key-01": "return-Type"
-  }
-}
-
-// Sample Data
-{
-  "id": "uuid",
-  "name": "text",
-  "email": "email"
-}
+// JSON object schema          | // Sample schema
+{                              | {
+  "key-01": "return-Type",     |  "id": "uuid",
+  "key-02": ["return-Type"],   |  "name": {
+  "key-03": {                  |    "first": "text",
+    "child-01": "return-Type"  |    "last": "text"
+  }                            |  }
+}                              |  "hobbies": ["text"]
+                               | }
   </code>
 </pre>
       </div>
@@ -184,7 +179,7 @@
     <div class="clear-both"></div>
     <!-- <img src="/assets/images/help-page/very-basic-schema.png" class="paragraph-image-value" /> -->
 
-    <div class="paragraph-content">
+    <!-- <div class="paragraph-content">
       <p  class="help-text">
         Assume you add a route name  <strong>/some/api/name</strong>.
         Then your api end-point will be like <span class="highlight-text">http://localhost:9920/your-project-name/some/api/name</span>.
@@ -192,24 +187,73 @@
         You have select route type <strong>GET</strong> and your expected returned <strong>JSON schema</strong> as like as shown on image right.
 
       </p>
-    </div>
+    </div> -->
 
     <!-- <br /> -->
-    <img src="/assets/images/help-page/very-basic-schema-value.png" class="paragraph-image-value" />
+    <!-- <img src="/assets/images/help-page/very-basic-schema-value.png" class="paragraph-image-value" /> -->
 
-    <div class="paragraph-content">
+    <!-- <div class="paragraph-content">
       <p  class="help-text">
         Now if you call <span class="highlight-text">GET</span> request to <span class="highlight-text">http://localhost:9920/your-project-name/some/api/name</span>, you will see the <strong>JSON data</strong> as like as shown on image right. (return random lorem-ipsum data)
       </p>
-    </div>
+    </div> -->
 
     <h2 class="help-title">More details</h2>
     <div class="paragraph-content">
-        <p  class="help-text">I hope we all have understand how this project work and what can we do. Here are some more details</p>
+        <!-- <p  class="help-text">I hope we all have understand how this project work and what can we do. Here are some more details</p> -->
+
+        <p  class="help-text more-details">
+          All you need to create a route and schema. Available schema's data type can be 
+            <span class="helper-dt">id</span>, 
+            <span class="helper-dt">uuid</span>, 
+            <span class="helper-dt">boolean</span>,
+            <span class="helper-dt">text</span>,
+            <span class="helper-dt">title</span>,
+            <span class="helper-dt">textarea</span>,
+            <span class="helper-dt">integer</span>,
+            <span class="helper-dt">float</span>,
+            <span class="helper-dt">phone</span>, 
+            <span class="helper-dt">zipcode</span>, 
+            <span class="helper-dt">date</span>,
+            <span class="helper-dt">time</span>,
+            <span class="helper-dt">date-time</span>, 
+            <span class="helper-dt">url</span>, 
+            <span class="helper-dt">email</span>, 
+            <span class="helper-dt">image</span>,
+            <span class="helper-dt">pdf</span>,
+            <span class="helper-dt">csv</span>,
+            <span class="helper-dt">doc</span>, 
+            <span class="helper-dt">ipaddress</span>,
+            <span class="helper-dt">second</span>,
+            <span class="helper-dt">alphanumeric</span>.
+        </p>
+
+        <div class="data-type">
+          <div> <span class="helper-dt">id</span>: incremental number (1, 2, 3, 4 etc) </div>
+          <div> <span class="helper-dt">uuid</span>: uuid/v1</div>
+          <div> <span class="helper-dt">text</span>: word (amet/fastidii/laboramus)</div>
+          <div> <span class="helper-dt">title</span>: 2-5 words</div>
+          <div> <span class="helper-dt">textarea</span>: 10-15 words</div>
+          <div> <span class="helper-dt">phone</span>: US phone number</div>
+          <div> <span class="helper-dt">zipcode</span>: number between 10001-99999</div>
+          <div> <span class="helper-dt">date</span>: MM/dd/YYYY</div>
+          <div> <span class="helper-dt">time</span>: HH:MM (AM/PM)</div>
+          <div> <span class="helper-dt">date-time</span>: ISO Date String</div>
+          <div> <span class="helper-dt">second</span>: Date in second</div>
+          <div> 
+            <span class="helper-dt">image</span>/
+            <span class="helper-dt">pdf</span>/
+            <span class="helper-dt">csv</span>/
+            <span class="helper-dt">doc</span>: 
+            link
+          </div>
+          <div> <span class="helper-dt">alphanumeric</span>: string with length of 25</div>
+          <div> <span class="helper-dt">boolean</span>: true/false</div>
+        </div>
 
         <p  class="help-text more-details">
           We might have expected fixed value. For example, in json response, there might be a parameter, called <span class="highlight-text">message</span>, that value will be always like <span class="highlight-text">message: "Successful"</span>.
-          In this situation, simply add like <span class="highlight-text">{ "object-key-name": "any-fixed-value" }</span>
+          In this situation, simply add like <span class="highlight-text">{ "key-name": "any-fixed-value" }</span>
           if <strong>return-Type</strong> doesn't match with <span class="highlight-text">return-Type</span> value, then expected value will be returned typed value. 
         </p>
 

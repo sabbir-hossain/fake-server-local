@@ -6,7 +6,7 @@ function showSchemaFormat() {
   /****   textarea | integer | float | phone |  ***/
   /****   zipcode | date | time | date-time |   ***/
   /****   url | email | image | pdf | csv |     ***/
-  /****   doc |  ipaddress                      ***/
+  /****   doc |  ipaddress | second | alphanumeric */
   /************************************************/
   {
     "variable-1": "return-Type",

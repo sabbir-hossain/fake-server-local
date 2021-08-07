@@ -23,6 +23,8 @@ router.get("/heath", ctx => {
   ctx.body = "Server is up and running";
 });
 
+router.get("/", views.index);
+
 // router.get("/*", getRequests.get);
 
 router.post("/__project/create", projectController.save);

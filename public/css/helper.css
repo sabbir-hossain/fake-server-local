@@ -140,7 +140,7 @@ img.help-image-full-width {
 
 .help-text-left-part {
   position: relative; 
-  margin-top: 16px; 
+  margin-top: -10px; 
   width: 48%; 
   float: left;
   margin-right: 5px;
@@ -158,4 +158,22 @@ li.li-help-step {
 .display-sample {
   width: 49%;
   justify-content: flex-end;
+}
+
+.data-type {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: #e8e8e8;
+  padding: 10px 0;
+}
+
+.data-type > div {
+  text-align: left;
+  padding: 5px 10px;
+}
+
+.helper-dt {
+  background-color: #c3c2c2;
+  padding: 0px 3px;
+  border-radius: 5px;
 }
