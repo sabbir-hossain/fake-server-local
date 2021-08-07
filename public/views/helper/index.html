@@ -58,7 +58,7 @@
 [
     {id: 1, name: "phone"},
     {id: 2, name: "computer"}, 
-    {id: 2, name: "books"}   
+    {id: 3, name: "books"}   
 ]
 
 // Create a schema
@@ -74,28 +74,9 @@
 </pre>
       </div>
 
-<!-- 
-      <p  class="help-text">
-        Now add returned schema. It has to be a <strong>JSON object</strong> as like as shown on image. Here  <span class="highlight-text">object-key-*</span> are user's
-        object key and <span class="highlight-text">return-Type</span> can be  <span class="highlight-text">id | uuid | boolean | text | title | textarea | integer | float | phone | zipcode | date | time | date-time | url | email | image | pdf | csv | doc |  ipaddress</span>.
-        <span class="highlight-text"> image | pdf | csv | doc </span> value will be some fixed default files which are attached with this project. <span class="highlight-text"> title </span> value will be 2-5 words.
-        I believe, all other <strong>return-Type</strong> will be return data as it is named.
-      </p>
-       -->
     </div>
-    <div class="clear-both"></div>
 
-    <!-- <div class="paragraph-content">
-       <p class="help-text">
-        Suppose you have a <strong>REST api server</strong> (for example <strong>http://api.example.com</strong>) and you have an api end-point like <strong>/some/api</strong>.
-        You are expecting a <strong>JSON object</strong> for that api and of-course you know expected 
-        <strong>JSON object</strong> schema. <strong>Object</strong> value might be contained 
-        <span class="highlight-text"> text | boolean | integer | textarea | array | object-array </span> etc.
-        Using <span class="highlight-text">fake server local</span>, all you need just replace
-        your <strong>REST api endpint</strong> and add expected output <strong>schema</strong>. 
-        You will get lorem-ipsum data based on your expected schema.
-      </p> 
-    </div> -->
+    <div class="clear-both"></div>
 
     <h2 class="help-title">Setup</h2>
     <div class="paragraph-content">
@@ -130,7 +111,7 @@
       <div class="help-text-left-part flex">
         <ul class="ul-help-step">
           <li class="li-help-step">
-            Create a new project. Now your api endpoint will be <span class="highlight-text">http://localhost:9920/${your-project-title}</span>. you can create multiple project for multiple server.
+            Create a new project. Now your fake api endpoint will be <span class="highlight-text">http://localhost:9920/${your-project-title}</span>. you can create multiple project for multiple server. For example, create a project named (<span class="highlight-text">awesome-ecommerce</span>) for your e-commerce project. So your api endpoint will be <span class="highlight-text">http://localhost:9920/awesome-ecommerce</span> and you can replace your environment variable in your working project with this url.
           </li>
 
           <li class="li-help-step"> select <strong>Route type</strong> from dropdown. 
@@ -147,6 +128,14 @@
           </li>
 
           <li class="li-help-step">There are no save/update button. Once you move your cursor, value will be updated</li>
+
+          <li class="li-help-step">
+            Now if you call <span class="highlight-text">http://localhost:9920/awesome-ecommerce/product/list</span> api from your <span class="highlight-text">front-end/app/microservice</span>, you should get results based on your schema.
+          </li>
+
+          <li class="li-help-step">
+            Your api might also have <span class="highlight-text">token</span>. In that case, there is a checkbox called <span class="highlight-text">Authenticate</span>, it will check if there are any auth value in <span class="highlight-text">header</span>.
+          </li>
         </ul>
       </div>
 
@@ -154,15 +143,32 @@
               
 <pre class="show-code" style="height: 100%;">
   <code class="language-javascript">
-// JSON object schema          | // Sample schema
-{                              | {
-  "key-01": "return-Type",     |  "id": "uuid",
-  "key-02": ["return-Type"],   |  "name": {
-  "key-03": {                  |    "first": "text",
-    "child-01": "return-Type"  |    "last": "text"
-  }                            |  }
-}                              |  "hobbies": ["text"]
-                               | }
+// JSON object schema
+{
+  "key-01": "return-Type",
+  "key-02": ["return-Type"],
+  "key-03": {    
+    "child-01": "return-Type"
+  }
+}
+
+// Sample schema
+[{
+  "id": "uuid",
+  "name": "text",
+  "tags": ["text"],
+  "shop": {
+    "name": "text",
+    "address": "title"
+  }
+}]
+
+// Fake response
+[
+    {id: "c4023b8c-", name: "lorem", tags: ["duo", "nec"], "shop": { name: "dicat", "address": "alii nobis" }},
+    {id: "d63d2352-", name: "quo", tags: ["dolore"], "shop": { name: "etiam", "address": "dolor nobis mei" }},
+    {id: "d63d278a-", name: "tollit", tags: ["solum", "nec"], "shop": { name: "audire", "address": "scaevola nemore" }},
+]
   </code>
 </pre>
       </div>
@@ -249,6 +255,7 @@
           </div>
           <div> <span class="helper-dt">alphanumeric</span>: string with length of 25</div>
           <div> <span class="helper-dt">boolean</span>: true/false</div>
+          <div> <span class="helper-dt">token</span>: JWT token (based on your data)</div>
         </div>
 
         <p  class="help-text more-details">

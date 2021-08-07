@@ -29,7 +29,7 @@ just create an api endpoint and output schema. You will get your sufficient data
 ```
 id | uuid | boolean | text | title | textarea | integer | 
 float | phone | zipcode | date | time | date-time | url | 
-email | image | pdf | csv | doc |  ipaddress | token
+email | image | pdf | csv | doc |  ipaddress | token | second | alphanumeric
 ```
 
 ```JSON

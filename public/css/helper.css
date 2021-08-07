@@ -153,6 +153,7 @@ ul.ul-help-step {
 li.li-help-step {
   text-align: left;
   padding-bottom: 10px;
+  line-height: 1.4em;
 }
 
 .display-sample {
