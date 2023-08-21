@@ -11,7 +11,7 @@ function showSchemaFormat() {
   {
     "variable-1": "return-Type",
     "variable-2": "fixed-value-1,fixed-value-1",
-    "singla-Array-Variable": ["return-Type"],
+    "single-Array-Variable": ["return-Type"],
     "object-Variable": {
       "variable-11": "return-Type" 
       // add variables
