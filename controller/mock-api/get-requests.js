@@ -23,6 +23,7 @@ module.exports = async ctx => {
 
     ctx.body = data;
   } catch (err) {
-    ctx.throw(error);
+    console.error(err);
+    ctx.throw(err);
   }
 };
