@@ -6,7 +6,7 @@ const collection = "record";
 const save = async data => {
   // const _id = uuid();
   const { projectName, routeName, routeType } = data;
-  const _id = `${routeType}/${projectName}${routeName}`;
+  const _id = `${routeType}__${projectName}${routeName.split("/").join("_")}`;
   const result = await db.create({ collection, _id, ...data });
   return result;
 };

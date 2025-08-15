@@ -8,8 +8,7 @@ const routeType = "GET";
 module.exports = async ctx => {
   try {
     const urlModel = ctx.request.url.split("?")[0];
-  
-    const _id = `${routeType}${urlModel}`;
+    const _id = `${routeType}_${urlModel.replaceAll('/', '_')}`;
     const result = await RecordModel.getById(_id);
     const { schema, options={} } = result;
 
@@ -19,9 +18,10 @@ module.exports = async ctx => {
 
     validateAuth(options, ctx);
 
-    const data = Generator.process(schema);
+    const inputSchema = { __data: schema };
+    const data = Generator.process(inputSchema);
 
-    ctx.body = data;
+    ctx.body = data.__data || data;
   } catch (err) {
     console.error(err);
     ctx.throw(err);
