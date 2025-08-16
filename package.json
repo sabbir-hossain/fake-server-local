@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/shsaucorp/fake-server-local#readme",
   "dependencies": {
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "koa": "^2.8.1",
     "koa-body": "^4.1.1",
     "koa-ejs": "^4.2.0",
@@ -33,10 +33,10 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "mocha": "^6.2.0",
-    "nodemon": "^1.19.2",
+    "mocha": "^11.7.1",
+    "nodemon": "^3.1.10",
     "nyc": "^15.0.0",
-    "rewire": "^4.0.1",
+    "rewire": "^9.0.1",
     "sinon": "^7.4.2",
     "sinon-chai": "^3.3.0",
     "supertest": "^4.0.2"
