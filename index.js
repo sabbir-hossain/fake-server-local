@@ -23,7 +23,7 @@ app.use(cors({ origin: "*" }));
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-const server = app.listen(config.appPort, () => {
+app.listen(config.appPort, () => {
   console.log(`server running at ${config.appPort}`);
   console.log(`go to http://localhost:${config.appPort}/dashboard`);
 });
