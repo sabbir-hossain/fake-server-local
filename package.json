@@ -1,44 +1,35 @@
 {
   "name": "fake-server-local",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "`fake server local` is a **local REST api server**\r which return random lorem-ipsum data based on user schema. It might be helpful for \r **Front-end/App developers**, who don't have sufficient data (might be REST \r api is not ready or not enough data in database) to test their projects. All you need, \r just create an api endpoint and output schema. You will get your sufficient data to test your project.",
+  "main": "dist/app.js",
   "scripts": {
-    "test": "nyc mocha \"./{,!(node_modules)/**/}*.test.js\" --exit",
-    "start": "node index.js"
+    "start": "ts-node src/server.ts",
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "build": "tsc"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shsaucorp/fake-server-local.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/shsaucorp/fake-server-local/issues"
-  },
-  "homepage": "https://github.com/shsaucorp/fake-server-local#readme",
   "dependencies": {
-    "jsonwebtoken": "^8.5.1",
-    "koa": "^2.8.1",
-    "koa-body": "^4.1.1",
-    "koa-ejs": "^4.2.0",
-    "koa-mount": "^4.0.0",
-    "koa-router": "^7.4.0",
-    "koa-static": "^5.0.0",
-    "koa2-cors": "^2.0.6",
-    "nedb": "^1.8.0",
-    "q": "^1.5.1",
-    "uuid": "^3.3.3"
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.10",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "mocha": "^6.2.0",
-    "nodemon": "^1.19.2",
-    "nyc": "^15.0.0",
-    "rewire": "^4.0.1",
-    "sinon": "^7.4.2",
-    "sinon-chai": "^3.3.0",
-    "supertest": "^4.0.2"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.10.4",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
+    "eslint": "^8.55.0",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.3"
   }
 }

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Server</title>
+    <link href="https://fonts.googleapis.com/css2 Follow link (ctrl + click) +Sans:wght@400;600;700&display=swap" rel="sty
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+    <input type="hidden" id="port-data" value="<%= port %>">
+    <input type="hidden" id="port-address" value="<%= host %>">
+    <header>
+        <div class="header-content">
+            <div class="dropdown-container">
+                <select id="project-list-dropdown">
+                </select>
+            </div>
+            <h2 id="prj-title">Mock Server <span id="prj-title-loader" class="loader-spinner"></span></h2>
+            <div id="toastr-container" class="toastr-message"></div>
+            <div class="header-right-controls">
+                <button id="add-header-btn" type="button" class="header-plus-btn" aria-label="Add" title="Add">
+                    &#43;<span class="add-project-label">Add Project</span>
+                </button>
+                <div id="header-add-controls">
+                    <input id="project-secret" type="text" placeholder="project secret">
+                    <input id="selected-project-title" type="text" placeholder="Add New Project">
+                    <button id="header-close-btn" type="button">&#x2715;</button>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Server</title>
+    <link href="https://fonts.googleapis.com/css2 Follow link (ctrl + click) +Sans:wght@400;600;700&display=swap" rel="sty
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+    <input type="hidden" id="port-data" value="<%= port %>">
+    <input type="hidden" id="port-address" value="<%= host %>">
+    <header>
+        <div class="header-content">
+            <div class="dropdown-container">
+                <select id="project-list-dropdown">
+                </select>
+            </div>
+            <h2 id="prj-title">Mock Server <span id="prj-title-loader" class="loader-spinner"></span></h2>
+            <div id="toastr-container" class="toastr-message"></div>
+            <div class="header-right-controls">
+                <button id="add-header-btn" type="button" class="header-plus-btn" aria-label="Add" title="Add">
+                    &#43;<span class="add-project-label">Add Project</span>
+                </button>
+                <div id="header-add-controls">
+                    <input id="project-secret" type="text" placeholder="project secret">
+                    <input id="selected-project-title" type="text" placeholder="Add New Project">
+                    <button id="header-close-btn" type="button">&#x2715;</button>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
+
+
+```html
+<html lang="en">
+<body>
+<main id="whole-content">
+<aside id="navbar">
+<div id="navbar-header">
+<h3>Route(s)</h3>
+<button id="add-route-btn" type="button">
+<span aria-label="Add Route" title="Add Route">&#43;</span>
+</button>
+</div>
+<ul id="route-title">
+</ul>
+</aside>
+<section id="main-content">
+<!-- Controls Row (10%) -->
+<div class="controls-row">
+<select name="http-method" id="route-type">
+</select>
+<span id="host-display"><%= host %></span>
+<input type="text" placeholder="add/edit route" id="selected-route-url" value="">
+</div>
+<!-- Editable JSON Row (40%) -->
+<div class="editable-json">
+<h4>Schema</h4>
+<pre contenteditable="true" id="schema-json">
+</pre>
+```
+
+
+```html
+<body>
+<main id="whole-content">
+<section id="main-content">
+<!-- Editable JSON Row (40%) -->
+<div class="editable-json">
+<h4>Schema</h4>
+<pre contenteditable="true" id="schema-json">
+</pre>
+</div>
+<!-- Static JSON Row (50%) -->
+<div class="static-json">
+<button type="button" id="generate-sample-data-btn" class="btn-sample">
+<span class="btn-icon">&#128202;</span>Genereate Sample Data
+</button>
+<button type="button" id="format-json-data" class="btn-format">
+<span class="btn-icon">&#128295;</span>Format JSON
+</button>
+<button type="button" id="stringify-json-btn" class="btn-stringify">
+<span class="btn-icon">&#128209;</span>Stringify JSON
+</button>
+<pre id="sample-output" contenteditable="true">
+</pre>
+</div>
+</section>
+</main>
+```
+
+
+index.ejs > html > head
+```html
+<html lang="en">
+<body>
+    <main id="whole-content">
+        <section id="main-content">
+            </div>
+        </section>
+    </main>
+    <footer>
+        <span>Mock Server &copy; 2025</span>
+    </footer>
+    <script type="module" type="text/javascript" src="/script.js"></script>
+</body>
+</html>
+```

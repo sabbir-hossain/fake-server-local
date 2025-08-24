@@ -2,19 +2,25 @@
   function showInactiveProjectList(projects) {
     const othersProjectElement = document.getElementById(otherProjectDivId);
     const { htmlObjectList, eventObjList } = generateOtherProjectList(projects);
-
     removeAllChildElement( othersProjectElement );
     createHtmlChildElement( othersProjectElement, htmlObjectList.childElement );
     createEventListener( eventObjList );
   }
 
   async function getProjectRouteList( projectId ) {
+    if( !projectId ) {
+      return;
+    }
     const response = await axios.get(`/__route/${projectId}/list`);
     const {htmlObjectList, eventObjList} = generateRouteList(response.data || []);
     const routeElement = document.getElementById(routeListDivId);
     removeAllChildElement( routeElement );
     createHtmlChildElement( routeElement, htmlObjectList.childElement );
     createEventListener( eventObjList );
+    //  let { id, projectId, type, name } of routes
+    const activeRoute = response.data && response.data.find( route => route.selected ) || {};
+    const { id: routeId } = activeRoute;
+    routeId && loadRouteDetails(projectId, routeId);
   }
 
   function handleAppUpdateCloseClick(event) {
@@ -93,7 +99,7 @@
       }
     )
 
-    for( let { _id, projectId, projectName, routeType, routeName } of routes ) {
+    for( let { id, projectId, type, name } of routes ) {
       childElementList.push({
         name: "li",
         attributes: {
@@ -102,32 +108,32 @@
         childElement: [
           {
             name: "div",
-            text: formatRouteText(`${routeType} - ${routeName}`),
+            text: formatRouteText(`${type} - ${name}`),
             attributes: {
-              id: _id,
+              id: id,
               class: "route-title",
               [`${projectIdAttr}`]: projectId,
-              [`${routeIdAttr}`]: _id
+              [`${routeIdAttr}`]: id
             }
           },
           {
             name: "img",
             attributes: {
-              id: `trash#${_id}`,
+              id: `trash#${id}`,
               src: "/assets/icons/trash.svg",
               class: "nav-icon-black icon-right",
               [`${projectIdAttr}`]: projectId,
-              [`${routeIdAttr}`]: _id
+              [`${routeIdAttr}`]: id
             } 
           }
         ]
       });
 
       eventObjList.push({
-        identifier: _id, 
+        identifier: id, 
         functionReference: handleShowRouteDetailsClick 
       }, {
-        identifier: `trash#${_id}`,
+        identifier: `trash#${id}`,
         functionReference: handleRemoveRouteClick
       });
     }
@@ -146,7 +152,7 @@
     const eventObjList = [];
     
     for( let i=0, len=projects.length; i<len; i++ ) {
-      let { _id:id, name, isActive } = projects[i];
+      let { id, name, selected } = projects[i];
       const divId =  `other-app-id-${i}`;
       
       childElementList.push({
@@ -156,7 +162,7 @@
           class: "other-app-title",
           id: divId,
           [`${dataId}`]: id,
-          [`${dataActive}`]: isActive,
+          [`${dataActive}`]: selected,
           [`${dataName}`]: name
         }
       });
@@ -243,7 +249,7 @@
     const titleValue = element.value;
     if( titleValue && titleValue.length > 0 ) {
       const response = await axios.post(`/__project/create`, { name: titleValue, isActive });
-      const { _id: id} = response.data;
+      const { id} = response.data;
       if( id ) {
         showToastr("project is created successfully :)");
       }
@@ -267,8 +273,17 @@
       "data-project-id": "projectId",
       "data-route-id": "routeId"
     }
+
     const { projectId, routeId } = getDataAttributes(event.target, mapObj)
-    const result = await axios.get(`/__route/get?id=${routeId}`);
+
+    loadRouteDetails(projectId, routeId);
+  }
+
+  async function loadRouteDetails(projectId, routeId) {
+    if( !projectId || !routeId ) {
+      return;
+    }
+    const result = await axios.get(`/__project/${projectId}/route/${routeId}`);
     const routeData = result.data || {};
     updateRouteFormData(routeData);
   }
@@ -279,9 +294,8 @@
       "data-project-id": "projectId",
       "data-route-id": "routeId"
     }
-    const { projectId, routeId } = getDataAttributes(event.target, mapObj)
-
-    routeId && axios.put(`/__route/delete`, { id: routeId})
+    const { projectId, routeId } = getDataAttributes(event.target, mapObj);
+    routeId && axios.delete(`/__project/${projectId}/route/${routeId}/delete`)
       .then(resp => {
         getProjectRouteList( projectId );
         showProjectNameInInput();
@@ -297,10 +311,14 @@
       "data-input-id": "id"
     }
     const { id:switchAppId } = getDataAttributes(event.target, mapObj);
-    const { id:activeProjId } = getActiveProjectDetails();
+    if( !switchAppId ) {
+      return;
+    }
+    const response = await axios.put(`/__project/${switchAppId}/switch`);
+    const { projectList = [] } = response.data || {};
 
-    await axios.put("/__project/switch", { switchAppId, activeProjId });
-    await  initFunction() ;
+    const { id:projectId, otherProjects } = await setupProjectData(projectList);
+    await initializeData(projectId, otherProjects);
   }
 
   function createAppTitleObject( { name, id, isActive } ) {
@@ -439,7 +457,7 @@
 
     if( titleValue && titleValue.length > 0 ) {
       const response = await axios.post(`/__project/create`, { name: titleValue, isActive:projActive });
-      const { _id: id, name, isActive} = response.data;
+      const { id, name, selected} = response.data;
       
       if( id ) {
         showToastr("project is created successfully :)");
@@ -454,31 +472,33 @@
     } else {
       showToastr("project title cannot be empty :(");
     }
-
   }
 
   async function getProjectList() {
-    const response = await axios.get("/__project/list");
+    const response = await fetch("/__project/list");
+    const { projectList = [] } = await response.json();
+    return await setupProjectData(projectList);
+  }
+
+  async function setupProjectData(projectList) {
     let activeProject = {};
     const otherProjects = [];
-    for(let proj of response.data || []) {
-      if( proj.isActive && Object.keys(activeProject).length === 0 ) {
+    for(const proj of projectList) {
+      if( proj.selected && Object.keys(activeProject).length === 0 ) {
         activeProject = proj; 
       } else {
         otherProjects.push(proj); 
       } 
     }
-
     const element = document.getElementById(activeProjectDivId);
 
-    if( Object.keys( activeProject ).length !== 0 ) {
-      const { _id:id, name, isActive } = activeProject;
-      const { htmlObject, eventList } = createAppTitleObject( { id, name, isActive } ); 
-
+    if( Object.keys( activeProject ).length > 0 ) {
+      const { id, name, selected } = activeProject;
+      const { htmlObject, eventList } = createAppTitleObject( { id, name, isActive: selected } ); 
       removeAllChildElement( element );
       createHtmlChildElement( element, htmlObject.childElement );
       createEventListener( eventList );
-      return { id, name, isActive, otherProjects }
+      return { id, name, selected, otherProjects }
     } else {
       const { htmlObject, eventList } = generateInputField({name: "", isActive: true});
       element.appendChild( createHtmlElement( htmlObject ) );
@@ -489,7 +509,13 @@
 
   async function initFunction() {
     const { id:projectId, otherProjects } = await getProjectList();
-    projectId && showInactiveProjectList(otherProjects);
-    projectId && await getProjectRouteList( projectId );
-    projectId && showProjectNameInInput();
+    await initializeData(projectId, otherProjects);
+  }
+
+  async function initializeData(projectId, otherProjects) {
+    if(projectId) {
+      showInactiveProjectList(otherProjects);
+      showProjectNameInInput();
+      await getProjectRouteList( projectId );
+    }
   }

@@ -38,7 +38,7 @@ function showSchemaFormat() {
   document.getElementById(id).innerHTML = html;
 
   const element1 = document.getElementById("btn-1");
-  const element2 = document.getElementById("btn-2");
+  const element2 = document.getElementById("show-sample-data");
 
   element1.classList.add("selected-btn");
   element2.classList.remove("selected-btn");
@@ -57,7 +57,7 @@ function showSampleResponse() {
   document.getElementById(id).innerHTML = html
 
   const element1 = document.getElementById("btn-1");
-  const element2 = document.getElementById("btn-2");
+  const element2 = document.getElementById("show-sample-data");
 
   element1.classList.remove("selected-btn");
   element2.classList.add("selected-btn");
@@ -74,10 +74,10 @@ function showProjectNameInInput() {
   const projectId = "project-id";
   const projectName = "project-name";
 
-  const { id, name, isActive } = getActiveProjectDetails();
+  const { id, name } = getActiveProjectDetails();
   const element = document.getElementById("project-url-value");
   const fakeUrl = document.getElementById("fake-url").value;
-  element.innerHTML = `${fakeUrl}${name}`;
+  element.innerHTML = `${fakeUrl}${name.length > 0 ? `/${name}` : "" }`;
 
   const projectIdElement = document.getElementById(projectId);
   projectIdElement.value = id;
@@ -92,7 +92,7 @@ function showProjectNameInInput() {
   routeData.routeName = "";
   routeData.id = "";
 
-  editor.setValue( "" );
+  window.editor.setValue( "" );
 
   const routeIdElement = document.getElementById(routeIdDiv);
   routeIdElement.value = "";
@@ -113,7 +113,7 @@ function showProjectNameInInput() {
 async function inputSelector(event) {
   event.preventDefault();
   routeData.routeType = event.target.value;
-  await saveRouteData (routeData);
+  await saveRouteData(routeData);
 }
 
 async function baseUrlSelector(event) {
@@ -131,30 +131,30 @@ function makeReadOnly() {
 }
 
 function updateRouteFormData(data) {
-  const { _id: id, projectId, projectName, routeType, routeName, schema, options={} } = data || {};
+  const { id, projectId, projectName, type, name, schema, options={} } = data || {};
   const routeTypeList = ["", "GET", "POST", "PUT", "DELETE", "PATCH"];
 
   const routeIdDivElement = document.getElementById(routeIdDiv);
   routeIdDivElement.value = id;
   const inputTypeSelectDivIdElement = document.getElementById(inputTypeSelectDivId);
-  inputTypeSelectDivIdElement.value = routeType;
-  inputTypeSelectDivIdElement.selectedIndex = routeTypeList.indexOf(routeType);
+  inputTypeSelectDivIdElement.value = type;
+  inputTypeSelectDivIdElement.selectedIndex = routeTypeList.indexOf(type);
 
   const baseUrlDivIdElement = document.getElementById(baseUrlDivId);
-  baseUrlDivIdElement.value = routeName;
+  baseUrlDivIdElement.value = name;
 
   const newSchema = schema && schema !== "" ? JSON.stringify(schema, null, 2) : "";
 
   routeData.id = id;
   routeData.projectId = projectId;
   routeData.projectName = projectName;
-  routeData.routeType = routeType;
-  routeData.routeName = routeName;
+  routeData.routeType = type;
+  routeData.routeName = name;
   routeData.schema = newSchema;
   routeData.options = {};
   routeData.options.__auth = options?.__auth || false;
 
-  editor.setValue( newSchema );
+  window.editor.setValue( newSchema );
   makeReadOnly();
   setAuthCheckbox(routeData.options.__auth);
 }
@@ -162,31 +162,45 @@ function updateRouteFormData(data) {
 async function saveRouteData(routeData) {
   try {
     const { id=null, projectId, projectName, schema, routeName, routeType, options } = routeData;
-    if( id &&  routeType && routeName  ) {
-      const result  = await axios.put(`__route/update`, { id, schema, options })
+    if( id &&  routeType && routeName && schema  ) {
+      // /__project/:projectId/route/:routeId/update
+      const result  = await axios.put(`__project/${projectId}/route/${id}/update`, { 
+        schema, 
+        options,
+        name: routeName, 
+        type: routeType, 
+      })
       if(result.data) {
-        showToastr("route is updated successfully :)")
+        showToastr("route is updated successfully :)");
+        await getProjectRouteList( projectId );
       } else {
         showToastr("route cannot be updated :(")
       }
-    } else if( routeType && routeName ) {
+    } else if( routeType && routeName && schema ) {
+      // name, type, schema
       const result =  await axios.post("__route/save", {  
-        id, projectId, projectName, schema, routeName, routeType, options 
+        id, 
+        projectId, 
+        projectName, 
+        schema, 
+        name: routeName, 
+        type: routeType, 
+        options 
       });
-      const { _id: routeId = ""} = result.data;
+      const { id: routeId = ""} = result.data;
       routeData.id = routeId;
       document.getElementById(routeIdDiv).value = routeId;
       makeReadOnly();
       if( routeId !== "") {
         showToastr("route is created successfully :)");
+        await getProjectRouteList( projectId );
       } else {
         showToastr("route cannot be created :(")
       }
     }
-
-    await getProjectRouteList( projectId );
   }
   catch(err) {
+    console.error(err);
     showToastr("internal server error :(");
   }
 }
@@ -210,7 +224,7 @@ async function displaySampleData(data) {
 
     console.log("Displaying sample data for:", JSON.stringify({
       method: `${data.routeType}`,
-      url: `${data.projectName}/${data.routeName}`,
+      url: `${data.projectName}${data.routeName}`,
       headers: {
         "Authorization": "auth-data",
         "Content-Type": "application/json"
