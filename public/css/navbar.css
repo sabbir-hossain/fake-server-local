@@ -140,7 +140,8 @@ ul.other-app-list {
 .route-list {
   position: relative;
   display: block;
-  padding: .75rem 10px;
+  padding: 0 10px;
+  padding-bottom: 10px;
   /* background-color: #fff; */
   color: #222;
   border-bottom: 1px solid rgba(0,0,0,.125);

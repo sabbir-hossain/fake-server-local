@@ -1,0 +1,537 @@
+```text
+export const project_list_data_id = 'project-list-data';
+export const route_list_data_id = 'route-list-data';
+export const selected_project_data_id = 'selected-project-data';
+export const selected_route_data_id = 'selected-route-data';
+export const port_data_id = 'port-data';
+export const host_data_id = 'port-address';
+export const route_input_id = 'selected-route-url';
+export const project_input_id = 'selected-project-title';
+export const project_secret_id = 'project-secret';
+export const project_list_id = 'project-list-dropdown';
+export const toastr_id = 'toastr-container';
+export const route_list_id = "route-title";
+export const schema_json_id = 'schema-json';
+export const close_project_input_id = 'header-close-btn';
+export const show_loader = 'prj-title-loader';
+export const add_header_btn_id = 'add-route-btn';
+export const route_type = 'route-type';
+export const sample_output = 'sample-output';
+export const generateSampleBtnId = 'generate-sample-data-btn';
+export const host_display_id = 'host-display';
+export const format_json_data_id = 'format-json-data';
+export const stringify_json_data_id = 'stringify-json-btn';
+export const error toastr duration = 15 000:
+```
+
+
+export const error_toastr_duration = 15_000;
+export const success_toastr_duration = 3_000;
+export const allowed_route_list = [
+"GET",
+"POST"
+"PUT",
+"PATCH",
+"DELETE"
+];
+export const global_data = {
+selectedProject: null,
+selectedRoute: null,
+projectList: [],
+routeList: [],
+port: null,
+serverUrl: null,
+routeInput: {
+id: null,
+type: null,
+name: null,
+schema: null,
+status: null
+}
+};
+
+
+/****************************************************** */
+
+document.addEventListener('DOMContentLoaded', function() {
+    toggleLoader(false);
+    const port = document.getElementById(port_data_id).value;
+    const serverUrl = document.getElementById(host_data_id).value;
+
+    global_data.port = port;
+    global_data.serverUrl = serverUrl;
+    console.log({global_data});
+
+    document.getElementById(project_input_id).addEventListener('blur', function(evt) {
+        evt.preventDefault();
+        const projectName = document.getElementById(project_input_id).value;
+        saveNewProject (projectName);
+    })
+    document.getElementById(project_list_id).addEventListener('change', function(evt) {
+        evt.preventDefault();
+        const selectedOption = evt.target.options[evt.target.selectedIndex];
+        const projectId = selectedOption.value;
+        updateProjectData(projectId);
+    });
+    document.getElementById(add_header_btn_id).addEventListener('click', function(evt) {
+        evt.preventDefault();
+
+        document.addEventListener('DOMContentLoaded', function() {
+document.getElementById(route_type).addEventListener('change', function(evt) {
+evt.preventDefault();
+const selectedOption = evt.target.options[evt.target.selectedIndex];
+global_data.routeInput.type = selectedoption.value;
+manageRouteData();
+});
+document.getElementById(route_input_id).addEventListener('blur', function(evt) {
+evt.preventDefault();
+global_data.routeInput.name = evt.target.value;
+manageRouteData();
+});
+document.getElementById(schema_json_id).addEventListener('blur', function(evt) {
+evt.preventDefault();
+const schemaText = evt.target.textContent.trim().replace(/\u00A0/g, ' ');
+try {
+const schemaJson = JSON.parse(`${schemaText}`);
+global_data.routeInput.schema = schemaJson;
+manageRouteData();
+} catch (e) {
+console.error('Invalid JSON:', e);
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+document.getElementById(generateSampleBtnId).addEventListener('click', async function(evt) {
+evt.preventDefault();
+
+// Generate sample data based on the schema
+try {
+const response = await generateSampleData();
+toggleLoader (false);
+document.getElementById(sample_output).textContent = JSON.stringify(response, null, 2);
+} catch (error) {
+console.error('Error generating sample data:', error);
+toggleLoader (false);
+showToastr ('Error generating sample data', error_toastr_duration);
+}
+});
+
+document.getElementById(format_json_data_id).addEventListener('click', async function(evt) {
+evt.preventDefault();
+const jsonText = document.getElementById(sample_output).textContent.trim().replace(/\u00A0/g
+if(jsonText.length === 0) {
+showToastr ('No data to format', error_toastr_duration);
+return;
+}
+try {
+const schemaJson = JSON.parse('${jsonText}');
+document.getElementById(sample_output).textContent = JSON.stringify(schemaJson, null, 2
+} catch (e) {
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+document.getElementById(stringify_json_data_id).addEventListener('click', async function(evt) {
+evt.preventDefault();
+const jsonText = document.getElementById(sample_output).textContent.trim().
+if(jsonText.length === 0) {
+showToastr ('No data to stringify', error_toastr_duration);
+return;
+}
+try {
+const schemaJson = JSON.parse(`${jsonText}`);
+document.getElementById(sample_output).textContent = JSON.stringify(schemaJson);
+} catch (e) {
+showToastr('No data to format', error_toastr_duration);
+return;
+}
+});
+
+loadInitData()
+.then(response => {
+toggleLoader (false);
+initializeData(response);
+})
+.catch(error => {
+console.error('Error retrieving project:', error);
+toggleLoader (false);
+
+
+```text
+document.addEventListener(
+loadInitData()
+.then(response => {
+toggleLoader(false);
+initializeData(response);
+})
+.catch(error => {
+console.error('Error retrieving project:', error);
+toggleLoader(false);
+});
+});
+
+export function initializeData(response = {}) {
+const { selectedProject, selectedRoute, projectList, routeList } = response;
+global_data.selectedProject = selectedProject;
+global_data.selectedRoute = selectedRoute;
+global_data.projectList = projectList;
+global_data.routeList = routeList;
+
+generateProjectListSelect();
+prettifyJsonData();
+
+manageProjectToggle();
+generateRouteList();
+showAllRouteInfo(global_data.selectedProject?.id, global_data.selectedRoute?.id);
+
+const serverUrl = document.getElementById(host_data_id).value;
+document.getElementById(host_display_id).textContent = `${serverUrl}/${global_data.selec
+```
+
+
+function prettifyJsonData() {
+    // Highlight JSON keys in editable-json
+    const editablePre = document.querySelector('.editable-json pre');
+    if (editablePre) {
+        function highlightJsonKeys (jsonString) {
+            // Regex to match JSON keys
+            return jsonString.replace(/("[^"]+")(?=\s*:)/g, '<span class="json-key">$1</spar
+        }
+        // Only highlight if not already highlighted
+        if (!editablePre.innerHTML.includes('json-key')) {
+            editablePre.innerHTML = highlightJsonKeys(editablePre.textContent);
+        }
+    }
+    // Highlight JSON keys in static-json
+    const staticPre = document.querySelector('.static-json pre');
+    if (staticPre) {
+        function highlightJsonKeys(jsonString) {
+            return jsonString.replace(/("[^"]+")(?=\s*:)/g, '<span class="json-key">$1</spa
+        }
+        if (!staticPre.innerHTML.includes('json-key')) {
+            staticPre.innerHTML = highlightJsonKeys(staticPre.textContent);
+        }
+    }
+}
+
+export function saveNewProject(projectName = '', secret='') {
+const url = `${global_data.serverUrl}/_record/project/save`;
+console.log(url, {project: projectName, secret});
+toggleLoader(true);
+postRequest(url, {project: projectName, secret})
+.then(response => {
+toggleLoader(false);
+// global_data.selectedProject = response.data;
+// global_data.projectList.push(response.data);
+showToastr (response.message, success_toastr_duration);
+initializeData(response);
+generateProjectkistSelect();
+addNewRoute();
+})
+.catch(error => {
+console.error('Error saving project:', error);
+throw error;
+});
+}
+
+export function manageProjectToggle() {
+// Header plus button logic
+const addHeaderBtn = document.getElementById('add-header-btn');
+const headerAddControls = document.getElementById('header-add-controls');
+const headerCloseBtn = document.getElementById('header-close-btn');
+
+export function manageProjectToggle() {
+    // Header plus button logic
+    const addHeaderBtn = document.getElementById('add-header-btn');
+    const headerAddControls = document.getElementById('header-add-controls');
+    const headerCloseBtn = document.getElementById('header-close-btn');
+    if (addHeaderBtn && headerAddControls && headerCloseBtn) {
+        addHeaderBtn.addEventListener('click', function() {
+        });
+        addHeaderBtn.style.display = 'none';
+        headerAddControls.style.display = 'flex';
+        global_data.selectedProject = null; // Reset selected project
+        global_data.selectedRoute = null; // Reset selected route
+        I
+        headerCloseBtn.addEventListener('click', function() {
+        });
+    }
+    headerAddControls.style.display = 'none';
+    addHeaderBtn.style.display = 'inline-block';
+}
+
+export function generateProjectListSelect() {
+    const projectList = global_data.projectList;
+    const selectElement = document.getElementById(project_list_id);
+    if (selectElement) {
+
+
+    export function generateProjectListSelect() {
+    const projectList = global_data.projectList;
+    const selectElement = document.getElementById(project_list_id);
+
+    if (selectElement) {
+        // Clear existing options
+        removeAllChildElement(selectElement);
+        // Populate with new options
+        (projectList || []).forEach(project => {
+            const option = document.createElement('option');
+            option.value = project.id;
+            option.textContent = project.name;
+            // option.selected = global_data.selectedProject && global_data.selectedProjec
+            selectElement.appendChild(option);
+        });
+        selectElement.value = global_data.selectedProject ? global_data.selectedProject.ic
+    }
+}
+
+export function updateProjectData(projectId) {
+    const url = `${global_data.serverUrl}/_record/${projectId}/get`;
+    toggleLoader(true);
+    getRequest(url)
+}
+
+export function updateProjectData(projectId) {
+  const url = `${global_data.serverUrl}/_record/${projectId}/get`;
+
+  toggleLoader(true);
+  getRequest(url)
+    .then(response => {
+      toggleLoader(false);
+
+      const { selectedProject, selectedRoute, projectList, routeList } = response.data;
+      global_data.selectedProject = selectedProject;
+      global_data.selectedRoute = selectedRoute;
+      global_data.projectList = projectList;
+      global_data.routeList = routeList;
+      showToastr(response.message, success_toastr_duration);
+      generateProjectListSelect();
+    })
+    .catch(error => {
+      console.error('Error retrieving project:', error);
+      showToastr(response.message, error_toastr_duration);
+      toggleLoader(false);
+    });
+}
+
+export function loadInitData() {
+  const url = `${global_data.serverUrl}/_record/index`;
+}
+
+
+```text
+Selection View Go Run Terminal Help
+mock-server
+ejs M
+TS type.ts
+JS project.js >
+.env
+style.css M
+JS script.js M JS constant.js M JS project.js X
+}
+Ydu, 3 weeks ago • feat: Enhance project management with CRUD oper...
+export function loadInitData() {
+const url = `${global_data.serverUrl}/_record/index`;
+toggleLoader(true);
+return getRequest(url)
+.catch(error => {
+throw error;
+})
+}
+export function generateSampleData() {
+///:projectId/route/: routeId/generate
+if(!global_data.selectedProject.id || !global_data.selectedRoute || ! global_data.selectedRoute.id) {
+}
+showToastr ('No route selected for sample data generation', error_toastr_duration);
+return Promise.reject(new Error('No route selected'));
+const url = `${global_data.serverUrl}/_route/${global_data.selectedProject.id}/route/${global_data.selectedRou
+generate`;
+toggleLoader (true);
+return getRequest(url)
+.catch(error => {
+toggleLoader (false);
+showToastr('Error generating sample data', error_toastr_duration);
+console.error('Error generating sample data:', error);
+return Promise.reject(error);
+});
+}
+```
+
+
+import { toggleLoader, showToastr } from "./util.js";
+
+export function addNewRoute() {
+    global_data.selectedRoute = null;
+    global_data.routeInput = {
+        type: null,
+        name: null,
+        schema: null
+    };
+    document.getElementById(route_input_id).value = '';
+    document.getElementById(schema_json_id).textContent = '';
+    document.getElementById(sample_output).textContent = '';
+    setRouteList();
+}
+
+export function setRouteList() {
+    const selectElement = document.getElementById(route_type);
+
+    if (selectElement) {
+        // Clear existing options
+        removeAllChildElement(selectElement);
+        // Populate with new options
+        allowed_route_list.forEach(route => {
+            const option = document.createElement('option');
+            option.value = route;
+            option.textContent = route;
+            selectElement.appendChild(option);
+        });
+        selectElement.value = global_data.selectedRoute ? global_data.selectedRoute?.type : '';
+    }
+}
+
+
+export function manageRouteData() {
+if(global_data.routeInput.name !==
+""
+&& global_data.routeInput.type !==
+&& Object.keys(global_data.routeInput.schema || {}).length > 0) {
+toggleLoader(true);
+let routeResponse = null;
+if(global_data.routeInput.id) {
+const url = `${global_data.serverUrl}/_route/${global_data.selectedProject.id}/route/update`;
+routeResponse = putRequest(url, {...global_data.routeInput})
+} else {
+const url = `${global_data.serverUrl}/_route/${global_data.selectedProject.id}/route/save`;
+routeResponse = postRequest(url, {...global_data.routeInput});
+routeResponse
+.then(response => {
+toggleLoader(false);
+global_data.selectedRoute = response.data;
+global_data.routeList = global_data.routeList || [];
+// global_data.routeList.push(response.data);
+const existingIndex = global_data.routeList.findIndex(route => route.id === response.data.ic
+if (existingIndex > -1) {
+global_data.routeList[existingIndex] = response.data;
+} else {
+}
+global_data.routeList.push (response.data);
+showToastr (response.message, success_toastr_duration);
+generateRouteList();
+global_data.routeInput = {
+id: global_data.selectedRoute.id,
+
+
+```javascript
+export function generateRouteList() {
+const routeListElement = document.getElementById(route_list_id);
+if (routeListElement) {
+removeAllChildElement (routeListElement);
+(global_data?.routeList || []).forEach(route => {
+const routeItem = document.createElement('li');
+routeItem.classList.add('route');
+if (global_data.selectedRoute && global_data.selectedRoute.id === route.id) {
+}
+routeItem.classList.add('route-selected');
+const spanItem = document.createElement('span');
+spanItem.classList.add('route-type-name');
+spanItem.textContent = route.type;
+spanItem.onclick = () => showAllRouteInfo(global_data.selectedProject.id, route.id);
+routeItem.appendChild(spanItem);
+const spanItem2 = document.createElement('span');
+spanItem2.classList.add('route-name-val');
+spanItem2.textContent = route.name;
+spanItem2.onclick = () => showAllRouteInfo(global_data.selectedProject.id, route.id)
+routeItem.appendChild(spanItem2);
+const removeButton = document.createElement('button');
+removeButton.classList.add('route-remove');
+removeButton.type = 'button'.
+```
+
+
+export function generateRouteList() {
+(global_data?.routeList || []).forEach(route => {
+
+const spanItem2 = document.createElement('span');
+spanItem2.classList.add('route-name-val');
+spanItem2.textContent = route.name;
+spanItem2.onclick = () => showAllRouteInfo(global_data.selectedProject.id, route.id);
+
+routeItem.appendChild(spanItem2);
+
+const removeButton = document.createElement('button');
+removeButton.classList.add('route-remove');
+removeButton.type = 'button';
+removeButton.title = 'Remove Route';
+removeButton.onclick = () => removeRoute(global_data.selectedProject.id, route.id);
+removeButton.innerHTML = '&#x2715;';
+routeItem.appendChild(removeButton);
+
+routeListElement.appendChild(routeItem);
+});
+}
+}
+export function showRouteData() {
+setRouteList();
+
+const routeData = global_data.selectedRoute || {schema: {}, name: '', type: ''};
+
+document.getElementById(schema_json_id).textContent = JSON.stringify(routeData.schema, null, 2);
+document.getElementById(route_input_id).value = routeData.name;
+document.getElementById(sample_output).textContent = '';
+}
+
+
+export function showAllRouteInfo(projectId, routeId) {
+    if(!projectId || ! routeId) {
+        return;
+    }
+    const url = `${global_data.serverUrl}/_route/${projectId}/route/${routeId}/get`;
+    toggleLoader(true);
+    getRequest(url)
+        .then (response => {
+            toggleLoader(false);
+            global_data.selectedRoute = response.data;
+            showRouteData();
+            generateRouteList();
+            global_data.routeInput = {
+                id: global_data.selectedRoute.id,
+                type: global_data.selectedRoute.type,
+                name: global_data.selectedRoute.name,
+                schema: global_data.selectedRoute.schema,
+                status: global_data.selectedRoute.status
+            };
+        })
+        .catch(error => {
+            toggleLoader (false);
+            showToastr('Error fetching route data', error_toastr_duration);
+        });
+}
+
+
+export function showAllRouteInfo(projectId, routeId) {
+    .catch(error => {
+        SHOWICGOeconang Touce data
+    });
+}
+
+export function removeRoute (projectId, routeId) {
+    if(!projectId || !routeId) {
+        return;
+    }
+    const url = `${global_data.serverUrl}/_route/${projectId}/route/${routeId}/remove`;
+    toggleLoader(true);
+    deleteRequest(url)
+    .then (response => {
+        global_data.routeList = response.data.routes;
+        global_data.selectedRoute = response.data?.selectedRoute || null;
+        toggleLoader(false);
+        // global_data.selectedRoute = response.data;
+        showRouteData();
+        generateRouteList();
+    })
+    .catch(error => {
+        toggleLoader (false);
+        showToastr('Error fetching route data', error_toastr_duration);
+    });
+}
+

@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>fake server local </title>
+
+    <link href="/vendor/prism/prism.css" rel="stylesheet" type="text/css">
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <link href="/css/context.css" rel="stylesheet" type="text/css">
+    <link href="/css/navbar.css" rel="stylesheet" type="text/css">
+    <link href="/css/helper.css" rel="stylesheet" type="text/css">
+
+    <script src="/vendor/ace/ace.js" type="text/javascript"></script>
+    <script src="/vendor/prism/prism.js" type="text/javascript"></script>
+    <script src="/vendor/ace/mode-json.js" type="text/javascript"></script>
+    <script src="/vendor/json-formatter/json-formatter.js" type="text/javascript"></script>
+    <script src="/vendor/axios/axios.min.js" type="text/javascript"> </script>
+    
+    <script src="/js/main.js" type="text/javascript"></script>
+    <script src="/js/navbar.js" type="text/javascript"></script>
+    <script src="/js/context.js" type="text/javascript"></script>
+
+    <script src="/js/project.js" type="text/javascript"></script>
+  </head>
+
+  <body>
+
+    <input type="hidden" id="fake-url" value=<%= projectUrl %> />
+
+    <div class="wrapper">
+
+      <div id="main-content">
+
+        <nav class="nav-part">
+          <%- include('navbar.ejs') %>
+        </nav>
+
+        <section class="content-part">
+          <%- include('context.ejs') %>
+        </section>
+
+
+      </div>  
+      
+    </div>
+
+  </body>
+
+</html>
