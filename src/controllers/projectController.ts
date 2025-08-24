@@ -10,9 +10,6 @@ export default class ProjectController {
     static reserveRouteList: string[] = [
         'vendor',
         '.well-known',
-        'css',
-        'js',
-        'favicon.ico'
     ];
 
     /**
@@ -21,6 +18,15 @@ export default class ProjectController {
      * @param response - The response object to send data back.
      */
     static handleProjectRequest(req: Request, res: Response): Response {
+        // const params = req.params;
+        // const query = req.query;
+        // const body = req.request.body;
+        console.log({
+            project: req.params.project,
+            method: req.method,
+            params: `/${req.params[0]}`,
+            param: req.params
+        });
 
         if( ProjectController.reserveRouteList.includes(req.params.project) ) {
             return res.status(404).send({

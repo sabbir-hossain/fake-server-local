@@ -154,9 +154,19 @@ ul.other-app-list {
 }
 
 .route-list {
-  list-style-type: none;
-  padding: 8px 16px;
-  border-bottom: 1px solid #ddd;
+  /* background: #666; */
+  position: relative;
+  font-size: 15px;
+}
+
+.route-list {
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  padding-bottom: 10px;
+  /* background-color: #fff; */
+  color: #222;
+  border-bottom: 1px solid rgba(0,0,0,.125);
   display: flex;
   align-items: center;
   gap: 8px;

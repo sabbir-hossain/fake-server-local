@@ -221,6 +221,16 @@ function setAuthCheckbox(value) {
 
 async function displaySampleData(data) {
   try {
+
+    console.log("Displaying sample data for:", JSON.stringify({
+      method: `${data.routeType}`,
+      url: `${data.projectName}${data.routeName}`,
+      headers: {
+        "Authorization": "auth-data",
+        "Content-Type": "application/json"
+      }
+    }, null, 2));
+
     const result =  await axios({
       method: `${data.routeType}`,
       url: `${data.projectName}${data.routeName}`,
