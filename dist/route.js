@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const healthController_1 = __importDefault(require("./controllers/healthController"));
+const projectController_1 = __importDefault(require("./controllers/projectController"));
+const recordController_1 = __importDefault(require("./controllers/recordController"));
+const router = (0, express_1.Router)();
+router.get('/health-check', healthController_1.default.checkHealth);
+router.post('/__project/create', recordController_1.default.createProject);
+router.get('/__project/list', recordController_1.default.getInitialData);
+router.get('/__project/:projectId/route/:routeId', recordController_1.default.getRouteData);
+router.get('/__route/:projectId/list', recordController_1.default.getRouteList);
+router.post('/__route/save', recordController_1.default.saveRoute);
+router.put('/__project/:projectId/route/:routeId/update', recordController_1.default.updateRoute);
+router.delete('/__project/:projectId/route/:routeId/delete', recordController_1.default.removeRoute);
+router.put('/__project/:projectId/switch', recordController_1.default.getProjectData);
+router.all('/:project/*', projectController_1.default.handleProjectRequest);
+exports.default = router;

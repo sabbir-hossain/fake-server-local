@@ -1,12 +1,7 @@
 .app-list {
-  position: sticky;
-  top: 0;
-  background: #C5DDEB;
-  z-index: 101;
-  padding: 16px 0 8px 0;
-  border-bottom: 1px solid #b0c4de;
+  background-color: #222222;
+  border-color: #121212;
 }
-
 
 .app-name {
   color: #f9f9f9;
@@ -196,4 +191,44 @@ ul.other-app-list {
 .fake-btn:hover {
   cursor: pointer;
   font-weight: 600;
+}
+
+/* ...existing code... */
+
+.nav-part {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background: #C5DDEB;
+  color: #444;
+  overflow-y: auto;
+  z-index: 100;
+  border-right: 1px solid #b0c4de;
+}
+
+/* To ensure main-content doesn't go under nav-part */
+#main-content {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 900px) {
+  .nav-part {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-right: none;
+  }
+  #main-content {
+    margin-left: 0;
+    width: 100%;
+    flex-direction: column;
+  }
 }

@@ -85,6 +85,16 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     showSampleResponse();
   });
 
+  // Update your JS to toggle visibility
+  document.getElementById('add-header-btn').onclick = function() {
+    document.getElementById('header-add-controls').classList.add('active');
+    document.getElementById('add-header-btn').style.display = 'none';
+  };
+  document.getElementById('header-close-btn').onclick = function() {
+    document.getElementById('header-add-controls').classList.remove('active');
+    document.getElementById('add-header-btn').style.display = 'flex';
+  };
+
   createEventListener( contextEventList );
 
   showSchemaFormat();

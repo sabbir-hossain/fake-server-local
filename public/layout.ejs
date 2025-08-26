@@ -4,9 +4,8 @@
 
     <link href="/vendor/prism/prism.css" rel="stylesheet" type="text/css">
     <link href="/css/main.css" rel="stylesheet" type="text/css">
-    <link href="/css/context.css" rel="stylesheet" type="text/css">
     <link href="/css/navbar.css" rel="stylesheet" type="text/css">
-    <link href="/css/helper.css" rel="stylesheet" type="text/css">
+    <!-- <link href="/css/context.css" rel="stylesheet" type="text/css"> -->
 
     <script src="/vendor/ace/ace.js" type="text/javascript"></script>
     <script src="/vendor/prism/prism.js" type="text/javascript"></script>
@@ -25,22 +24,48 @@
 
     <input type="hidden" id="fake-url" value=<%= projectUrl %> />
 
-    <div class="wrapper">
+        <header class="header-contents">
+          <div class="context-header">
+            <!-- <div class="dropdown-container">
+                <select id="project-list-dropdown">
+                </select>
+            </div> -->
 
-      <div id="main-content">
+            <h2 id="prj-title">
+              Fake Server Local
+              <span id="prj-title-loader" class="loader-spinner"></span>
+            </h2>
 
-        <nav class="nav-part">
-          <%- include('navbar.ejs') %>
-        </nav>
+            <div class="toastr-msg">
+              <span id="toastr-title"></span>
+            </div>
 
-        <section class="content-part">
-          <%- include('context.ejs') %>
-        </section>
+            <div class="header-right-controls">
+                <div id="add-header-btn" class="header-plus-btn" aria-label="Add" title="Add">
+                    &#43;<span class="add-project-label">Add Project</span>
+                </div>
+                <div id="header-add-controls">
+                    <input id="project-secret" type="text" placeholder="project secret">
+                    <input id="selected-project-title" type="text" placeholder="project name">
+                    <button id="header-close-btn" type="button">&#x2715;</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    <main class="wrapper">
+
+      <nav class="nav-part">
+        <%- include('navbar.ejs') %>
+      </nav>
+
+      <section class="content-part">
+        <%- include('context.ejs') %>
+      </section>
 
 
-      </div>  
-      
-    </div>
+    </main>
 
   </body>
 
