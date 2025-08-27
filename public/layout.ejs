@@ -5,7 +5,7 @@
     <link href="/vendor/prism/prism.css" rel="stylesheet" type="text/css">
     <link href="/css/main.css" rel="stylesheet" type="text/css">
     <link href="/css/navbar.css" rel="stylesheet" type="text/css">
-    <!-- <link href="/css/context.css" rel="stylesheet" type="text/css"> -->
+    <link href="/css/context.css" rel="stylesheet" type="text/css">
 
     <script src="/vendor/ace/ace.js" type="text/javascript"></script>
     <script src="/vendor/prism/prism.js" type="text/javascript"></script>
@@ -26,14 +26,9 @@
 
         <header class="header-contents">
           <div class="context-header">
-            <!-- <div class="dropdown-container">
-                <select id="project-list-dropdown">
-                </select>
-            </div> -->
-
             <h2 id="prj-title">
               Fake Server Local
-              <span id="prj-title-loader" class="loader-spinner"></span>
+              <!-- <span id="prj-title-loader" class="loader-spinner"></span> -->
             </h2>
 
             <div class="toastr-msg">
@@ -42,7 +37,8 @@
 
             <div class="header-right-controls">
                 <div id="add-header-btn" class="header-plus-btn" aria-label="Add" title="Add">
-                    &#43;<span class="add-project-label">Add Project</span>
+                  <img src="/assets/icons/plus.svg" class="nav-icon-white btn-icon">  
+                  <span class="add-project-label">Add Project</span>
                 </div>
                 <div id="header-add-controls">
                     <input id="project-secret" type="text" placeholder="project secret">

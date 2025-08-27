@@ -1,18 +1,30 @@
+
+/* App list stays fixed below header */
 .app-list {
-  position: sticky;
-  top: 0;
-  background: #C5DDEB;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  /* background: #C5DDEB; */
   z-index: 101;
   padding: 16px 0 8px 0;
+  padding-top: 0;
   border-bottom: 1px solid #b0c4de;
 }
 
+/* All route list fills remaining space and is scrollable */
+.all-route-list {
+  margin-top: 40px; /* header + app-list height */
+  overflow-y: auto;
+  padding: 8px 0;
+  /* background: #F2F5F8; */
+  height: calc(100vh - 60px - 56px); /* header + app-list height */
+}
 
 .app-name {
-  color: #f9f9f9;
+  /* color: #f9f9f9; */
   width: 100%;
   font-size: 20px;
-  height: 38px;
+  /* height: 38px; */
   float: none;
 }
 
@@ -22,8 +34,13 @@
 }
 
 .nav-icon-white {
+  /* filter: invert(1.5); */
+  width: 1rem;
+}
+
+#add-header-btn img {
   filter: invert(1.5);
-  width: 16px;
+  width: 12px;
 }
 
 .btn-icon {
@@ -76,7 +93,7 @@ ul.other-app-list {
 }
 
 .other-app-title {
-  color: #f8f8f8;
+  /* color: #f8f8f8; */
   padding: 10px 0;
   border-bottom: 1px solid #666;
   text-align: left;
@@ -137,21 +154,13 @@ ul.other-app-list {
 }
 
 .route-list {
-  /* background: #666; */
-  position: relative;
-  font-size: 15px;
-}
-
-.route-list {
-  position: relative;
-  display: block;
-  padding: 0 10px;
-  padding-bottom: 10px;
-  /* background-color: #fff; */
-  color: #222;
-  border-bottom: 1px solid rgba(0,0,0,.125);
+  list-style-type: none;
+  padding: 8px 16px;
+  border-bottom: 1px solid #ddd;
   display: flex;
-}
+  align-items: center;
+  gap: 8px;
+  }
 
 .route-list:last-child {
   border-bottom: none;

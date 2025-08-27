@@ -173,60 +173,6 @@
       });
     }
 
-    childElementList.push({
-        name: "li",
-        text: name,
-        attributes: {
-          class: "other-app-title"
-        },
-        childElement: [
-          {
-            name: "div",
-            attributes: {
-              class: "input-group"  
-            },
-            childElement: [
-              {
-                name: "input",
-                attributes: {
-                  type: "text",
-                  value: name,
-                  class: "input-field",
-                  placeholder: "Add new Project",
-                  id: otherProjectInputDiv
-                }
-              }, 
-              {
-                name:"div",
-                attributes: {
-                  class: "input-group-append"
-                },
-                childElement: [
-                  {
-                    name: "button",
-                    attributes: {
-                      class: "btn btn-outline-secondary",
-                      id: otherProjectSaveDivId,
-                      [`${dataActive}`]: false
-                    },
-                    childElement: [
-                      {
-                        name: "img",
-                        attributes: {
-                          src: "/assets/icons/checkmark.svg",
-                          class: "nav-icon-black",
-                          [`${dataActive}`]: false
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ] 
-          }
-        ]
-      });
-
     eventObjList.push({
       identifier: otherProjectSaveDivId, 
       functionReference: handleCreateNewProjectClick 
