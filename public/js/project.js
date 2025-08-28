@@ -40,7 +40,6 @@ const contextEventList = [
 document.addEventListener("DOMContentLoaded", async (event) => {
   event.preventDefault();
   window.editor = ace.edit("documentTextarea")
-  // console.log("editor", window.editor)
   window.editor.resize()
   window.editor.getSession().setMode("ace/mode/json")
   window.editor.setTheme("ace/theme/monokai")
@@ -84,20 +83,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     evt.preventDefault();
     showSampleResponse();
   });
-
-  // Update your JS to toggle visibility
-  document.getElementById('add-header-btn').onclick = function() {
-    document.getElementById('header-add-controls').classList.add('active');
-    document.getElementById('add-header-btn').style.display = 'none';
-  };
-  document.getElementById('header-close-btn').onclick = function() {
-    document.getElementById('header-add-controls').classList.remove('active');
-    document.getElementById('add-header-btn').style.display = 'flex';
-  };
-
-  document.getElementById('active-project-id').onclick = function() {
-    document.querySelector('.dropdown').classList.toggle('open');
-  };
 
   createEventListener( contextEventList );
 

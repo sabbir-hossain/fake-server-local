@@ -1,45 +1,46 @@
 [
-    {
-        "name": "demo",
-        "type": "project",
+  {
+    "name": "demo",
+    "type": "project",
+    "selected": true,
+    "status": true,
+    "id": "8d3f85ce-7513-4f21-8128-a3705dd7f43c",
+    "createdAt": 1755878770100,
+    "updatedAt": 1756401200800,
+    "secret": "super-secret",
+    "routes": [
+      {
+        "schema": {
+          "__type": "array",
+          "__range": "10,15",
+          "__property": {
+            "name": "text",
+            "email": "email",
+            "phone": "01>5|6|7|8|9>int:8"
+          }
+        },
+        "options": {
+          "__auth": false
+        },
+        "name": "/data/list",
+        "type": "GET",
+        "id": "15e45f47-8600-4812-ab38-7b6350ad04e6",
+        "updatedAt": 1756399391417,
         "selected": true,
-        "status": true,
-        "id": "8d3f85ce-7513-4f21-8128-a3705dd7f43c",
-        "createdAt": 1755878770100,
-        "updatedAt": 1756022022070,
-        "secret": "super-secret",
-        "routes": [
-            {
-                "schema": {
-                    "__type": "array",
-                    "__range": "10,15",
-                    "__property": {
-                        "name": "text",
-                        "email": "email"
-                    }
-                },
-                "options": {
-                    "__auth": false
-                },
-                "name": "/data/list",
-                "type": "GET",
-                "id": "15e45f47-8600-4812-ab38-7b6350ad04e6",
-                "updatedAt": 1756019147501,
-                "selected": true,
-                "projectId": "8d3f85ce-7513-4f21-8128-a3705dd7f43c",
-                "projectName": "demo"
-            }
-        ]
-    },
-    {
-        "name": "blog-project",
-        "type": "project",
-        "selected": false,
-        "status": true,
-        "id": "23bb5514-cddf-4c75-be23-33b99b50f6ca",
-        "createdAt": 1756023011309,
-        "updatedAt": 1756023011309,
-        "secret": "super-secret",
-        "routes": []
-    }
+        "projectId": "8d3f85ce-7513-4f21-8128-a3705dd7f43c",
+        "projectName": "demo"
+      }
+    ]
+  },
+  {
+    "name": "blog-project",
+    "type": "project",
+    "selected": false,
+    "status": true,
+    "id": "23bb5514-cddf-4c75-be23-33b99b50f6ca",
+    "createdAt": 1756023011309,
+    "updatedAt": 1756023011309,
+    "secret": "super-secret",
+    "routes": []
+  }
 ]

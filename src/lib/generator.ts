@@ -11,7 +11,7 @@ export const processData = (type: string, params: Params = {}, option: Options):
 
   let result = '';
   for(const dataType of typeDataList) {
-    result += `${generateData(dataType, params, option)}'`;
+    result += `${generateData(dataType, params, option)}`;
   }
 
   return result;
@@ -32,7 +32,7 @@ export const generateData = (type: string, params: Params = {}, option: Options)
 export const processUserData = (input: string): string | number[] => {
   const userOutput = input.split('|');
   if (userOutput.length > 1) {
-    return processUserData(randomArrayData(userOutput) as string);
+    return randomArrayData(userOutput) as any;
   } else {
     return userOutput[0] || '';
   }

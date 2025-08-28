@@ -25,7 +25,7 @@ const booleanGenerator = () => {
 };
 
 const integerGenerator = (digit='3'):  number => {
-  const [start=1, end = -1] = digit.split(",").map(num => num && num.trim() !== '' ? parseInt(num, 10) : -1);
+  const [start, end = -1] = digit.split(",").map(num => num && num.trim() !== '' ? parseInt(num, 10) : -1);
   return end > -1 
     ? randomNumberGenerator(end, start) 
     : randomNumberGenerator(Math.pow(10, start) - 1, Math.pow(10, start - 1));

@@ -1,7 +1,7 @@
 
   function showInactiveProjectList(projects) {
     const othersProjectElement = document.getElementById(otherProjectDivId);
-    const { htmlObjectList } = generateOtherProjectList(projects);
+    const { htmlObjectList, eventObjList } = generateOtherProjectList(projects);
     removeAllChildElement( othersProjectElement );
     createHtmlChildElement( othersProjectElement, htmlObjectList.childElement );
     // createEventListener( eventObjList );
