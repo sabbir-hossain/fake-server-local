@@ -6,7 +6,7 @@
     "status": true,
     "id": "8d3f85ce-7513-4f21-8128-a3705dd7f43c",
     "createdAt": 1755878770100,
-    "updatedAt": 1756022022070,
+    "updatedAt": 1756401373052,
     "secret": "super-secret",
     "routes": [
       {
@@ -15,7 +15,8 @@
           "__range": "10,15",
           "__property": {
             "name": "text",
-            "email": "email"
+            "email": "email",
+            "phone": "01>5|6|7|8|9>int:8"
           }
         },
         "options": {
@@ -24,7 +25,7 @@
         "name": "/data/list",
         "type": "GET",
         "id": "15e45f47-8600-4812-ab38-7b6350ad04e6",
-        "updatedAt": 1756019147501,
+        "updatedAt": 1756399391417,
         "selected": true,
         "projectId": "8d3f85ce-7513-4f21-8128-a3705dd7f43c",
         "projectName": "demo"

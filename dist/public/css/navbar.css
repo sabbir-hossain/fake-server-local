@@ -1,0 +1,194 @@
+.app-list {
+  background-color: #222222;
+  border-color: #121212;
+}
+
+.app-name {
+  color: #f9f9f9;
+  width: 100%;
+  font-size: 20px;
+  height: 38px;
+  float: none;
+}
+
+.app-title {
+  width: 80%;
+  float: left; 
+}
+
+.nav-icon-white {
+  filter: invert(1.5);
+  width: 16px;
+}
+
+.btn-icon {
+  float: left;
+}
+
+.btn-txt{
+  font-size: 16px;
+  margin-left: 7px;
+}
+
+.nav-icon-black {
+  width: 15px;
+}
+
+#app-title-id {
+  text-align: center;
+  margin-left: 5px;
+  margin-top: 5px;
+  font-size: 19px;
+  line-height: 21px;
+}
+
+#app-title-id:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.app-list-toggle {
+  display: block;
+  border: none;
+  background: transparent !important;
+
+  position: relative;
+  float: right;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+
+ul.other-app-list {
+  list-style-type: none;
+  width: 100%;
+  padding: 0;
+  float: none !important;
+  margin: 7.5px 0px;
+  overflow-y: auto;
+  /* overflow: hidden; */
+  height: 250px;
+  z-index: 99999;
+}
+
+.other-app-title {
+  color: #f8f8f8;
+  padding: 10px 0;
+  border-bottom: 1px solid #666;
+  text-align: left;
+  padding-left: 25px;
+
+  position: relative;
+  display: block;
+}
+
+.other-app-title:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.toggle-content {
+  display: none;
+  height: 0;
+  overflow: hidden;
+}
+
+.toggle-content.is-visible {
+  display: block;
+  height: auto;
+  transition: height 2s;
+}
+
+.input-btn {
+  border: 1px solid #f9f9f9;
+}
+
+.input-btn:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.app-title-input {
+  font-size: 17px;
+  padding-left: 7px;
+}
+
+.display-none {
+  display: none;
+  height: 0;
+  overflow: hidden;
+}
+
+.display {
+  display: block;
+}
+
+#route-list-id {
+  padding-left: 0;
+  width: 100%;
+  overflow-y: auto;
+  position: -webkit-sticky;
+  position: sticky;
+  height: 85%;
+}
+
+.route-list {
+  /* background: #666; */
+  position: relative;
+  font-size: 15px;
+}
+
+.route-list {
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  padding-bottom: 10px;
+  /* background-color: #fff; */
+  color: #222;
+  border-bottom: 1px solid rgba(0,0,0,.125);
+  display: flex;
+}
+
+.route-list:last-child {
+  border-bottom: none;
+}
+
+.icon-right {
+  display: block;
+  border: none;
+  background: transparent !important;
+  position: relative;
+}
+
+.icon-right:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.route-title {
+  display: flex;
+  flex: 1;
+}
+
+.route-title:hover {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.route-title-selected {
+  font-weight: 600;
+}
+
+.fake-btn {
+  padding: .25rem 1.5rem;
+  font-size: .875rem;
+  border-radius: .2rem;
+  color: #f9f9f9;
+  background-color: #222222;
+  border-color: #222222;
+  border: solid 1px #222222;
+}
+
+.fake-btn:hover {
+  cursor: pointer;
+  font-weight: 600;
+}

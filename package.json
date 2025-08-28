@@ -4,7 +4,7 @@
   "description": "`fake server local` is a **local REST api server**\r which return random lorem-ipsum data based on user schema. It might be helpful for \r **Front-end/App developers**, who don't have sufficient data (might be REST \r api is not ready or not enough data in database) to test their projects. All you need, \r just create an api endpoint and output schema. You will get your sufficient data to test your project.",
   "main": "dist/app.js",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "node dist/server.js",
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc"
   },

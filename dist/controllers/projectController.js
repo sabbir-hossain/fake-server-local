@@ -19,10 +19,6 @@ class ProjectController {
             });
         }
         const { routeData, secret } = ProjectController.databaseService.getSchemaData(req.params.project, req.method, `/${req.params[0]}`);
-        console.log({
-            routeData,
-            secret,
-        });
         if (!routeData) {
             return res.status(400).send({
                 message: `Route ${req.params[0]} not found in project ${req.params.project}.`,

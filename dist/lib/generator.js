@@ -13,7 +13,7 @@ const processData = (type, params = {}, option) => {
     }
     let result = '';
     for (const dataType of typeDataList) {
-        result += `${(0, exports.generateData)(dataType, params, option)}'`;
+        result += `${(0, exports.generateData)(dataType, params, option)}`;
     }
     return result;
 };
@@ -31,7 +31,7 @@ exports.generateData = generateData;
 const processUserData = (input) => {
     const userOutput = input.split('|');
     if (userOutput.length > 1) {
-        return (0, exports.processUserData)((0, storage_1.randomArrayData)(userOutput));
+        return (0, storage_1.randomArrayData)(userOutput);
     }
     else {
         return userOutput[0] || '';
