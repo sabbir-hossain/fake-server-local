@@ -1,10 +1,10 @@
 
   function showInactiveProjectList(projects) {
     const othersProjectElement = document.getElementById(otherProjectDivId);
-    const { htmlObjectList, eventObjList } = generateOtherProjectList(projects);
+    const { htmlObjectList } = generateOtherProjectList(projects);
     removeAllChildElement( othersProjectElement );
     createHtmlChildElement( othersProjectElement, htmlObjectList.childElement );
-    createEventListener( eventObjList );
+    // createEventListener( eventObjList );
   }
 
   async function getProjectRouteList( projectId ) {
@@ -52,8 +52,8 @@
 
   function toggleAppList(event) {
     event.preventDefault();
-    const element = document.getElementsByClassName("toggle-content")[0];
-    element.classList.toggle("is-visible");
+    // const element = document.getElementsByClassName("toggle-content")[0];
+    // element.classList.toggle("is-visible");
   }
 
   function generateRouteList(routes) {
