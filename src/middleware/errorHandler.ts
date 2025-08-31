@@ -1,23 +1,20 @@
-// // src/middleware/errorHandler.ts
-// import { Context, Next } from 'koa';
+import {
+  ExpressErrorMiddlewareInterface,
+  Middleware,
+} from "routing-controllers";
 
-// export const errorHandler = async (ctx: Context, next: Next) => {
-//   try {
-//     await next();
-//   } catch (err: any) {
-//     console.error('Error occurred:', err);
-//     // Check if the error is from routing-controllers
-//     if (err.httpCode) {
-//       ctx.status = err.httpCode;
-//       ctx.body = {
-//         message: err.message || 'Error',
-//       };
-//     } else {
-//       ctx.status = err.status || 500;
-//       ctx.body = {
-//         message: err.message || 'Internal Server Error',
-//       };
-//     }
-//     ctx.app.emit('error', err, ctx);
-//   }
-// };
+@Middleware({ type: "after" })
+export class ErrorHandler implements ExpressErrorMiddlewareInterface {
+  error(error: any, req: any, res: any, next: (err?: any) => any): void {
+    console.error("Error caught by middleware:", error);
+
+    if (res.headersSent) {
+      return next(error); // let Express handle if already sent
+    }
+
+    res.status(error.httpCode || 500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+}

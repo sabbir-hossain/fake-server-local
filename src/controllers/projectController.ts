@@ -1,49 +1,113 @@
-
 import { Request, Response } from 'express';
+import { Body, Controller, Delete, Get, JsonController, Post, Put, Req, Res } from 'routing-controllers';
 import DatabaseService from '../service/database.service';
-import { StatusCodes } from '../types/type';
-import { process } from '../lib/generator';
+import { ProjectService } from '../service/project.service';
+import { Route, RouteResponse, StatusCodes, ViewResponse } from '../types/type';
 
+@Controller('/__project')
 export default class ProjectController {
 
-    static databaseService: DatabaseService  = new DatabaseService();
-    static reserveRouteList: string[] = [
-        'vendor',
-        '.well-known',
-    ];
+  private projectService: ProjectService;
+  private databaseService: DatabaseService;
 
-    /**
-     * Handles all requests to the project endpoint.
-     * @param request - The incoming request object.
-     * @param response - The response object to send data back.
-     */
-    static handleProjectRequest(req: Request, res: Response): Response {
-        if( ProjectController.reserveRouteList.includes(req.params.project) ) {
-            return res.status(404).send({
-                message: `Project ${req.params.project} is reserved and cannot be accessed.`
-            });
-        }
+  constructor(
+    projectService: ProjectService = new ProjectService(),
+    databaseService: DatabaseService = new DatabaseService()
+  ) {
+    this.projectService = projectService;
+    this.databaseService = databaseService;
+  } 
 
-        const {routeData, secret} = ProjectController.databaseService.getSchemaData(
-          req.params.project, 
-          req.method, 
-          `/${req.params[0]}`
-        );
+  @Get('/list')
+  public getInitialData(@Req() req: Request, @Res() res: Response): Response {
+    const result = this.projectService.getRouteData();
+ 
+    return res.status(200).json({
+        projectList: result?.projectList || [],
+        selectedProject: result?.selectedProject || {},
+        routeList: result?.routeList || [],
+        selectedRoute: result?.selectedRoute || {},
+    });
+  }
 
-        if (!routeData) {
-            return res.status(400).send({
-                message: `Route ${req.params[0]} not found in project ${req.params.project}.`,
-            });
-        }
+  @Post('/create')
+  public createProject(req: Request, @Body() requestBody: any,  res: Response): Response {
+    const { name } = requestBody;
 
-        const { schema } = routeData || {};
-
-        const schemaData: any = {
-            __output: schema,
-        };
-
-        const data: any = process(schemaData, {}, { secret });
-
-        return res.status(StatusCodes.OK).send(data.__output);
+    if (!name || typeof name !== 'string') {
+      return res.status(400).json({ message: 'Invalid project name' });
     }
+    const result = this.projectService.createProject(name);
+    if (result) {
+      return res.status(201).json(result);
+    } else {
+      return res.status(500).json({ message: 'Failed to create project' });
+    }
+  }
+
+  @Put('/:projectId/route/:routeId/update')
+  public updateRoute(@Req() req: Request, @Body() requestBody: any, @Res() res: Response): Response {
+    const { projectId, routeId } = req.params;
+
+    const { name, type } = req.body;
+    if (!name || !type) {
+        return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Name, type, and schema are required' });
+    }
+
+    req.body.id = routeId;
+    try {
+      const result: Route = this.databaseService.updateRoute(projectId, req.body);
+      return res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      return res.status(StatusCodes.BAD_REQUEST).send(error);
+    }
+  }
+
+  @Get('/:projectId/route/:routeId')
+  public getRouteData(@Req() req: Request, @Res() res: Response): Response {
+    const { projectId, routeId } = req.params;
+    try {
+      const {routeData}: RouteResponse = this.databaseService.getRouteData(projectId, routeId);
+      if (!routeData) {
+      return res.status(StatusCodes.NOT_FOUND).send({ message: 'Route not found' });
+      }
+      return res.status(StatusCodes.OK).send(routeData);
+    } catch (error) {
+      console.error(error);
+      return res.status(StatusCodes.BAD_REQUEST).send(error);
+    }
+  }
+
+  @Delete('/:projectId/route/:routeId/delete')
+  public removeRoute(@Req() req: Request, @Res() res: Response): Response {
+      const { projectId, routeId } = req.params;
+      try {
+          this.databaseService.deleteRoute (projectId, routeId);
+          const {routes, routeData}: RouteResponse = this.databaseService.getRouteData(projectId, routeId);
+          return res.status(StatusCodes.OK).send({
+              message: 'Route deleted successfully',
+              data: {
+                  routes,
+                  selectedRoute: routeData,
+              },
+          });
+      } catch (error) {
+          return res.status(StatusCodes.BAD_REQUEST).send(error);
+      }
+  }
+
+  @Get('/:projectId/switch')
+  public getProjectData(req: Request, res: Response): Response {
+    const { projectId } = req.params;
+    if(!projectId || typeof projectId !== 'string') {
+        return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Valid projectId is required' });
+    }
+    const result = this.projectService.getRouteData(projectId);
+    return res.status(200).json({
+        projectList: result?.projectList || [],
+        selectedProject: result?.selectedProject || {},
+        routeList: result?.routeList || [],
+        selectedRoute: result?.selectedRoute || {},
+    });
+  }
 }

@@ -6,7 +6,7 @@
     "status": true,
     "id": "8d3f85ce-7513-4f21-8128-a3705dd7f43c",
     "createdAt": 1755878770100,
-    "updatedAt": 1756401373052,
+    "updatedAt": 1756603537254,
     "secret": "super-secret",
     "routes": [
       {
@@ -29,6 +29,24 @@
         "selected": true,
         "projectId": "8d3f85ce-7513-4f21-8128-a3705dd7f43c",
         "projectName": "demo"
+      },
+      {
+        "id": "1bbce306-f1a2-4247-be05-82c48d0db822",
+        "projectName": "demo",
+        "schema": {
+          "name": "text",
+          "info": "title"
+        },
+        "name": "/test",
+        "type": "GET",
+        "options": {
+          "__auth": false
+        },
+        "status": true,
+        "selected": false,
+        "createdAt": 1756603537255,
+        "updatedAt": 1756603537255,
+        "projectId": "8d3f85ce-7513-4f21-8128-a3705dd7f43c"
       }
     ]
   },

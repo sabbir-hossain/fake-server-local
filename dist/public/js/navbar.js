@@ -76,7 +76,7 @@
             {
               name: "img",
               attributes: {
-                src: "/assets/icons/plus.svg",
+                src: "/plus.svg",
                 class: "nav-icon-white btn-icon"
               } 
             },
@@ -120,7 +120,7 @@
             name: "img",
             attributes: {
               id: `trash#${id}`,
-              src: "/assets/icons/trash.svg",
+              src: "/trash.svg",
               class: "nav-icon-black icon-right",
               [`${projectIdAttr}`]: projectId,
               [`${routeIdAttr}`]: id
@@ -213,7 +213,7 @@
                       {
                         name: "img",
                         attributes: {
-                          src: "/assets/icons/checkmark.svg",
+                          src: "/checkmark.svg",
                           class: "nav-icon-black",
                           [`${dataActive}`]: false
                         }
@@ -345,7 +345,7 @@
         {
           name: "img",
           attributes: {
-            src: "/assets/icons/chevron-bottom.svg",
+            src: "/chevron-bottom.svg",
             class: "nav-icon-white app-list-toggle",
             id: toggleAppListDivId
           } 
@@ -420,7 +420,7 @@
                 {
                   name: "img",
                   attributes: {
-                    src: "/assets/icons/checkmark.svg",
+                    src: "/checkmark.svg",
                     class: "nav-icon-black",
                     [`${dataActive}`]: isActive
                   }

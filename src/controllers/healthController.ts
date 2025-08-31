@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
+import { Controller, Get } from 'routing-controllers';
 /**
  * HealthController handles health check requests.
  */
-class HealthController {
+@Controller("/health-check")
+export class HealthController {
   /**
    * Checks the health of the server.
    * @returns A message indicating the server is up and running.
    */
-  public checkHealth(req: Request, res: Response): Response {
-    return res.status(200).send('Server is up and running!');
+  @Get('/')
+  public checkHealth() {
+    return "Server is up and running.";
   }
 }
-
-export default new HealthController();

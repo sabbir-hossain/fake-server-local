@@ -1,0 +1,244 @@
+
+.header-contents, .header-container {
+  /* flex: 1; */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.input-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.input-content-view {
+  flex: 1;
+  display: grid;
+  grid-template: repeat(2, min-content) repeat(2, 1fr)/min-content 1fr;
+}
+
+.route-header {
+  position: relative;
+  box-sizing: border-box;
+  z-index: 7;
+  flex: 1;
+}
+
+.context-header {
+  color: #f9f9f9;
+  width: 100%;
+  height: 38px;
+  float: none;
+  background-color: #222222;
+  border-color: #121212;
+}
+
+.input-route-url {
+  margin-top: 10px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.input-group-text {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  height: calc(1.1em + .75rem);
+  padding: 0.1rem .65rem;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+
+.left-border-none {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.no-border {
+  border: 1px solid #ced4da;
+  border-radius: 0px;
+}
+
+.input-group-prepend {
+  margin-right: -1px;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.custom-select {
+  display: inline-block;
+  width: 100%;
+  height: calc(1.1em + .75rem);
+  padding: 0.1rem .65rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  vertical-align: middle;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.input-group>.custom-select:not(:first-child), .input-group>.input-field:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.middle-input-part {
+  border-radius: 0 !important;
+  margin-left: -1%;
+  margin-right: -1%;
+  padding-right: 15px;
+  padding-left: 15px;
+  width: 30%;
+}
+/* 
+pre code {
+  background-color: #eee;
+  border: 1px solid #999;
+  display: block;
+  padding: 20px;
+}
+*/
+/* pre, code {
+  font-family: monospace, monospace;
+}
+pre {
+  overflow: auto;
+}
+pre > code {
+  display: block;
+  padding: 1rem;
+  word-wrap: normal;
+} */ 
+
+.show-code {
+  width: 100%;
+  /* float: right; */
+  /* margin-top: 16px !important; */
+  margin-top: 5px !important;
+  height: 475px;
+}
+
+code[class*="language-"], pre[class*="language-"] {
+  /* font-size: 13px !important; */
+  padding: 0 !important;
+}
+
+ul.header-menu {
+  margin: 7.5px 0px;
+}
+
+.route-name {
+  display: inline;
+  float: right;
+  margin-right: 20px;
+}
+
+.route-name > a {
+  color: #fff;
+  opacity: 0.6;
+  text-decoration: none;
+}
+
+.route-name:hover, .route-name > a:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.active-route, .active-route > a {
+  opacity:1;
+}
+
+.toastr-msg {
+  color: #f0f0f0;
+  float: left;
+  margin-left: 10%;
+  margin-top: 5px;
+}
+
+#toastr-title {
+  font-style: oblique;
+  letter-spacing: 1px;
+  color: #c7c20b;
+  cursor: pointer;
+}
+
+#toastr-title:hover {
+  opacity: 0.7;
+}
+
+.input-option {
+  /* padding: 7px 0 ; */
+  /* padding-bottom: 5px; */
+  margin-left: 3px;
+}
+
+.input-checkbox {
+  margin: auto;
+  position: relative;
+  margin-left: 5px;
+}
+
+.auth-input-part {
+  padding-left: 25px;
+  margin-left: -20px;
+}
+
+.right-input {
+  margin-left: 20px;
+  margin-top: 6px;
+}
+
+.button-input-part {
+  margin-right: 20px;
+  cursor: pointer;
+  padding: 7px 35px;
+}
+
+.button-input-part:hover {
+  opacity: 0.7;
+}
+
+.selected-btn {
+  background-color: #121212;
+  color: #ced4da;
+}
+
+.hide {
+  display: none;
+}
+
+.input-group-header {
+  text-align: left;
+  background-color: #e9ecef;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+  margin-top: 3px;
+  margin-left: -3px;
+}
+
+.input-group-header > span {
+  margin-left: 7px;
+}
+
+.sync-ico {
+  margin-right: 5px;
+}
