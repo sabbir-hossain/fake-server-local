@@ -6,7 +6,7 @@ import { Project, Route, RouteResponse } from '../types/type';
 
 export default class DatabaseService {
 
-  private db: any[];
+  private db: Project[];
 
   constructor() {
     if(typeof data === 'object' && Array.isArray(data)) {
@@ -17,26 +17,30 @@ export default class DatabaseService {
   }
   
   public getAllProjects(): Project[] {
+    this.db = this.loadData();
     return this.db.filter((item) => item.type === 'project');
   }
 
   public getProjectData(projectName: string): Project | undefined {
+    this.db = this.loadData();
     const result = this.db.find((item) => item.name === projectName);
     return result; // Explicit return type
   }
 
   public updateSelectedProjectById(projectId: string): Project[] {
+    this.db = this.loadData();
     this.db = this.db.map((item) => ({ ...item, selected: item.id === projectId }));
     this.saveData();
     return this.getAllProjects(); // Explicit return type
   }
 
   public getRouteData(projectId: string, routeId: string): RouteResponse {
-    const project = this.db.find((item) => item.id === projectId);
+    this.db = this.loadData();
+    const project: Project | null = this.db.find((item) => item.id === projectId) || null;
     if (!project) {
       throw new Error(`Project ${projectId} not found`);
     }
-    project.routes = project.routes.map((route: any) => ({
+    project.routes = (project.routes ?? []).map((route: any) => ({
       ...route,
       selected: route.id === routeId,
       projectId: project?.id || '',
@@ -49,6 +53,7 @@ export default class DatabaseService {
 
 
   public getSchemaData (projectName: string, routeType: string, routeName: string): RouteResponse {
+    this.db = this.loadData();
     const project = this.db.find((item) => item.name === projectName);
     if (!project) {
       throw new Error(`Project ${projectName} not found`);
@@ -63,7 +68,9 @@ export default class DatabaseService {
     const routeArray = routeName.split('/');
     let routeData = null;
     for(const route of project.routes || []) {
+      if(!route || !route.status) continue;
       if (route.type === routeType) {
+        if (!route.name) continue;
         const routePathArray = route.name.split('/');
         let routeFound = true;
         for(let i = 0; i<routeArray.length; i++) {
@@ -80,25 +87,27 @@ export default class DatabaseService {
       }
     }
 
-    return { routeData, secret: project.secret };
+    return { routeData: routeData || undefined, secret: project.secret };
   }
 
 
   public getAllRoutes(projectId: string, active: boolean = true): Route[] {
-    const project = this.db.find((item) => item.id === projectId);
+    this.db = this.loadData();
+    const project: Project | null = this.db.find((item) => item.id === projectId) || null;
     if (!project) {
       throw new Error(`Project ${projectId} not found`);
     }
     const routes = project.routes || [];
     if (active) {
       const routes = project.routes || [];
-      return routes.filter((route: any) => route.status);
+      return routes.filter((route: Route) => route.status);
     } else {
       return routes;
     }
   }
 
   public updateRoute(projectId: string, routeData: Route): Route {
+    this.db = this.loadData();
     const project = this.db.find((item) => item.id === projectId);
     if (project) {
       routeData.updatedAt = Date.now();
@@ -118,6 +127,7 @@ export default class DatabaseService {
   }
 
   public saveProject (project: Project): Project {
+    this.db = this.loadData();
     project.id = uuidv4();
     project.createdAt = Date.now();
     project.updatedAt = Date.now();
@@ -136,6 +146,7 @@ export default class DatabaseService {
 
 
   public saveRoute(projectId: string, routeData: Route): Route {
+    this.db = this.loadData();
     const project = this.db.find((item) => item.id === projectId);
     if (project) {
       project.updatedAt = Date.now();
@@ -154,10 +165,11 @@ export default class DatabaseService {
   }
 
   public deleteRoute(projectId: string, routeId: string): void {
+    this.db = this.loadData();
     const project = this.db.find((item) => item.id === projectId);
     if (project) {
       project.updatedAt = Date.now();
-      project.routes = project.routes.filter((route: any) => route.id !== routeId);
+      project.routes = (project.routes ?? []).filter((route: any) => route.id !== routeId);
       this.saveData();
     } else {
       throw new Error(`Project ${projectId} not found`);
@@ -174,23 +186,19 @@ export default class DatabaseService {
       // this.db = JSON.parse(
       //   fs.readFileSync(path.join(__dirname, '../data/store.json'), 'utf8')
       // );
-      // console.log('Database saved successfully.');
-      // console.log('Current Database State:', JSON.stringify(this.db, null, 2));
     } catch (error) {
       console.error('Error saving database:: ', error);
     }
   }
   
-  public loadData(): any {
+  public loadData(): Project[] {
     try {
-      this.db = JSON.parse(
+      return JSON.parse(
         fs.readFileSync(path.join(__dirname, '../data/store.json'), 'utf8')
       );
-      console.log('Database loaded successfully.');
     } catch (error) {
       console.error('Error loading database:: ', error);
+      throw error;
     }
-
-    return this.db;
   }
 }
