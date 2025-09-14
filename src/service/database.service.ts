@@ -171,9 +171,9 @@ export default class DatabaseService {
         JSON.stringify(this.db, undefined, 2), 
         'utf-8'
       );
-      this.db = JSON.parse(
-        fs.readFileSync(path.join(__dirname, '../data/store.json'), 'utf8')
-      );
+      // this.db = JSON.parse(
+      //   fs.readFileSync(path.join(__dirname, '../data/store.json'), 'utf8')
+      // );
       // console.log('Database saved successfully.');
       // console.log('Current Database State:', JSON.stringify(this.db, null, 2));
     } catch (error) {
@@ -181,4 +181,16 @@ export default class DatabaseService {
     }
   }
   
+  public loadData(): any {
+    try {
+      this.db = JSON.parse(
+        fs.readFileSync(path.join(__dirname, '../data/store.json'), 'utf8')
+      );
+      console.log('Database loaded successfully.');
+    } catch (error) {
+      console.error('Error loading database:: ', error);
+    }
+
+    return this.db;
+  }
 }
