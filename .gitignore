@@ -13,6 +13,7 @@ build
 dist/
 .idea
 
-data/*
+src/data/*
+!src/data/.gitkeep
 
 .nyc_output

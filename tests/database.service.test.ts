@@ -9,13 +9,19 @@ import { ProjectService } from '../src/service/project.service';
 // and restore it afterwards so the real data is never lost.
 const storePath = path.resolve(process.cwd(), 'src/data/store.json');
 let originalContent = '';
+let storeExisted = false;
 
 before(() => {
-  originalContent = fs.readFileSync(storePath, 'utf8');
+  storeExisted = fs.existsSync(storePath);
+  originalContent = storeExisted ? fs.readFileSync(storePath, 'utf8') : '';
 });
 
 after(() => {
-  fs.writeFileSync(storePath, originalContent, 'utf8');
+  if (storeExisted) {
+    fs.writeFileSync(storePath, originalContent, 'utf8');
+  } else if (fs.existsSync(storePath)) {
+    fs.unlinkSync(storePath);
+  }
 });
 
 const uniqueName = (prefix: string) => `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;

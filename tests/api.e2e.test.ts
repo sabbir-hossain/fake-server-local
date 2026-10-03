@@ -9,12 +9,14 @@ import type { Server } from 'http';
 // restore it after the tests so real data is never lost.
 const storePath = path.resolve(process.cwd(), 'src/data/store.json');
 let originalContent = '';
+let storeExisted = false;
 
 let server: Server;
 let baseUrl = '';
 
 before(async () => {
-  originalContent = fs.readFileSync(storePath, 'utf8');
+  storeExisted = fs.existsSync(storePath);
+  originalContent = storeExisted ? fs.readFileSync(storePath, 'utf8') : '';
 
   const instance = new App(0);
   server = instance.listen();
@@ -29,7 +31,11 @@ after(async () => {
   await new Promise<void>((resolve, reject) => {
     server.close((error) => (error ? reject(error) : resolve()));
   });
-  fs.writeFileSync(storePath, originalContent, 'utf8');
+  if (storeExisted) {
+    fs.writeFileSync(storePath, originalContent, 'utf8');
+  } else if (fs.existsSync(storePath)) {
+    fs.unlinkSync(storePath);
+  }
 });
 
 const uniqueName = (prefix: string) => `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;

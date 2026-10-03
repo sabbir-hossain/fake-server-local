@@ -1,8 +1,5 @@
   <header class="header-contents">
     <div class="context-header">
-        <div class="toastr-msg">
-            <span id="toastr-title"></span>
-          </div>
       <ul class="header-menu">
         <li class="route-name active-route"> <a href="/dashboard">Dashboard</a> </li>
         <li class="route-name"> <a href="/helper">Help</a></li>
@@ -10,7 +7,8 @@
     </div>
   </header>
 
-  <div class="input-route-url">
+  <div class="input-route-url panel-card">
+    <div class="panel-card__label">Route</div>
     <div class="input-group">
       <input type="hidden" id="route-id" value="" />
       <input type="hidden" id="project-id" value="" />
@@ -34,7 +32,9 @@
 
     <div
       id="documentWrapper"
-      class="flex-fill">
+      class="flex-fill panel-card">
+
+        <div class="panel-card__label">Response Schema</div>
 
         <div class="input-option">
 
@@ -61,7 +61,9 @@
 
     </div>
 
-    <div class="show-hints">
+    <div class="show-hints panel-card">
+
+      <div class="panel-card__label">Sample Response</div>
 
       <div class="input-option right-input">
         <div class="input-header">

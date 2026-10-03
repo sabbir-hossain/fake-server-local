@@ -193,14 +193,32 @@ function checkObject(obj1, obj2) {
   }
 }
 
-function showToastr(message = "", showTime = 3000) {
-  const toastrDivId = "toastr-title";
-  const element = document.getElementById(toastrDivId);
-  hideElement(element);
-  createTextElement(element, message);
-  displayElement(element);
+function showToastr(message = "", showTime = 3000, type = "success") {
+  let container = document.getElementById("toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = `toast-item ${type === "error" ? "toast-error" : "toast-success"}`;
+
+  const icon = document.createElement("span");
+  icon.className = "toast-icon";
+  icon.textContent = type === "error" ? "✕" : "✓";
+
+  const text = document.createElement("span");
+  text.className = "toast-text";
+  text.textContent = message;
+
+  toast.appendChild(icon);
+  toast.appendChild(text);
+  container.appendChild(toast);
+
   setTimeout(() => {
-    hideElement(element);
+    toast.classList.add("is-leaving");
+    setTimeout(() => toast.remove(), 260);
   }, showTime);
 }
 

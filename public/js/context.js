@@ -93,7 +93,7 @@ function stringifyJson() {
     const parsed = JSON.parse(code.textContent || "");
     code.textContent = JSON.stringify(parsed);
   } catch (error) {
-    showToastr("invalid json :(");
+    showToastr("invalid json :(", 3000, "error");
   }
 }
 
@@ -103,7 +103,7 @@ function beautifyJson() {
     const parsed = JSON.parse(code.textContent || "");
     code.textContent = JSON.stringify(parsed, null, 2);
   } catch (error) {
-    showToastr("invalid json :(");
+    showToastr("invalid json :(", 3000, "error");
   }
 }
 
@@ -231,7 +231,7 @@ async function handlePastedCurl(parsedCurl, routeNameElement) {
     showToastr(`route ${method} ${parsedCurl.routeName} generated from curl :)`);
   } catch (error) {
     console.error(error);
-    showToastr(error?.response?.data?.message || "invalid curl command :(");
+    showToastr(error?.response?.data?.message || "invalid curl command :(", 3000, "error");
   }
 }
 
@@ -288,7 +288,7 @@ async function saveRouteData(routeData) {
         showToastr("route is updated successfully :)");
         await getProjectRouteList( projectId );
       } else {
-        showToastr("route cannot be updated :(")
+        showToastr("route cannot be updated :(", 3000, "error")
       }
     } else if( routeType && routeName && schema ) {
       // name, type, schema
@@ -309,13 +309,13 @@ async function saveRouteData(routeData) {
         showToastr("route is created successfully :)");
         await getProjectRouteList( projectId );
       } else {
-        showToastr("route cannot be created :(")
+        showToastr("route cannot be created :(", 3000, "error")
       }
     }
   }
   catch(err) {
     console.error(err);
-    showToastr(err?.response?.data?.message || "Internal server error :(");
+    showToastr(err?.response?.data?.message || "Internal server error :(", 3000, "error");
   }
 }
 
@@ -368,7 +368,7 @@ async function handleSwaggerUpload(event) {
 
     const operations = SwaggerSchema.listOperations(spec);
     if (!operations.length) {
-      showToastr("no routes found in the uploaded file :(");
+      showToastr("no routes found in the uploaded file :(", 3000, "error");
       return;
     }
 
@@ -394,7 +394,7 @@ async function handleSwaggerUpload(event) {
     console.log('routeObjects---> ', routeObjects);
 
     if (!routeObjects.length) {
-      showToastr("no schema found in the uploaded file :(");
+      showToastr("no schema found in the uploaded file :(", 3000, "error");
       return;
     }
 
@@ -457,7 +457,7 @@ async function handleSwaggerUpload(event) {
     showToastr(`route(s) ${parts.join(" & ")} from the uploaded file :)`);
   } catch (error) {
     console.error(error);
-    showToastr(error?.response?.data?.message || "invalid OpenAPI file :(");
+    showToastr(error?.response?.data?.message || "invalid OpenAPI file :(", 3000, "error");
   } finally {
     fileInput.value = "";
   }

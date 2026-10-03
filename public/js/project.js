@@ -78,16 +78,10 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
     catch(error) {
       console.error("error", error);
-      showToastr("something went wrong :(")
+      showToastr("something went wrong :(", 3000, "error")
     }
   });
 
-
-  document.getElementById("toastr-title").addEventListener("click", (evt) => {
-    evt.preventDefault();
-    const element = evt.target;
-    hideElement(element);
-  });
 
   document.getElementById("show-sample-data").addEventListener("click", (evt) => {
     evt.preventDefault();
