@@ -2,7 +2,6 @@
 *.vs/
 node_modules/
 npm-debug.log
-*.vs/*
 .env
 .vscode/
 .eslintrc.json
@@ -10,10 +9,9 @@ npm-debug.log
 .history
 yarn-error.log
 
-node_modules
 build
+dist/
 .idea
-package-lock.json
 
 data/*
 

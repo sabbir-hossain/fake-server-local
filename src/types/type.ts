@@ -46,24 +46,6 @@ export interface RouteResponse {
     routes?: Route[];
 }
 
-export interface Project {
-    id?: string;
-    name?: string;
-    status?: boolean;
-    type?: string; 
-    secret?: string;
-    selected?: boolean;
-    updatedAt?: number;
-    createdAt?: number;
-    routes?: Route[];
-}
-
-export interface RouteResponse {
-    routeData: Route | undefined;
-    secret?: string;
-    routes?: Route[];
-}
-
 export interface ViewResponse {
     projectList?: Project[] | undefined;
     selectedProject?: Project;

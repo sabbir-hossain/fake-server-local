@@ -1,7 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
 import apiRoutes from './route'; // Import the API routes
 import { Server } from 'http'; // Import the Server type from the 'http' module
 import path from 'path';
@@ -26,7 +25,6 @@ class App {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cors());
     this.app.use(helmet());
-    dotenv.config();
     this.app.use(express.static(path.join(__dirname, '../public')));
   }
 

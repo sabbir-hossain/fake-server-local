@@ -1,8 +1,12 @@
 import { v4 as uuid } from "uuid";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import { allowed_block_text, allowed_end_of_line, alphanumericCharList, capitalCharList, csvFileList, docFileList, domainList, emailDomainList, getMinMax, imageList, pdfFileList, randomArrayData, randomNumberGenerator, smallCharList } from "./storage";
 import { Options, Params } from "../types/type";
-const port = process.env.PORT || 3000
+
+dotenv.config();
+
+const port = process.env.PORT || 3000;
 
 const pdfGenerator = () => {
   return `http://localhost:${port}/assets/${randomArrayData(pdfFileList)}`;
@@ -126,24 +130,36 @@ const ipAddressGenerator = () => {
   )}.${randomNumberGenerator(255)}.${randomNumberGenerator(255)}`;
 };
 
+const phoneGenerator = () => {
+  return `${integerGenerator('3')}-${integerGenerator('3')}-${integerGenerator('4')}`;
+};
+
 const alphanumericGenerator = ({ size = 25 }) => alphanumericCharList.sort((a, b) => 0.5 - Math.random()).slice(0, size).join("")
 
 
 export default {
   default: wordGenerator,
   word: wordGenerator,
+  text: wordGenerator,
+  id: uuidGenerator,
   title: titleGenerator,
   desc: textAreaGenerator,
+  textarea: textAreaGenerator,
   boolean: booleanGenerator,
   int: integerGenerator,
+  integer: integerGenerator,
   float: floatGenerator,
   uuid: uuidGenerator,
+  phone: phoneGenerator,
   zipCode: zipCodeGenerator,
+  zipcode: zipCodeGenerator,
   domain: domainNameGenerator,
+  url: domainNameGenerator,
   email: emailNameGenerator,
   date: dateGenerator,
   time: timeGenerator,
   dateTime: dateTimeGenerator,
+  'date-time': dateTimeGenerator,
   second: secondGenerator,
   image: imageUrlGenerator,
   pdf: pdfGenerator,
@@ -151,5 +167,6 @@ export default {
   doc: docGenerator,
   token: tokenGenerator,
   ip: ipAddressGenerator,
+  ipaddress: ipAddressGenerator,
   alphanumeric: alphanumericGenerator
 }

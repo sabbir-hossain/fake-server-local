@@ -8,19 +8,19 @@ api is not ready or not enough data in database) to test their projects. All you
 just create an api endpoint and output schema. You will get your sufficient data to test your project.
 
 ## Technologies used
-`Node.js, Koa.js, neDB, JavaScript, HTML, CSS`
+`Node.js, Express, TypeScript, EJS, JavaScript, HTML, CSS`
 
 ## Setup
 - Clone this project (must have `node.js` installed in your machine )
 - open project directory using terminal/Command Prompt
 - run `npm install`
 - run `npm start`
-- now go to `http://localhost:9920/dashboard`
+- now go to `http://localhost:3000/dashboard`
 - create a project
-- your fake api endpoint will be `http://localhost:9920/${your-project-title}`
+- your fake api endpoint will be `http://localhost:3000/${your-project-title}`
 
 ## Creating Fake Api
-> Select `Route type` (`GET|POST|PUT|PATCH|DELETE`) and type your route name. Now your route will be  `http://localhost:9920/${your-project-title}/${your-route-name}`
+> Select `Route type` (`GET|POST|PUT|PATCH|DELETE`) and type your route name. Now your route will be  `http://localhost:3000/${your-project-title}/${your-route-name}`
 
 > Now add output schema. Schema will be json object, which will be as like as given below
 
