@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help - fake server local</title>
+  <link href="/css/helper.css" rel="stylesheet" type="text/css">
+  <style>
+    body { text-align: left; background: #f2f5f8; margin: 0; color: #333; font-family: "Source Sans Pro", Calibri, Candara, Arial, sans-serif; }
+    .help-container { max-width: 880px; margin: 0 auto; padding: 24px 16px 56px; }
+    .help-header { background: #1f2937; color: #fff; padding: 20px 24px; border-radius: 8px; margin-bottom: 24px; }
+    .help-header a { color: #93c5fd; }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    h2 { font-size: 20px; margin: 32px 0 10px; color: #0f172a; }
+    p, li { line-height: 1.6; }
+    code { background: #e8e8e8; padding: 2px 5px; border-radius: 3px; font-family: "Courier New", Courier, monospace; font-size: 13px; }
+    pre { background: #1f2937; color: #e5e7eb; padding: 12px 16px; border-radius: 6px; overflow-x: auto; font-size: 13px; }
+    .steps { padding-left: 22px; }
+    .type-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .type-grid span { background: #e0e7ff; color: #3730a3; padding: 4px 10px; border-radius: 4px; font-size: 13px; }
+    .note { background: #fff7ed; border-left: 4px solid #f59e0b; padding: 10px 14px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="help-container">
+    <div class="help-header">
+      <h1>fake server local &mdash; How it works</h1>
+      <p style="margin: 0;">A local REST API server that returns random data based on your schema. <a href="/dashboard">Open dashboard &rarr;</a></p>
+    </div>
+
+    <h2>Overview</h2>
+    <p>
+      <strong>fake server local</strong> is a local REST API server that returns random (lorem-ipsum style) data
+      based on a schema you define. It is useful for front-end / app developers who don't yet have a real API or
+      enough data in a database to test against. You just create an endpoint and an output schema, and you get
+      realistic data to work with.
+    </p>
+
+    <h2>Setup</h2>
+    <ol class="steps">
+      <li>Clone the project (requires <code>Node.js</code> installed).</li>
+      <li>Run <code>npm install</code>.</li>
+      <li>Run <code>npm start</code>.</li>
+      <li>Open <code><%= projectUrl %>/dashboard</code>.</li>
+      <li>Create a project. Your fake endpoint will be <code><%= projectUrl %>/&lt;project-title&gt;</code>.</li>
+    </ol>
+
+    <h2>Create a project</h2>
+    <p>
+      In the top-left corner, click the toggle icon to open the project list. Type a name in the
+      <strong>"Add new project"</strong> input and press the save button. The new project becomes selected. You can
+      rename a project with the pencil (edit) icon or remove it with the trash (delete) icon.
+    </p>
+
+    <h2>Create a route</h2>
+    <ol class="steps">
+      <li>Select a <strong>Route type</strong> (<code>GET | POST | PUT | PATCH | DELETE</code>).</li>
+      <li>Type a <strong>route name</strong> (for example <code>/list</code>).</li>
+      <li>Write the <strong>output schema</strong> as JSON in the editor.</li>
+    </ol>
+    <p>Your route will then be available at <code><%= projectUrl %>/&lt;project-title&gt;/&lt;route-name&gt;</code>.</p>
+
+    <h2>Schema return-types</h2>
+    <p>Each key in your schema is mapped to a <code>return-type</code>. Available types:</p>
+    <div class="type-grid">
+      <span>id</span><span>uuid</span><span>boolean</span><span>text</span><span>title</span>
+      <span>textarea</span><span>integer</span><span>float</span><span>phone</span><span>zipcode</span>
+      <span>date</span><span>time</span><span>date-time</span><span>url</span><span>email</span>
+      <span>image</span><span>pdf</span><span>csv</span><span>doc</span><span>ipaddress</span>
+      <span>token</span><span>second</span><span>alphanumeric</span>
+    </div>
+
+    <h3>Example schema</h3>
+    <pre>{
+  "name": "title",
+  "email": "email",
+  "phone": "phone",
+  "active": "boolean",
+  "posts": {
+    "__type": "array",
+    "__range": "10,15",
+    "__property": {
+      "id": "uuid",
+      "body": "textarea"
+    }
+  }
+}</pre>
+    <div class="note">
+      You can also use fixed values (<code>"country": "Bangladesh"</code>) or a comma-separated list of options
+      (<code>"status": "active,inactive,pending"</code>) to pick one randomly.
+    </div>
+
+    <h2>Preview sample response</h2>
+    <p>
+      Select a route, then click <strong>Sample Response</strong> to see the generated data. You can edit the result
+      and use <strong>Stringify JSON</strong> (compact) or <strong>Beautify JSON</strong> (pretty-print) to format it.
+    </p>
+  </div>
+</body>
+</html>

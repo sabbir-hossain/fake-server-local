@@ -40,7 +40,7 @@
 
           <div class="input-header">
             <div class="input-group-header">
-              <input type="checkbox" name="isAuthenticate" id="isAuthenticate" onclick="handleAuth(this)" />
+              <input type="checkbox" name="isAuthenticate" id="isAuthenticate" />
               <span class="input-auth">Authenticate</span>
             </div>
            
@@ -57,11 +57,19 @@
       <div class="input-option right-input">
         <div class="input-header">
           <div class="input-group two-button">
-            <button class="input-group-text auth-input-part button-input-part" id="btn-1" onclick="showSchemaFormat()">Schema Format</button>
+            <button type="button" class="input-group-text auth-input-part button-input-part" id="btn-1">Schema Format</button>
 
             <button id="show-sample-data" class="input-group-text auth-input-part button-input-part">
               <img src="/assets/icons/sync.svg" class="btn-icon sync-ico">
               Sample Response
+            </button>
+
+            <button type="button" class="input-group-text auth-input-part button-input-part json-action-btn" id="btn-stringify" title="Stringify JSON" disabled>
+              <img src="/assets/icons/stringify.svg" class="json-action-icon">
+            </button>
+
+            <button type="button" class="input-group-text auth-input-part button-input-part json-action-btn" id="btn-beautify" title="Beautify JSON" disabled>
+              <img src="/assets/icons/beautify.svg" class="json-action-icon">
             </button>
 
           </div>
@@ -71,7 +79,7 @@
       <script src="/vendor/prism/prism.js"  type="text/javascript"></script>
       
 <pre class="show-code">
-  <code class="language-javascript" id="code"></code>
+  <code class="language-javascript" id="code" contenteditable="true"></code>
 </pre>
     </div>
 

@@ -11,6 +11,9 @@ const projectIdAttr = "data-project-id";
 const routeIdAttr = "data-route-id";
 const activeProjectInputDiv = "active-project-input";
 const otherProjectInputDiv = "other-project-input";
+const newProjectInputDiv = "new-project-input";
+const newProjectSaveBtnId = "new-project-save";
+let editingProjectId = null;
 
 const dataAttributeObj = {
   [`${dataName}`]: "name",
@@ -43,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   window.editor.resize()
   window.editor.getSession().setMode("ace/mode/json")
   window.editor.setTheme("ace/theme/monokai")
-  window.editor.setFontSize(14)
+  window.editor.setFontSize(12)
   window.editor.focus();
 
   window.editor.on("blur", async function(event) {
@@ -82,6 +85,25 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   document.getElementById("show-sample-data").addEventListener("click", (evt) => {
     evt.preventDefault();
     showSampleResponse();
+  });
+
+  document.getElementById("btn-1").addEventListener("click", (evt) => {
+    evt.preventDefault();
+    showSchemaFormat();
+  });
+
+  document.getElementById("isAuthenticate").addEventListener("change", (evt) => {
+    handleAuth(evt.target);
+  });
+
+  document.getElementById("btn-stringify").addEventListener("click", (evt) => {
+    evt.preventDefault();
+    stringifyJson();
+  });
+
+  document.getElementById("btn-beautify").addEventListener("click", (evt) => {
+    evt.preventDefault();
+    beautifyJson();
   });
 
   createEventListener( contextEventList );

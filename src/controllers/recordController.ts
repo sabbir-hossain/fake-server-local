@@ -7,7 +7,13 @@ import { Route, RouteResponse, StatusCodes, ViewResponse } from '../types/type';
 export default class RecordController {
 
   static projectService: ProjectService = new ProjectService();
-  static databaseService: DatabaseService = new DatabaseService();
+  static databaseService: DatabaseService = DatabaseService.getInstance();
+
+  static reservedProjectNames: string[] = ['health-check', '__project', '__route'];
+
+  static isReservedProjectName(name: string): boolean {
+    return RecordController.reservedProjectNames.includes(name);
+  }
 
   static getInitialData(req: Request, res: Response): Response {
     const result = RecordController.projectService.getRouteData();
@@ -26,11 +32,49 @@ export default class RecordController {
     if (!name || typeof name !== 'string') {
       return res.status(400).json({ message: 'Invalid project name' });
     }
+    if (RecordController.isReservedProjectName(name)) {
+      return res.status(400).json({ message: `Project name "${name}" is reserved` });
+    }
     const result = RecordController.projectService.createProject(name);
     if (result) {
       return res.status(201).json(result);
     } else {
       return res.status(500).json({ message: 'Failed to create project' });
+    }
+  }
+
+  static updateProject(req: Request, res: Response): Response {
+    const { projectId } = req.params;
+    const { name } = req.body;
+    if (!projectId || typeof projectId !== 'string') {
+        return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Valid projectId is required' });
+    }
+    if (!name || typeof name !== 'string') {
+        return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Valid project name is required' });
+    }
+    if (RecordController.isReservedProjectName(name)) {
+        return res.status(StatusCodes.BAD_REQUEST).send({ message: `Project name "${name}" is reserved` });
+    }
+    try {
+        const result = RecordController.projectService.updateProject(projectId, name);
+        return res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+        console.error('Error updating project:', error);
+        return res.status(StatusCodes.BAD_REQUEST).send({ message: error instanceof Error ? error.message : 'Failed to update project' });
+    }
+  }
+
+  static deleteProject(req: Request, res: Response): Response {
+    const { projectId } = req.params;
+    if (!projectId || typeof projectId !== 'string') {
+        return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Valid projectId is required' });
+    }
+    try {
+        const result = RecordController.projectService.deleteProject(projectId);
+        return res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+        console.error('Error deleting project:', error);
+        return res.status(StatusCodes.BAD_REQUEST).send({ message: error instanceof Error ? error.message : 'Failed to delete project' });
     }
   }
 
@@ -42,7 +86,7 @@ export default class RecordController {
         return res.status(200).send(result?.routeList || []);
     } catch (error) {
         console.error('Error retrieving project:', error);
-        return res.status(400).send(error);
+        return res.status(400).send({ message: error instanceof Error ? error.message : 'Failed to retrieve routes' });
     }
   }
 
@@ -60,7 +104,7 @@ export default class RecordController {
           return res.status(StatusCodes.OK).send(result);
       } catch (error) {
           console.error('Error saving route:', error);
-          return res.status(StatusCodes.BAD_REQUEST).send(error);
+          return res.status(StatusCodes.BAD_REQUEST).send({ message: error instanceof Error ? error.message : 'Failed to save route' });
       }
   }
 
@@ -77,7 +121,7 @@ export default class RecordController {
       const result: Route = RecordController.databaseService.updateRoute(projectId, req.body);
       return res.status(StatusCodes.OK).send(result);
     } catch (error) {
-      return res.status(StatusCodes.BAD_REQUEST).send(error);
+      return res.status(StatusCodes.BAD_REQUEST).send({ message: error instanceof Error ? error.message : 'Failed to update route' });
     }
   }
 
@@ -91,7 +135,7 @@ export default class RecordController {
       return res.status(StatusCodes.OK).send(routeData);
     } catch (error) {
       console.error(error);
-      return res.status(StatusCodes.BAD_REQUEST).send(error);
+      return res.status(StatusCodes.BAD_REQUEST).send({ message: error instanceof Error ? error.message : 'Failed to retrieve route' });
     }
   }
 
@@ -108,7 +152,7 @@ export default class RecordController {
               },
           });
       } catch (error) {
-          return res.status(StatusCodes.BAD_REQUEST).send(error);
+          return res.status(StatusCodes.BAD_REQUEST).send({ message: error instanceof Error ? error.message : 'Failed to delete route' });
       }
   }
 

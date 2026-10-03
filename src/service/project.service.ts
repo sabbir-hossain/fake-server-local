@@ -7,7 +7,7 @@ export class ProjectService {
      * Initializes the ProjectService with a new instance of DatabaseService.
      */
     public constructor() {
-        this.db = new DatabaseService();
+        this.db = DatabaseService.getInstance();
     }
     /**
      * Retrieves the list of all projects and the selected project.
@@ -70,6 +70,14 @@ export class ProjectService {
         };
 
         return this.db.saveProject(newProject);
+    }
+
+    public updateProject(projectId: string, name: string): Project {
+        return this.db.updateProject(projectId, name);
+    }
+
+    public deleteProject(projectId: string): Project[] {
+        return this.db.deleteProject(projectId);
     }
 
 }

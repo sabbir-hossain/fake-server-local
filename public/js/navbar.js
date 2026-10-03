@@ -1,10 +1,16 @@
 
+  const reservedProjectNames = ['health-check', '__project', '__route'];
+
+  function isReservedProjectName(name) {
+    return reservedProjectNames.includes(name);
+  }
+
   function showInactiveProjectList(projects) {
     const othersProjectElement = document.getElementById(otherProjectDivId);
     const { htmlObjectList, eventObjList } = generateOtherProjectList(projects);
     removeAllChildElement( othersProjectElement );
     createHtmlChildElement( othersProjectElement, htmlObjectList.childElement );
-    // createEventListener( eventObjList );
+    createEventListener( eventObjList );
   }
 
   async function getProjectRouteList( projectId ) {
@@ -52,8 +58,14 @@
 
   function toggleAppList(event) {
     event.preventDefault();
-    // const element = document.getElementsByClassName("toggle-content")[0];
-    // element.classList.toggle("is-visible");
+    const element = document.getElementById(otherProjectDivId);
+    if (element) {
+      element.classList.toggle("is-visible");
+    }
+    const toggle = document.getElementById(toggleAppListDivId);
+    if (toggle) {
+      toggle.classList.toggle("is-rotated");
+    }
   }
 
   function generateRouteList(routes) {
@@ -108,13 +120,28 @@
         childElement: [
           {
             name: "div",
-            text: formatRouteText(`${type} - ${name}`),
             attributes: {
               id: id,
               class: "route-title",
               [`${projectIdAttr}`]: projectId,
               [`${routeIdAttr}`]: id
-            }
+            },
+            childElement: [
+              {
+                name: "span",
+                text: type,
+                attributes: {
+                  class: "route-type"
+                }
+              },
+              {
+                name: "span",
+                text: formatRouteText(name),
+                attributes: {
+                  class: "route-name"
+                }
+              }
+            ]
           },
           {
             name: "img",
@@ -150,34 +177,126 @@
   function generateOtherProjectList( projects ) {
     const  childElementList = [];
     const eventObjList = [];
-    
+
+    // First row: create/edit project input + save button
+    childElementList.push({
+      name: "li",
+      attributes: {
+        class: "project-create-row"
+      },
+      childElement: [
+        {
+          name: "input",
+          attributes: {
+            type: "text",
+            id: newProjectInputDiv,
+            class: "project-input",
+            placeholder: "Add new project"
+          }
+        },
+        {
+          name: "button",
+          attributes: {
+            class: "project-save-btn",
+            id: newProjectSaveBtnId,
+            title: "Save"
+          },
+          childElement: [
+            {
+              name: "img",
+              attributes: {
+                src: "/assets/icons/checkmark.svg",
+                class: "project-icon"
+              }
+            }
+          ]
+        }
+      ]
+    });
+
+    eventObjList.push({
+      identifier: newProjectSaveBtnId,
+      functionReference: handleProjectSaveClick
+    });
+
     for( let i=0, len=projects.length; i<len; i++ ) {
-      let { id, name, selected } = projects[i];
+      let { id, name } = projects[i];
       const divId =  `other-app-id-${i}`;
-      
+      const nameId =  `project-name-${i}`;
+      const editId =  `edit#${id}`;
+      const deleteId =  `delete#${id}`;
+
       childElementList.push({
         name: "li",
-        text: name,
         attributes: {
           class: "other-app-title",
-          id: divId,
-          [`${dataId}`]: id,
-          [`${dataActive}`]: selected,
-          [`${dataName}`]: name
-        }
+          id: divId
+        },
+        childElement: [
+          {
+            name: "span",
+            text: name,
+            attributes: {
+              class: "project-name",
+              id: nameId,
+              [`${dataId}`]: id
+            }
+          },
+          {
+            name: "button",
+            attributes: {
+              class: "project-action-btn",
+              title: "Edit"
+            },
+            childElement: [
+              {
+                name: "img",
+                attributes: {
+                  id: editId,
+                  src: "/assets/icons/edit.svg",
+                  class: "project-icon",
+                  [`${dataId}`]: id,
+                  [`${dataName}`]: name
+                }
+              }
+            ]
+          },
+          {
+            name: "button",
+            attributes: {
+              class: "project-action-btn",
+              title: "Delete"
+            },
+            childElement: [
+              {
+                name: "img",
+                attributes: {
+                  id: deleteId,
+                  src: "/assets/icons/trash.svg",
+                  class: "project-icon",
+                  [`${dataId}`]: id,
+                  [`${dataName}`]: name
+                }
+              }
+            ]
+          }
+        ]
       });
 
       eventObjList.push({
-        identifier: divId, 
-        functionReference: handleAppSwitchClick 
+        identifier: nameId,
+        functionReference: handleAppSwitchClick
+      });
+      eventObjList.push({
+        identifier: editId,
+        functionReference: handleProjectEditClick
+      });
+      eventObjList.push({
+        identifier: deleteId,
+        functionReference: handleProjectDeleteClick
       });
     }
 
-    eventObjList.push({
-      identifier: otherProjectSaveDivId, 
-      functionReference: handleCreateNewProjectClick 
-    });
-    
     return { htmlObjectList: { childElement: childElementList }, eventObjList }
   }
 
@@ -192,7 +311,11 @@
     };
     
     const element = document.getElementById(otherProjectInputDiv);
-    const titleValue = element.value;
+    const titleValue = element.value.trim();
+    if( isReservedProjectName(titleValue) ) {
+      showToastr(`Project name "${titleValue}" is reserved :(`);
+      return;
+    }
     if( titleValue && titleValue.length > 0 ) {
       const response = await axios.post(`/__project/create`, { name: titleValue, isActive });
       const { id} = response.data;
@@ -208,19 +331,99 @@
     }
   }
 
+  async function handleProjectSaveClick(event) {
+    event.preventDefault();
+    const input = document.getElementById(newProjectInputDiv);
+    const titleValue = input ? input.value.trim() : "";
+    if (!titleValue) {
+      showToastr("project title cannot be empty :(");
+      return;
+    }
+    if (isReservedProjectName(titleValue)) {
+      showToastr(`Project name "${titleValue}" is reserved :(`);
+      return;
+    }
+    try {
+      if (editingProjectId) {
+        await axios.put(`/__project/${editingProjectId}/update`, { name: titleValue });
+        showToastr("project is updated successfully :)");
+      } else {
+        await axios.post(`/__project/create`, { name: titleValue });
+        showToastr("project is created successfully :)");
+      }
+      editingProjectId = null;
+      if (input) input.value = "";
+      await refreshProjectList();
+    } catch (error) {
+      console.error(error);
+      showToastr(error?.response?.data?.message || "Something went wrong :(");
+    }
+  }
+
+  function handleProjectEditClick(event) {
+    event.preventDefault();
+    const mapObj = {
+      "data-input-id": "id",
+      "data-input-name": "name"
+    };
+    const { id, name } = getDataAttributes(event.target, mapObj);
+    const input = document.getElementById(newProjectInputDiv);
+    if (input) {
+      input.value = name || "";
+      input.focus();
+    }
+    editingProjectId = id || null;
+  }
+
+  async function handleProjectDeleteClick(event) {
+    event.preventDefault();
+    const mapObj = {
+      "data-input-id": "id",
+      "data-input-name": "name"
+    };
+    const { id, name } = getDataAttributes(event.target, mapObj);
+    if (!id) return;
+    if (!window.confirm(`Are you sure you want to delete project "${name}"?`)) {
+      return;
+    }
+    try {
+      await axios.delete(`/__project/${id}/delete`);
+      showToastr("project is deleted successfully :)");
+      editingProjectId = null;
+      await refreshProjectList();
+    } catch (error) {
+      console.error(error);
+      showToastr(error?.response?.data?.message || "Something went wrong :(");
+    }
+  }
+
+  async function refreshProjectList() {
+    const { id: projectId, otherProjects = [] } = await getProjectList();
+    await initializeData(projectId, otherProjects);
+    const listElement = document.getElementById(otherProjectDivId);
+    if (listElement) {
+      listElement.classList.add("is-visible");
+    }
+    const toggle = document.getElementById(toggleAppListDivId);
+    if (toggle) {
+      toggle.classList.add("is-rotated");
+    }
+  }
+
   async function handleShowRouteDetailsClick(event) {
     event.preventDefault();
+    const target = event.currentTarget;
 
     const selectedRoute = document.querySelector('.route-title-selected');
     selectedRoute && selectedRoute.classList.remove('route-title-selected');
-    event.target.classList.toggle("route-title-selected");
+    target.classList.toggle("route-title-selected");
 
     const mapObj = {
       "data-project-id": "projectId",
       "data-route-id": "routeId"
     }
 
-    const { projectId, routeId } = getDataAttributes(event.target, mapObj)
+    const { projectId, routeId } = getDataAttributes(target, mapObj)
 
     loadRouteDetails(projectId, routeId);
   }
@@ -265,6 +468,11 @@
 
     const { id:projectId, otherProjects } = await setupProjectData(projectList);
     await initializeData(projectId, otherProjects);
+
+    const projectListElement = document.getElementById(otherProjectDivId);
+    if (projectListElement) {
+      projectListElement.classList.remove("is-visible");
+    }
   }
 
   function createAppTitleObject( { name, id, isActive } ) {
@@ -399,8 +607,12 @@
 
     projActive = projActive === "true";
     const element = document.getElementById(activeProjectInputDiv);
-    const titleValue = element.value;
+    const titleValue = element.value.trim();
 
+    if( isReservedProjectName(titleValue) ) {
+      showToastr(`Project name "${titleValue}" is reserved :(`);
+      return;
+    }
     if( titleValue && titleValue.length > 0 ) {
       const response = await axios.post(`/__project/create`, { name: titleValue, isActive:projActive });
       const { id, name, selected} = response.data;
@@ -437,30 +649,27 @@
       } 
     }
     const element = document.getElementById(activeProjectDivId);
+    removeAllChildElement( element );
 
     if( Object.keys( activeProject ).length > 0 ) {
       const { id, name, selected } = activeProject;
       const { htmlObject, eventList } = createAppTitleObject( { id, name, isActive: selected } ); 
-      removeAllChildElement( element );
       createHtmlChildElement( element, htmlObject.childElement );
       createEventListener( eventList );
       return { id, name, selected, otherProjects }
     } else {
-      const { htmlObject, eventList } = generateInputField({name: "", isActive: true});
-      element.appendChild( createHtmlElement( htmlObject ) );
-      createEventListener( eventList );
-      return {};
+      return { otherProjects };
     }
   }
 
   async function initFunction() {
-    const { id:projectId, otherProjects } = await getProjectList();
+    const { id:projectId, otherProjects = [] } = await getProjectList();
     await initializeData(projectId, otherProjects);
   }
 
-  async function initializeData(projectId, otherProjects) {
+  async function initializeData(projectId, otherProjects = []) {
+    showInactiveProjectList(otherProjects);
     if(projectId) {
-      showInactiveProjectList(otherProjects);
       showProjectNameInInput();
       await getProjectRouteList( projectId );
     }

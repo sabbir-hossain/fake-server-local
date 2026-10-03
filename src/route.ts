@@ -8,6 +8,8 @@ const router = Router();
 router.get('/health-check', HealthController.checkHealth);
 
 router.post('/__project/create', RecordController.createProject);
+router.put('/__project/:projectId/update', RecordController.updateProject);
+router.delete('/__project/:projectId/delete', RecordController.deleteProject);
 router.get('/__project/list', RecordController.getInitialData);
 router.get('/__project/:projectId/route/:routeId', RecordController.getRouteData);
 router.get('/__route/:projectId/list', RecordController.getRouteList);

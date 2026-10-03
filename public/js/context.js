@@ -46,6 +46,13 @@ function showSchemaFormat() {
   element2.children[0].classList.remove("nav-icon-white");
   element2.children[0].classList.remove("nav-icon-black");
   element2.children[0].classList.add("nav-icon-black");
+
+  const stringifyBtn = document.getElementById("btn-stringify");
+  const beautifyBtn = document.getElementById("btn-beautify");
+  stringifyBtn.disabled = true;
+  beautifyBtn.disabled = true;
+  stringifyBtn.classList.remove("json-active");
+  beautifyBtn.classList.remove("json-active");
 }
 
 function showSampleResponse() {
@@ -67,7 +74,34 @@ function showSampleResponse() {
   element2.children[0].classList.add("nav-icon-white");
   // nav-icon-black
 
+  const stringifyBtn = document.getElementById("btn-stringify");
+  const beautifyBtn = document.getElementById("btn-beautify");
+  stringifyBtn.disabled = false;
+  beautifyBtn.disabled = false;
+  stringifyBtn.classList.add("json-active");
+  beautifyBtn.classList.add("json-active");
+
   routeData.id !== "" && routeData.routeName !== "" && displaySampleData(routeData)
+}
+
+function stringifyJson() {
+  const code = document.getElementById("code");
+  try {
+    const parsed = JSON.parse(code.textContent || "");
+    code.textContent = JSON.stringify(parsed);
+  } catch (error) {
+    showToastr("invalid json :(");
+  }
+}
+
+function beautifyJson() {
+  const code = document.getElementById("code");
+  try {
+    const parsed = JSON.parse(code.textContent || "");
+    code.textContent = JSON.stringify(parsed, null, 2);
+  } catch (error) {
+    showToastr("invalid json :(");
+  }
 }
 
 function showProjectNameInInput() {
@@ -201,7 +235,7 @@ async function saveRouteData(routeData) {
   }
   catch(err) {
     console.error(err);
-    showToastr("internal server error :(");
+    showToastr(err?.response?.data?.message || "Internal server error :(");
   }
 }
 

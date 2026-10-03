@@ -6,14 +6,22 @@ import { Project, Route, RouteResponse } from '../types/type';
 
 export default class DatabaseService {
 
+  private static instance: DatabaseService;
   private db: any[];
 
-  constructor() {
+  private constructor() {
     if(typeof data === 'object' && Array.isArray(data)) {
       this.db = data;
     } else {
       this.db = [];
     }
+  }
+
+  public static getInstance(): DatabaseService {
+    if (!DatabaseService.instance) {
+      DatabaseService.instance = new DatabaseService();
+    }
+    return DatabaseService.instance;
   }
   
   public getAllProjects(): Project[] {
@@ -132,6 +140,31 @@ export default class DatabaseService {
 
     this.saveData();
     return project; // Explicit return type
+  }
+
+  public updateProject(projectId: string, name: string): Project {
+    const project = this.db.find((item) => item.id === projectId);
+    if (!project) {
+      throw new Error(`Project ${projectId} not found`);
+    }
+    project.name = name;
+    project.updatedAt = Date.now();
+    this.saveData();
+    return project;
+  }
+
+  public deleteProject(projectId: string): Project[] {
+    const project = this.db.find((item) => item.id === projectId);
+    if (!project) {
+      throw new Error(`Project ${projectId} not found`);
+    }
+    const wasSelected = !!project.selected;
+    this.db = this.db.filter((item) => item.id !== projectId);
+    if (wasSelected && this.db.length > 0) {
+      this.db = this.db.map((item, index) => ({ ...item, selected: index === 0 }));
+    }
+    this.saveData();
+    return this.getAllProjects();
   }
 
 

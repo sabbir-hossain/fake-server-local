@@ -36,6 +36,13 @@ class App {
       });
     });
 
+    // Help page
+    this.app.get('/helper', (req: Request, res: Response) => {
+      res.render('helper', {
+        projectUrl: `http://localhost:${this.port}`,
+      });
+    });
+
     // Use API routes
     this.app.use('/', apiRoutes);
   }

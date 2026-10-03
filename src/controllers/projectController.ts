@@ -6,7 +6,7 @@ import { process } from '../lib/generator';
 
 export default class ProjectController {
 
-    static databaseService: DatabaseService  = new DatabaseService();
+    static databaseService: DatabaseService  = DatabaseService.getInstance();
     static reserveRouteList: string[] = [
         'vendor',
         '.well-known',
