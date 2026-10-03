@@ -403,14 +403,7 @@
   async function refreshProjectList() {
     const { id: projectId, otherProjects = [] } = await getProjectList();
     await initializeData(projectId, otherProjects);
-    const listElement = document.getElementById(otherProjectDivId);
-    if (listElement) {
-      listElement.classList.add("is-visible");
-    }
-    const toggle = document.getElementById(toggleAppListDivId);
-    if (toggle) {
-      toggle.classList.add("is-rotated");
-    }
+    showProjectListPanel();
   }
 
   async function handleShowRouteDetailsClick(event) {
@@ -671,10 +664,25 @@
     await initializeData(projectId, otherProjects);
   }
 
+  function showProjectListPanel() {
+    const listElement = document.getElementById(otherProjectDivId);
+    if (listElement) {
+      listElement.classList.add("is-visible");
+    }
+    const toggle = document.getElementById(toggleAppListDivId);
+    if (toggle) {
+      toggle.classList.add("is-rotated");
+    }
+  }
+
   async function initializeData(projectId, otherProjects = []) {
     showInactiveProjectList(otherProjects);
     if(projectId) {
       showProjectNameInInput();
       await getProjectRouteList( projectId );
+    } else {
+      // No project exists yet: reveal the "Add new project" panel so the
+      // user can create their first project without hunting for the toggle.
+      showProjectListPanel();
     }
   }
