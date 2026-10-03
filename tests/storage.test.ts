@@ -15,7 +15,7 @@ import {
   alphanumericCharList,
   allowed_end_of_line,
   allowed_block_text,
-} from '../src/lib/storageb/storage';
+} from '../src/lib/storage';
 
 describe('storage', () => {
   describe('randomNumberGenerator', () => {

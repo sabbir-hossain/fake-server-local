@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import dataGenerator, { getRandomName } from '../src/lib/dataGeneratorGenerator';
+import dataGenerator, { getRandomName } from '../src/lib/dataGenerator';
 
 const generator = dataGenerator as any;
 

@@ -7,7 +7,7 @@ import {
   processArrayData,
   processObjectData,
   process,
-} from '../src/lib/generatorgenerator';
+} from '../src/lib/generator';
 
 describe('generator', () => {
   describe('processUserData', () => {
