@@ -14,7 +14,7 @@ dist/
 .idea
 
 src/data/*
-!src/data/.gitkeep
+
 
 
 .nyc_output
