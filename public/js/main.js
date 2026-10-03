@@ -193,14 +193,32 @@ function checkObject(obj1, obj2) {
   }
 }
 
-function showToastr(message = "", showTime = 3000) {
-  const toastrDivId = "toastr-title";
-  const element = document.getElementById(toastrDivId);
-  hideElement(element);
-  createTextElement(element, message);
-  displayElement(element);
+function showToastr(message = "", showTime = 3000, type = "success") {
+  let container = document.getElementById("toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = `toast-item ${type === "error" ? "toast-error" : "toast-success"}`;
+
+  const icon = document.createElement("span");
+  icon.className = "toast-icon";
+  icon.textContent = type === "error" ? "✕" : "✓";
+
+  const text = document.createElement("span");
+  text.className = "toast-text";
+  text.textContent = message;
+
+  toast.appendChild(icon);
+  toast.appendChild(text);
+  container.appendChild(toast);
+
   setTimeout(() => {
-    hideElement(element);
+    toast.classList.add("is-leaving");
+    setTimeout(() => toast.remove(), 260);
   }, showTime);
 }
 
@@ -214,3 +232,53 @@ function displayElement(element) {
   element.classList.add("display");
   element.classList.remove("display-none");
 }
+
+/* ---------- hover tooltip for elements with [data-tooltip] ---------- */
+
+let tooltipElement = null;
+
+function showTooltip(target, text) {
+  if (!tooltipElement) {
+    tooltipElement = document.createElement("div");
+    tooltipElement.className = "app-tooltip";
+    document.body.appendChild(tooltipElement);
+  }
+  tooltipElement.textContent = text || "";
+
+  const rect = target.getBoundingClientRect();
+  const margin = 8;
+  const maxWidth = 340;
+  let left = rect.left;
+  if (left + maxWidth > window.innerWidth - margin) {
+    left = Math.max(margin, window.innerWidth - margin - maxWidth);
+  }
+  tooltipElement.style.left = `${left}px`;
+  tooltipElement.style.top = `${rect.bottom + margin}px`;
+  tooltipElement.classList.add("is-visible");
+}
+
+function hideTooltip() {
+  if (tooltipElement) {
+    tooltipElement.classList.remove("is-visible");
+  }
+}
+
+document.addEventListener("mouseover", (event) => {
+  const target = event.target && event.target.closest
+    ? event.target.closest("[data-tooltip]")
+    : null;
+  if (target) {
+    showTooltip(target, target.getAttribute("data-tooltip"));
+  } else {
+    hideTooltip();
+  }
+});
+
+document.addEventListener("mouseout", (event) => {
+  const target = event.target && event.target.closest
+    ? event.target.closest("[data-tooltip]")
+    : null;
+  if (target) {
+    hideTooltip();
+  }
+});

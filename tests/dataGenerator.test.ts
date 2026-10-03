@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import dataGenerator, { getRandomName } from '../src/lib/dataGeneratorGenerator';
+import dataGenerator, { getRandomName } from '../src/lib/dataGenerator';
 
 const generator = dataGenerator as any;
 
@@ -14,34 +14,19 @@ describe('dataGenerator', () => {
     });
   });
 
-  describe('word / text / default', () => {
+  describe('word / default', () => {
     it('returns a lowercase word', () => {
       for (let i = 0; i < 20; i++) {
         assert.match(generator.word(), /^[a-z]+$/);
-        assert.match(generator.text(), /^[a-z]+$/);
         assert.match(generator.default(), /^[a-z]+$/);
       }
     });
   });
 
-  describe('title', () => {
-    it('returns at least two words by default', () => {
-      for (let i = 0; i < 10; i++) {
-        const value = generator.title();
-        assert.ok(value.split(' ').length >= 2);
-      }
-    });
-
-    it('honors a fixed word count range', () => {
-      const value = generator.title('5');
-      assert.strictEqual(value.split(' ').length, 6);
-    });
-  });
-
-  describe('desc / textarea', () => {
+  describe('desc', () => {
     it('returns a non-empty string', () => {
       for (let i = 0; i < 10; i++) {
-        const value = generator.textarea();
+        const value = generator.desc();
         assert.strictEqual(typeof value, 'string');
         assert.ok(value.length > 0);
       }
@@ -75,6 +60,14 @@ describe('dataGenerator', () => {
       const value = generator.integer('2');
       assert.ok(value >= 10 && value <= 99);
     });
+
+    it('defaults to a 3-digit integer without a parameter', () => {
+      for (let i = 0; i < 20; i++) {
+        const value = generator.integer();
+        assert.ok(Number.isInteger(value));
+        assert.ok(value >= 100 && value <= 999);
+      }
+    });
   });
 
   describe('float', () => {
@@ -84,6 +77,14 @@ describe('dataGenerator', () => {
         assert.strictEqual(typeof value, 'number');
         assert.ok(Number.isFinite(value));
         assert.ok(value % 1 !== 0, `expected decimals, got ${value}`);
+      }
+    });
+
+    it('defaults to a finite decimal without a parameter', () => {
+      for (let i = 0; i < 20; i++) {
+        const value = generator.float();
+        assert.strictEqual(typeof value, 'number');
+        assert.ok(Number.isFinite(value), `expected a finite number, got ${value}`);
       }
     });
   });
@@ -128,8 +129,57 @@ describe('dataGenerator', () => {
   });
 
   describe('date', () => {
-    it('returns MM/DD/YYYY', () => {
-      assert.match(generator.date(), /^\d{1,2}\/\d{1,2}\/\d{4}$/);
+    it('returns DD/MM/YYYY for today by default', () => {
+      assert.match(generator.date(), /^\d{2}\/\d{2}\/\d{4}$/);
+      const today = new Date();
+      const value = generator.date().split('/');
+      assert.strictEqual(value[0], `${today.getDate()}`.padStart(2, '0'));
+      assert.strictEqual(value[1], `${today.getMonth() + 1}`.padStart(2, '0'));
+      assert.strictEqual(value[2], `${today.getFullYear()}`);
+    });
+
+    it('returns a future date for a positive offset', () => {
+      const value = generator.date('5');
+      assert.match(value, /^\d{2}\/\d{2}\/\d{4}$/);
+      const expected = new Date();
+      expected.setDate(expected.getDate() + 5);
+      assert.strictEqual(value, [
+        `${expected.getDate()}`.padStart(2, '0'),
+        `${expected.getMonth() + 1}`.padStart(2, '0'),
+        `${expected.getFullYear()}`
+      ].join('/'));
+    });
+
+    it('returns a past date for a negative offset', () => {
+      const value = generator.date('-3');
+      const expected = new Date();
+      expected.setDate(expected.getDate() - 3);
+      assert.strictEqual(value, [
+        `${expected.getDate()}`.padStart(2, '0'),
+        `${expected.getMonth() + 1}`.padStart(2, '0'),
+        `${expected.getFullYear()}`
+      ].join('/'));
+    });
+
+    it('honors a custom format with offset', () => {
+      const value = generator.date('YYYY-MM-DD|2');
+      const expected = new Date();
+      expected.setDate(expected.getDate() + 2);
+      assert.strictEqual(value, [
+        `${expected.getFullYear()}`,
+        `${expected.getMonth() + 1}`.padStart(2, '0'),
+        `${expected.getDate()}`.padStart(2, '0')
+      ].join('-'));
+    });
+
+    it('honors a custom format without offset', () => {
+      const today = new Date();
+      const value = generator.date('MM/DD/YYYY');
+      assert.strictEqual(value, [
+        `${today.getMonth() + 1}`.padStart(2, '0'),
+        `${today.getDate()}`.padStart(2, '0'),
+        `${today.getFullYear()}`
+      ].join('/'));
     });
   });
 
@@ -143,6 +193,32 @@ describe('dataGenerator', () => {
     it('returns a parseable ISO string', () => {
       assert.ok(!Number.isNaN(Date.parse(generator.dateTime())));
       assert.ok(!Number.isNaN(Date.parse(generator['date-time']())));
+    });
+
+    it('returns today for zero', () => {
+      const value = new Date(generator.dateTime('0'));
+      const today = new Date();
+      assert.strictEqual(value.getDate(), today.getDate());
+      assert.strictEqual(value.getMonth(), today.getMonth());
+      assert.strictEqual(value.getFullYear(), today.getFullYear());
+    });
+
+    it('returns a future date for a positive offset', () => {
+      const value = new Date(generator.dateTime('5'));
+      const expected = new Date();
+      expected.setDate(expected.getDate() + 5);
+      assert.strictEqual(value.getDate(), expected.getDate());
+      assert.strictEqual(value.getMonth(), expected.getMonth());
+      assert.strictEqual(value.getFullYear(), expected.getFullYear());
+    });
+
+    it('returns a past date for a negative offset', () => {
+      const value = new Date(generator.dateTime('-2'));
+      const expected = new Date();
+      expected.setDate(expected.getDate() - 2);
+      assert.strictEqual(value.getDate(), expected.getDate());
+      assert.strictEqual(value.getMonth(), expected.getMonth());
+      assert.strictEqual(value.getFullYear(), expected.getFullYear());
     });
   });
 

@@ -107,7 +107,7 @@
     eventObjList.push(
       {
         identifier: addNewRoute,
-        functionReference: showProjectNameInInput
+        functionReference: handleAddNewRouteClick
       }
     )
 
@@ -136,9 +136,10 @@
               },
               {
                 name: "span",
-                text: formatRouteText(name),
+                text: truncateName(name),
                 attributes: {
-                  class: "route-name"
+                  class: "route-name",
+                  "data-tooltip": name
                 }
               }
             ]
@@ -168,10 +169,11 @@
     return { htmlObjectList: { childElement: childElementList }, eventObjList }
   } 
 
-  function formatRouteText( routeName="", len = 25 ) {
-    return routeName.length > len
-      ? `${routeName.substr(0, len)}....`
-      : routeName; 
+  function truncateName( name = "", maxLength = 50 ) {
+    if (name.length <= maxLength) {
+      return name;
+    }
+    return `...${name.slice(-maxLength)}`;
   } 
 
   function generateOtherProjectList( projects ) {
@@ -235,11 +237,12 @@
         childElement: [
           {
             name: "span",
-            text: name,
+            text: truncateName(name),
             attributes: {
               class: "project-name",
               id: nameId,
-              [`${dataId}`]: id
+              [`${dataId}`]: id,
+              ...(name.length > 50 ? { "data-tooltip": name } : {})
             }
           },
           {
@@ -313,7 +316,7 @@
     const element = document.getElementById(otherProjectInputDiv);
     const titleValue = element.value.trim();
     if( isReservedProjectName(titleValue) ) {
-      showToastr(`Project name "${titleValue}" is reserved :(`);
+      showToastr(`Project name "${titleValue}" is reserved :(`, 3000, "error");
       return;
     }
     if( titleValue && titleValue.length > 0 ) {
@@ -327,7 +330,7 @@
       const projectList = result.data || [];
       showInactiveProjectList(projectList);
     } else {
-      showToastr("project title cannot be empty :(");
+      showToastr("project title cannot be empty :(", 3000, "error");
     }
   }
 
@@ -336,11 +339,11 @@
     const input = document.getElementById(newProjectInputDiv);
     const titleValue = input ? input.value.trim() : "";
     if (!titleValue) {
-      showToastr("project title cannot be empty :(");
+      showToastr("project title cannot be empty :(", 3000, "error");
       return;
     }
     if (isReservedProjectName(titleValue)) {
-      showToastr(`Project name "${titleValue}" is reserved :(`);
+      showToastr(`Project name "${titleValue}" is reserved :(`, 3000, "error");
       return;
     }
     try {
@@ -356,7 +359,7 @@
       await refreshProjectList();
     } catch (error) {
       console.error(error);
-      showToastr(error?.response?.data?.message || "Something went wrong :(");
+      showToastr(error?.response?.data?.message || "Something went wrong :(", 3000, "error");
     }
   }
 
@@ -393,7 +396,7 @@
       await refreshProjectList();
     } catch (error) {
       console.error(error);
-      showToastr(error?.response?.data?.message || "Something went wrong :(");
+      showToastr(error?.response?.data?.message || "Something went wrong :(", 3000, "error");
     }
   }
 
@@ -486,12 +489,13 @@
           childElement: [
             {
               name: "div",
-              text: name,
+              text: truncateName(name),
               attributes: {
                 id: appTitleDivId,
                 [`${dataId}`]: id,
                 [`${dataActive}`]: isActive,
-                [`${dataName}`]: name
+                [`${dataName}`]: name,
+                ...(name.length > 50 ? { "data-tooltip": name } : {})
               }
            }
           ]
@@ -610,7 +614,7 @@
     const titleValue = element.value.trim();
 
     if( isReservedProjectName(titleValue) ) {
-      showToastr(`Project name "${titleValue}" is reserved :(`);
+      showToastr(`Project name "${titleValue}" is reserved :(`, 3000, "error");
       return;
     }
     if( titleValue && titleValue.length > 0 ) {
@@ -628,7 +632,7 @@
       createEventListener( eventList );
       id && showProjectNameInInput();
     } else {
-      showToastr("project title cannot be empty :(");
+      showToastr("project title cannot be empty :(", 3000, "error");
     }
   }
 

@@ -9,13 +9,19 @@ import RecordController from '../src/controllers/recordController';
 // singleton. Snapshot the file before and restore it after the tests.
 const storePath = path.resolve(process.cwd(), 'src/data/store.json');
 let originalContent = '';
+let storeExisted = false;
 
 before(() => {
-  originalContent = fs.readFileSync(storePath, 'utf8');
+  storeExisted = fs.existsSync(storePath);
+  originalContent = storeExisted ? fs.readFileSync(storePath, 'utf8') : '';
 });
 
 after(() => {
-  fs.writeFileSync(storePath, originalContent, 'utf8');
+  if (storeExisted) {
+    fs.writeFileSync(storePath, originalContent, 'utf8');
+  } else if (fs.existsSync(storePath)) {
+    fs.unlinkSync(storePath);
+  }
 });
 
 interface MockRes {

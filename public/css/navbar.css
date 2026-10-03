@@ -3,11 +3,11 @@
 .app-list {
   position: relative;
   flex-shrink: 0;
-  background: #b5d1f6;
+  background: var(--surface);
   z-index: 1;
   padding: 16px 0 8px 0;
   padding-top: 0;
-  border-bottom: 1px solid #b6cbe0;
+  border-bottom: 1px solid var(--border);
 }
 
 /* All route list fills remaining space and is scrollable */
@@ -64,9 +64,9 @@
   font-size: 15px;
   font-weight: 700;
   line-height: 1;
-  color: #0f172a;
+  color: var(--text);
   background: #ffffff;
-  border: 1px solid #dbe4ee;
+  border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0 10px;
   overflow: hidden;
@@ -76,7 +76,7 @@
 
 #app-title-id:hover {
   cursor: pointer;
-  background: #f1f5f9;
+  background: var(--accent-tint);
 }
 
 .app-list-toggle {
@@ -85,7 +85,7 @@
   width: 30px;
   height: 30px;
   padding: 5px;
-  border: 1px solid #b6cbe0;
+  border: 1px solid var(--border);
   border-radius: 6px;
   background: #ffffff;
   filter: none;
@@ -95,7 +95,7 @@
 }
 
 .app-list-toggle:hover {
-  background: #e3ecf5;
+  background: var(--accent-tint);
 }
 
 .app-list-toggle.is-rotated {
@@ -115,9 +115,9 @@ ul.other-app-list {
 }
 
 .other-app-title {
-  color: #1f2937;
+  color: var(--text);
   padding: 8px 12px;
-  border-bottom: 1px solid #dbe4ee;
+  border-bottom: 1px solid var(--border);
   text-align: left;
   border-radius: 4px;
 
@@ -128,15 +128,15 @@ ul.other-app-list {
 }
 
 .other-app-title:hover {
-  background: #e3ecf5;
-  color: #0f172a;
+  background: var(--accent-tint);
+  color: var(--text);
 }
 
 .project-create-row {
   display: flex;
   align-items: center;
   padding: 8px 12px;
-  border-bottom: 1px solid #b6cbe0;
+  border-bottom: 1px solid var(--border);
 }
 
 .project-input {
@@ -144,9 +144,9 @@ ul.other-app-list {
   height: 30px;
   padding: 0 .65rem;
   font-size: 0.9rem;
-  color: #495057;
+  color: var(--text);
   background-color: #fff;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border);
   border-right: none;
   border-radius: 4px 0 0 4px;
 }
@@ -159,14 +159,15 @@ ul.other-app-list {
   height: 30px;
   border: none;
   border-radius: 0 4px 4px 0;
-  background: #2563eb;
+  background: var(--accent);
   color: #fff;
   cursor: pointer;
   padding: 0;
 }
 
 .project-save-btn:hover {
-  opacity: 0.85;
+  background: var(--accent-hover);
+  opacity: 1;
 }
 
 .project-name {
@@ -256,9 +257,8 @@ ul.other-app-list {
   display: block;
   padding: 0 10px;
   padding-bottom: 10px;
-  /* background-color: #fff; */
-  color: #222;
-  border-bottom: 1px solid rgba(0,0,0,.125);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -307,21 +307,26 @@ ul.other-app-list {
 
 .route-title-selected {
   font-weight: 600;
+  background: var(--accent-tint);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding-left: 6px;
 }
 
 .fake-btn {
   padding: .15rem 1.5rem;
   font-size: .875rem;
-  border-radius: .2rem;
+  border-radius: 6px;
   color: #ffffff;
-  background-color: #2563eb;
-  border-color: #2563eb;
-  border: solid 1px #2563eb;
+  background-color: var(--accent);
+  border: solid 1px var(--accent);
+  transition: background-color 0.15s ease;
 }
 
 .fake-btn:hover {
   cursor: pointer;
   font-weight: 600;
+  background-color: var(--accent-hover);
 }
 
 .dropdown {

@@ -49,6 +49,13 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   window.editor.setFontSize(12)
   window.editor.focus();
 
+  // Keep the editor filling its container on any window/browser resize
+  window.addEventListener("resize", function() {
+    if (window.editor) {
+      window.editor.resize();
+    }
+  });
+
   window.editor.on("blur", async function(event) {
     event.preventDefault();
     try {
@@ -71,16 +78,10 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
     catch(error) {
       console.error("error", error);
-      showToastr("something went wrong :(")
+      showToastr("something went wrong :(", 3000, "error")
     }
   });
 
-
-  document.getElementById("toastr-title").addEventListener("click", (evt) => {
-    evt.preventDefault();
-    const element = evt.target;
-    hideElement(element);
-  });
 
   document.getElementById("show-sample-data").addEventListener("click", (evt) => {
     evt.preventDefault();
@@ -105,6 +106,11 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     evt.preventDefault();
     beautifyJson();
   });
+
+  const swaggerFileInput = document.getElementById("swagger-file-input");
+  if (swaggerFileInput) {
+    swaggerFileInput.addEventListener("change", handleSwaggerUpload);
+  }
 
   createEventListener( contextEventList );
 

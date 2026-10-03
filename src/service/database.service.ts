@@ -1,8 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import data from '../data/store.json';
 import { Project, Route, RouteResponse } from '../types/type';
+
+// The store file lives in src/data when running through ts-node and in
+// dist/data when running a build. It is not part of the repository.
+const storeFilePath = path.join(__dirname, '../data/store.json');
 
 export default class DatabaseService {
 
@@ -10,10 +13,24 @@ export default class DatabaseService {
   private db: any[];
 
   private constructor() {
-    if(typeof data === 'object' && Array.isArray(data)) {
-      this.db = data;
-    } else {
-      this.db = [];
+    this.db = DatabaseService.loadData();
+  }
+
+  private static loadData(): any[] {
+    try {
+      const raw = fs.readFileSync(storeFilePath, 'utf8');
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      // Missing or corrupt store file: start fresh and create an empty one.
+      const emptyDb: any[] = [];
+      try {
+        fs.mkdirSync(path.dirname(storeFilePath), { recursive: true });
+        fs.writeFileSync(storeFilePath, JSON.stringify(emptyDb, null, 2), 'utf8');
+      } catch (writeError) {
+        console.error('Could not create the store file:', writeError);
+      }
+      return emptyDb;
     }
   }
 
@@ -75,7 +92,8 @@ export default class DatabaseService {
         const routePathArray = route.name.split('/');
         let routeFound = true;
         for(let i = 0; i<routeArray.length; i++) {
-          if (routePathArray[i][0] !== ':' && routePathArray[i] !== routeArray[i]) {
+          if (routePathArray[i] === undefined ||
+            (routePathArray[i][0] !== ':' && routePathArray[i] !== routeArray[i])) {
             routeFound = false;
             break;
           }
@@ -200,12 +218,12 @@ export default class DatabaseService {
   public saveData(): void {
     try {
       fs.writeFileSync(
-        path.join(__dirname, '../data/store.json'), 
+        storeFilePath, 
         JSON.stringify(this.db, undefined, 2), 
         'utf-8'
       );
       this.db = JSON.parse(
-        fs.readFileSync(path.join(__dirname, '../data/store.json'), 'utf8')
+        fs.readFileSync(storeFilePath, 'utf8')
       );
       // console.log('Database saved successfully.');
       // console.log('Current Database State:', JSON.stringify(this.db, null, 2));

@@ -1,35 +1,38 @@
 function showSchemaFormat() {
   const id = "code";
- 
+
   const html = `/*************  return-Type   *******************/
-  /****   id | uuid | boolean | text | title |  ***/
-  /****   textarea | integer | float | phone |  ***/
-  /****   zipcode | date | time | date-time |   ***/
-  /****   url | email | image | pdf | csv |     ***/
-  /****   doc |  ipaddress | second | alphanumeric */
+  /****   id | uuid | boolean | integer | float |  ***/
+  /****   phone | zipcode | date | time | date-time ***/
+  /****   url | email | image | pdf | csv | doc |  ***/
+  /****   ipaddress | second | alphanumeric |     ***/
+  /****                                            ***/
+  /****   date & date-time accept a day offset:    ***/
+  /****   "date" | "date:5" | "date:DD/MM/YYYY|-2" ***/
+  /****   "date-time:3" (0=today, +future, -past)  ***/
   /************************************************/
   {
     "variable-1": "return-Type",
     "variable-2": "fixed-value-1,fixed-value-1",
     "single-Array-Variable": ["return-Type"],
     "object-Variable": {
-      "variable-11": "return-Type" 
+      "variable-11": "return-Type"
       // add variables
     },
     "array-Object-Variable-1": [{
-      "variable-22": "return-Type" 
+      "variable-22": "return-Type"
       // add variables
     }],
     "variable-3": {
-      "__type": "return-Type" 
-    },                   
-    "variable-4":  "fixed value",                     
+      "__type": "return-Type"
+    },
+    "variable-4":  "fixed value",
     "array-Of-Array-Variable-1": [ ["return-Type"] ],
     "array-Object-Variable-1": {
       "__type": "array",
       "__range": "array-length" // number|(min,max)
-      "__property": {                    
-        "variable-33": "return-Type" 
+      "__property": {
+        "variable-33": "return-Type"
         // add variables
       }
     }
@@ -90,7 +93,7 @@ function stringifyJson() {
     const parsed = JSON.parse(code.textContent || "");
     code.textContent = JSON.stringify(parsed);
   } catch (error) {
-    showToastr("invalid json :(");
+    showToastr("invalid json :(", 3000, "error");
   }
 }
 
@@ -100,7 +103,7 @@ function beautifyJson() {
     const parsed = JSON.parse(code.textContent || "");
     code.textContent = JSON.stringify(parsed, null, 2);
   } catch (error) {
-    showToastr("invalid json :(");
+    showToastr("invalid json :(", 3000, "error");
   }
 }
 
@@ -142,7 +145,23 @@ function showProjectNameInInput() {
 
   const selectedRoute = document.querySelector('.route-title-selected');
   selectedRoute && selectedRoute.classList.remove('route-title-selected');
-} 
+}
+
+function setSwaggerUploadEnabled(enabled) {
+  const input = document.getElementById("swagger-file-input");
+  const label = document.querySelector(".swagger-upload-label");
+  if (input) {
+    input.disabled = !enabled;
+  }
+  if (label) {
+    label.classList.toggle("is-disabled", !enabled);
+  }
+}
+
+function handleAddNewRouteClick() {
+  showProjectNameInInput();
+  setSwaggerUploadEnabled(true);
+}
 
 async function inputSelector(event) {
   event.preventDefault();
@@ -152,8 +171,68 @@ async function inputSelector(event) {
 
 async function baseUrlSelector(event) {
   event.preventDefault();
-  routeData.routeName = event.target.value;
+  const rawValue = event.target.value.trim();
+
+  const parsedCurl = SwaggerSchema.parseCurlCommand(rawValue);
+  if (parsedCurl) {
+    await handlePastedCurl(parsedCurl, event.target);
+    return;
+  }
+
+  routeData.routeName = rawValue;
   await saveRouteData (routeData)
+}
+
+async function handlePastedCurl(parsedCurl, routeNameElement) {
+  try {
+    const supportedMethods = ["GET", "POST", "PUT", "DELETE", "PATCH"];
+    const method = supportedMethods.indexOf(parsedCurl.method) !== -1
+      ? parsedCurl.method
+      : "GET";
+
+    const routeTypeElement = document.getElementById(inputTypeSelectDivId);
+    routeTypeElement.value = method;
+    routeTypeElement.selectedIndex = Array.prototype.findIndex.call(
+      routeTypeElement.options,
+      (option) => option.value === method
+    );
+
+    // route name = URL path only
+    routeNameElement.value = parsedCurl.routeName;
+
+    // generate the schema from the curl request body, re-using the
+    // swagger example-inference code
+    let schema = {};
+    if (parsedCurl.hasBody) {
+      try {
+        const bodyJson = JSON.parse(parsedCurl.body);
+        if (Array.isArray(bodyJson)) {
+          schema = {
+            __type: "array",
+            __range: "10,15",
+            __property: bodyJson.length > 0
+              ? SwaggerSchema.inferTypeFromExample(bodyJson[0])
+              : "word"
+          };
+        } else {
+          schema = SwaggerSchema.inferSchemaFromExample(bodyJson);
+        }
+      } catch (error) {
+        schema = {};
+      }
+    }
+
+    routeData.routeName = parsedCurl.routeName;
+    routeData.routeType = method;
+    routeData.schema = schema;
+
+    window.editor.setValue(JSON.stringify(schema, null, 2));
+    await saveRouteData(routeData);
+    showToastr(`route ${method} ${parsedCurl.routeName} generated from curl :)`);
+  } catch (error) {
+    console.error(error);
+    showToastr(error?.response?.data?.message || "invalid curl command :(", 3000, "error");
+  }
 }
 
 function makeReadOnly() {
@@ -191,6 +270,7 @@ function updateRouteFormData(data) {
   window.editor.setValue( newSchema );
   makeReadOnly();
   setAuthCheckbox(routeData.options.__auth);
+  setSwaggerUploadEnabled(false);
 }
 
 async function saveRouteData(routeData) {
@@ -198,28 +278,28 @@ async function saveRouteData(routeData) {
     const { id=null, projectId, projectName, schema, routeName, routeType, options } = routeData;
     if( id &&  routeType && routeName && schema  ) {
       // /__project/:projectId/route/:routeId/update
-      const result  = await axios.put(`__project/${projectId}/route/${id}/update`, { 
-        schema, 
+      const result  = await axios.put(`__project/${projectId}/route/${id}/update`, {
+        schema,
         options,
-        name: routeName, 
-        type: routeType, 
+        name: routeName,
+        type: routeType,
       })
       if(result.data) {
         showToastr("route is updated successfully :)");
         await getProjectRouteList( projectId );
       } else {
-        showToastr("route cannot be updated :(")
+        showToastr("route cannot be updated :(", 3000, "error")
       }
     } else if( routeType && routeName && schema ) {
       // name, type, schema
-      const result =  await axios.post("__route/save", {  
-        id, 
-        projectId, 
-        projectName, 
-        schema, 
-        name: routeName, 
-        type: routeType, 
-        options 
+      const result =  await axios.post("__route/save", {
+        id,
+        projectId,
+        projectName,
+        schema,
+        name: routeName,
+        type: routeType,
+        options
       });
       const { id: routeId = ""} = result.data;
       routeData.id = routeId;
@@ -229,13 +309,13 @@ async function saveRouteData(routeData) {
         showToastr("route is created successfully :)");
         await getProjectRouteList( projectId );
       } else {
-        showToastr("route cannot be created :(")
+        showToastr("route cannot be created :(", 3000, "error")
       }
     }
   }
   catch(err) {
     console.error(err);
-    showToastr(err?.response?.data?.message || "Internal server error :(");
+    showToastr(err?.response?.data?.message || "Internal server error :(", 3000, "error");
   }
 }
 
@@ -270,5 +350,115 @@ async function displaySampleData(data) {
   }
   catch(error) {
     console.error(error);
+  }
+}
+
+/* ------------------------- Swagger upload ------------------------- */
+
+async function handleSwaggerUpload(event) {
+  const fileInput = event.target;
+  const file = fileInput.files && fileInput.files[0];
+  if (!file) {
+    return;
+  }
+
+  try {
+    const content = await file.text();
+    const spec = SwaggerSchema.parseSwaggerFile(content);
+
+    const operations = SwaggerSchema.listOperations(spec);
+    if (!operations.length) {
+      showToastr("no routes found in the uploaded file :(", 3000, "error");
+      return;
+    }
+
+    // Build one route object per operation:
+    // name = path, type = method, schema = inferred from the response
+    // example values (falling back to request/response schema types).
+    const routeObjects = operations
+      .map((op) => {
+        const extracted = SwaggerSchema.extractSchemaFromSwagger(
+          spec,
+          op.path,
+          op.method,
+          Boolean(op.operation.requestBody)
+        );
+        return {
+          name: op.path,
+          type: op.method,
+          schema: (extracted && extracted.converted) || {}
+        };
+      })
+      .filter((routeObj) => routeObj.schema && Object.keys(routeObj.schema).length > 0);
+
+    console.log('routeObjects---> ', routeObjects);
+
+    if (!routeObjects.length) {
+      showToastr("no schema found in the uploaded file :(", 3000, "error");
+      return;
+    }
+
+//     // Save every generated route for the current project. When a route with
+    // the same name & method already exists, update it instead of creating
+    // a duplicate.
+    const { projectId, projectName } = routeData;
+    const existingRoutesResult = await axios.get(`/__route/${projectId}/list`);
+    const existingRoutes = existingRoutesResult.data || [];
+
+    const { toCreate, toUpdate } = SwaggerSchema.planRouteUpserts(existingRoutes, routeObjects);
+
+    await Promise.all([
+      ...toCreate.map((routeObj) =>
+        axios.post("__route/save", {
+          id: "",
+          projectId,
+          projectName,
+          schema: routeObj.schema,
+          name: routeObj.name,
+          type: routeObj.type,
+          options: {}
+        })
+      ),
+      ...toUpdate.map(({ existing, route: routeObj }) =>
+        axios.put(`__project/${projectId}/route/${existing.id}/update`, {
+          ...existing,
+          id: existing.id,
+          schema: routeObj.schema,
+          name: routeObj.name,
+          type: routeObj.type,
+          options: existing.options || {}
+        })
+      )
+    ]);
+
+    // Fill the form with the first generated route
+    const first = routeObjects[0];
+    const routeNameElement = document.getElementById(baseUrlDivId);
+    routeNameElement.value = first.name;
+
+    const routeTypeElement = document.getElementById(inputTypeSelectDivId);
+    routeTypeElement.value = first.type;
+    routeTypeElement.selectedIndex = Array.prototype.findIndex.call(
+      routeTypeElement.options,
+      (option) => option.value === first.type
+    );
+
+    routeData.routeName = first.name;
+    routeData.routeType = first.type;
+    routeData.schema = first.schema;
+
+    window.editor.setValue(JSON.stringify(first.schema, null, 2));
+
+    await getProjectRouteList(projectId);
+
+    const parts = [];
+    if (toCreate.length > 0) parts.push(`${toCreate.length} created`);
+    if (toUpdate.length > 0) parts.push(`${toUpdate.length} updated`);
+    showToastr(`route(s) ${parts.join(" & ")} from the uploaded file :)`);
+  } catch (error) {
+    console.error(error);
+    showToastr(error?.response?.data?.message || "invalid OpenAPI file :(", 3000, "error");
+  } finally {
+    fileInput.value = "";
   }
 }

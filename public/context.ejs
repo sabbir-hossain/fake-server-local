@@ -1,8 +1,5 @@
   <header class="header-contents">
     <div class="context-header">
-        <div class="toastr-msg">
-            <span id="toastr-title"></span>
-          </div>
       <ul class="header-menu">
         <li class="route-name active-route"> <a href="/dashboard">Dashboard</a> </li>
         <li class="route-name"> <a href="/helper">Help</a></li>
@@ -10,7 +7,8 @@
     </div>
   </header>
 
-  <div class="input-route-url">
+  <div class="input-route-url panel-card">
+    <div class="panel-card__label">Route</div>
     <div class="input-group">
       <input type="hidden" id="route-id" value="" />
       <input type="hidden" id="project-id" value="" />
@@ -31,10 +29,12 @@
   </div>
 
   <div class="route-options">
-  
+
     <div
       id="documentWrapper"
-      class="flex-fill">
+      class="flex-fill panel-card">
+
+        <div class="panel-card__label">Response Schema</div>
 
         <div class="input-option">
 
@@ -42,8 +42,17 @@
             <div class="input-group-header">
               <input type="checkbox" name="isAuthenticate" id="isAuthenticate" />
               <span class="input-auth">Authenticate</span>
+
+              <span class="swagger-upload">
+                <label for="swagger-file-input" class="swagger-upload-label" title="Upload an OpenAPI/Swagger file (YAML or JSON) to generate the schema">
+                  <img src="/assets/icons/upload.svg" class="swagger-upload-icon" alt="upload" />
+                  Upload OpenAPI
+                </label>
+                <input type="file" id="swagger-file-input" class="swagger-file-input" accept=".yaml,.yml,.json" disabled />
+              </span>
+
             </div>
-           
+
           </div>
 
         </div>
@@ -52,16 +61,18 @@
 
     </div>
 
-    <div class="show-hints">
+    <div class="show-hints panel-card">
+
+      <div class="panel-card__label">Sample Response</div>
 
       <div class="input-option right-input">
         <div class="input-header">
           <div class="input-group two-button">
-            <button type="button" class="input-group-text auth-input-part button-input-part" id="btn-1">Schema Format</button>
+            <button type="button" class="input-group-text auth-input-part button-input-part" id="btn-1">Schema</button>
 
             <button id="show-sample-data" class="input-group-text auth-input-part button-input-part">
               <img src="/assets/icons/sync.svg" class="btn-icon sync-ico">
-              Sample Response
+              Sample
             </button>
 
             <button type="button" class="input-group-text auth-input-part button-input-part json-action-btn" id="btn-stringify" title="Stringify JSON" disabled>
@@ -75,9 +86,9 @@
           </div>
         </div>
       </div>
-      
+
       <script src="/vendor/prism/prism.js"  type="text/javascript"></script>
-      
+
 <pre class="show-code">
   <code class="language-javascript" id="code" contenteditable="true"></code>
 </pre>
