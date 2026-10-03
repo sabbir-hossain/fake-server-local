@@ -7,7 +7,7 @@
     "start": "ts-node src/server.ts",
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
-    "test": "node --test --test-concurrency=1 --require ts-node/register/transpile-only tests/storage.test.ts tests/generator.test.ts tests/dataGenerator.test.ts tests/database.service.test.ts tests/recordController.test.ts"
+    "test": "node --test --test-concurrency=1 --require ts-node/register/transpile-only tests/storage.test.ts tests/generator.test.ts tests/dataGenerator.test.ts tests/database.service.test.ts tests/recordController.test.ts tests/projectController.test.ts tests/api.e2e.test.ts tests/swagger.test.ts"
   },
   "keywords": [],
   "author": "",

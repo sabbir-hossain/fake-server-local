@@ -41,7 +41,9 @@ section {
   background: #F2F5F8;
   flex: 1;
   min-width: 0;
-  height: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   position: relative;
   overflow-x: hidden;
 }
@@ -165,39 +167,37 @@ button, input, optgroup, select, textarea {
 
 .route-options {
   display: flex;
-  margin: 7px 3px;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 7px 3px 0 3px;
   flex-direction: row;
   justify-content: space-between;
+  gap: 20px;
 }
 
 .show-hints {
   display: flex;
-  margin-left: 20px;
-  /* height: 525px;  */
-  justify-content: flex-end;
-  width: 45%;
+  flex: 1 1 45%;
+  min-width: 0;
+  justify-content: flex-start;
   flex-direction: column;
   font-size: 13px;
+  margin: 0 0 15px 0;
 }
 
 #documentWrapper {
   position: relative;
   margin-top: 5px;
-  width: 50%;
-  /* height: 500px;  */
+  flex: 1 1 50%;
+  min-width: 0;
 }
 
 #documentTextarea {
-  /* position: absolute;
-  width: 100%;
-  height: 100%; */
-
   position: absolute;
   top: 45px;
   right: 0;
-  bottom: 0;
+  bottom: 15px;
   left: 0;
-  height: 475px;
 }
 /*
 #code {
@@ -210,7 +210,12 @@ button, input, optgroup, select, textarea {
     width: 200px;
   }
 
+  section {
+    height: auto;
+  }
+
   .route-options {
+    flex: none;
     flex-direction: column;
     gap: 16px;
   }
@@ -225,12 +230,36 @@ button, input, optgroup, select, textarea {
     right: auto;
     bottom: auto;
     left: auto;
+    height: 475px;
   }
 
   .show-hints {
     width: 100%;
     margin-left: 0;
   }
+}
+
+.app-tooltip {
+  position: fixed;
+  z-index: 99999;
+  max-width: 340px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #1f2937;
+  color: #f9fafb;
+  font-size: 13px;
+  line-height: 1.5;
+  word-break: break-word;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.app-tooltip.is-visible {
+  opacity: 1;
+  visibility: visible;
 }
 
 @media (max-width: 768px) {

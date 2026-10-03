@@ -49,12 +49,6 @@ describe('generator', () => {
       }
     });
 
-    it('supports title', () => {
-      const value = generateData('title', {}, {});
-      assert.strictEqual(typeof value, 'string');
-      assert.ok(value.length > 0);
-    });
-
     it('supports boolean', () => {
       const value = generateData('boolean', {}, {});
       assert.strictEqual(typeof value, 'boolean');
@@ -62,7 +56,7 @@ describe('generator', () => {
 
     it('supports every documented return type', () => {
       const types = [
-        'id', 'uuid', 'boolean', 'text', 'title', 'textarea',
+        'id', 'uuid', 'boolean',
         'integer', 'float', 'phone', 'zipcode', 'date', 'time',
         'date-time', 'url', 'email', 'image', 'pdf', 'csv', 'doc',
         'ipaddress', 'second', 'alphanumeric',
@@ -86,11 +80,32 @@ describe('generator', () => {
       const value = processData('01>5|6|7|8|9>int:2', {}, {});
       assert.match(String(value), /^01[5-9]\d{2}$/);
     });
+
+    it('passes | payloads through to the date generator', () => {
+      const value = processData('date:DD/MM/YYYY|5', {}, {});
+      const expected = new Date();
+      expected.setDate(expected.getDate() + 5);
+      assert.strictEqual(value, [
+        `${expected.getDate()}`.padStart(2, '0'),
+        `${expected.getMonth() + 1}`.padStart(2, '0'),
+        `${expected.getFullYear()}`
+      ].join('/'));
+    });
+
+    it('passes offsets through to the date-time generator', () => {
+      const value = processData('date-time:3', {}, {});
+      const parsed = new Date(`${value}`);
+      const expected = new Date();
+      expected.setDate(expected.getDate() + 3);
+      assert.strictEqual(parsed.getDate(), expected.getDate());
+      assert.strictEqual(parsed.getMonth(), expected.getMonth());
+      assert.strictEqual(parsed.getFullYear(), expected.getFullYear());
+    });
   });
 
   describe('processArrayData', () => {
     it('generates an array of the requested length for a single value', () => {
-      const result = processArrayData(['text'], { __range: '3' }, {});
+      const result = processArrayData(['word'], { __range: '3' }, {});
       assert.ok(Array.isArray(result));
       assert.strictEqual(result.length, 3);
       result.forEach((item: any) => {
@@ -100,10 +115,10 @@ describe('generator', () => {
     });
 
     it('generates an array of objects for an object schema', () => {
-      const result = processArrayData([{ title: 'title', active: 'boolean' }], { __range: '2' }, {});
+      const result = processArrayData([{ name: 'word', active: 'boolean' }], { __range: '2' }, {});
       assert.strictEqual(result.length, 2);
       result.forEach((obj: any) => {
-        assert.strictEqual(typeof obj.title, 'string');
+        assert.strictEqual(typeof obj.name, 'string');
         assert.strictEqual(typeof obj.active, 'boolean');
       });
     });
@@ -116,8 +131,8 @@ describe('generator', () => {
 
   describe('processObjectData', () => {
     it('processes a plain object schema recursively', () => {
-      const result = processObjectData({ title: 'title', active: 'boolean' }, {}, {});
-      assert.strictEqual(typeof result.title, 'string');
+      const result = processObjectData({ name: 'word', active: 'boolean' }, {}, {});
+      assert.strictEqual(typeof result.name, 'string');
       assert.strictEqual(typeof result.active, 'boolean');
     });
 
@@ -138,7 +153,7 @@ describe('generator', () => {
 
     it('processes a token type object into a jwt', () => {
       const result = processObjectData(
-        { __type: 'token', __property: { user: 'text', role: 'text' } },
+        { __type: 'token', __property: { user: 'word', role: 'word' } },
         {},
         { secret: 'test-secret' }
       );
@@ -151,10 +166,10 @@ describe('generator', () => {
     it('processes a full nested schema', () => {
       const result = process(
         {
-          name: 'title',
+          name: 'word',
           age: 'int:2',
           active: 'boolean',
-          tags: ['text'],
+          tags: ['word'],
           nested: { email: 'email' },
           array: { __type: 'array', __range: '2', __property: { id: 'uuid' } },
         },
@@ -172,15 +187,30 @@ describe('generator', () => {
     });
 
     it('skips keys whose value is the __auth sentinel', () => {
-      const result = process({ auth: '__auth', name: 'text' }, {}, {});
+      const result = process({ auth: '__auth', name: 'word' }, {}, {});
       assert.strictEqual(result.auth, undefined);
       assert.strictEqual(typeof result.name, 'string');
     });
 
+    it('never returns NaN for plain integer/float types', () => {
+      const result = process(
+        {
+          totalOrders: 'integer',
+          totalAmount: 'float',
+          averageProcessingTimeSeconds: 'float'
+        },
+        {},
+        {}
+      ) as any;
+      assert.ok(Number.isInteger(result.totalOrders), `got ${result.totalOrders}`);
+      assert.ok(Number.isFinite(result.totalAmount), `got ${result.totalAmount}`);
+      assert.ok(Number.isFinite(result.averageProcessingTimeSeconds), `got ${result.averageProcessingTimeSeconds}`);
+    });
+
     it('generates the documented schema shape (README)', () => {
       const schema = {
-        'key-01': 'title',
-        'key-02': ['text'],
+        'key-01': 'word',
+        'key-02': ['word'],
         'key-03': 'fixed value',
         'key-04': 'option-1|option-2|option-3',
         'key-05': {
@@ -201,13 +231,13 @@ describe('generator', () => {
           '__type': 'array',
           '__range': '2,4',
           '__property': {
-            'array-property-01': 'title',
+            'array-property-01': 'word',
           },
         },
         'key-09': {
           '__type': 'token',
           '__property': {
-            'token-key-01': 'text',
+            'token-key-01': 'word',
           },
         },
       };

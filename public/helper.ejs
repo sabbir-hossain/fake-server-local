@@ -12,6 +12,7 @@
     .help-header a { color: #93c5fd; }
     h1 { margin: 0 0 8px; font-size: 24px; }
     h2 { font-size: 20px; margin: 32px 0 10px; color: #0f172a; }
+    h3 { font-size: 17px; margin: 22px 0 8px; color: #1f2937; }
     p, li { line-height: 1.6; }
     code { background: #e8e8e8; padding: 2px 5px; border-radius: 3px; font-family: "Courier New", Courier, monospace; font-size: 13px; }
     pre { background: #1f2937; color: #e5e7eb; padding: 12px 16px; border-radius: 6px; overflow-x: auto; font-size: 13px; }
@@ -19,6 +20,10 @@
     .type-grid { display: flex; flex-wrap: wrap; gap: 8px; }
     .type-grid span { background: #e0e7ff; color: #3730a3; padding: 4px 10px; border-radius: 4px; font-size: 13px; }
     .note { background: #fff7ed; border-left: 4px solid #f59e0b; padding: 10px 14px; border-radius: 4px; }
+    .warn { background: #fef2f2; border-left: 4px solid #dc2626; padding: 10px 14px; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; }
+    th, td { border: 1px solid #d1d5db; padding: 6px 10px; text-align: left; }
+    th { background: #e5e7eb; }
   </style>
 </head>
 <body>
@@ -51,49 +56,223 @@
       <strong>"Add new project"</strong> input and press the save button. The new project becomes selected. You can
       rename a project with the pencil (edit) icon or remove it with the trash (delete) icon.
     </p>
+    <div class="warn">
+      Project names <code>health-check</code>, <code>__project</code> and <code>__route</code> are
+      <strong>reserved</strong> and cannot be created or used as a project name.
+    </div>
 
     <h2>Create a route</h2>
     <ol class="steps">
+      <li>Click <strong>"add new route"</strong> in the route list.</li>
       <li>Select a <strong>Route type</strong> (<code>GET | POST | PUT | PATCH | DELETE</code>).</li>
       <li>Type a <strong>route name</strong> (for example <code>/list</code>).</li>
       <li>Write the <strong>output schema</strong> as JSON in the editor.</li>
     </ol>
     <p>Your route will then be available at <code><%= projectUrl %>/&lt;project-title&gt;/&lt;route-name&gt;</code>.</p>
 
+    <h2>Upload an OpenAPI / Swagger file</h2>
+    <p>
+      After clicking <strong>"add new route"</strong>, the <strong>Upload OpenAPI</strong> option (next to
+      Authenticate) becomes available. Upload a <code>.yaml</code>, <code>.yml</code> or <code>.json</code> file
+      (Swagger 2.0 or OpenAPI 3.x) and every operation in the file becomes a route automatically:
+    </p>
+    <ul>
+      <li><strong>Route name</strong> comes from the path (e.g. <code>/api/v1/orders</code>).</li>
+      <li><strong>Method</strong> comes from the operation (e.g. <code>POST</code>).</li>
+      <li><strong>Schema</strong> is generated, in this priority:
+        <ol>
+          <li>file media types: <code>application/pdf</code> &rarr; <code>pdf</code>, <code>text/csv</code> &rarr; <code>csv</code>, <code>image/*</code> &rarr; <code>image</code></li>
+          <li>the 200 response <code>example</code> values (types are inferred from the actual values)</li>
+          <li>the <code>requestBody</code> schema (POST/PUT/PATCH)</li>
+          <li>the response schema, or the first schema in the file</li>
+        </ol>
+      </li>
+    </ul>
+
     <h2>Schema return-types</h2>
     <p>Each key in your schema is mapped to a <code>return-type</code>. Available types:</p>
     <div class="type-grid">
-      <span>id</span><span>uuid</span><span>boolean</span><span>text</span><span>title</span>
-      <span>textarea</span><span>integer</span><span>float</span><span>phone</span><span>zipcode</span>
-      <span>date</span><span>time</span><span>date-time</span><span>url</span><span>email</span>
-      <span>image</span><span>pdf</span><span>csv</span><span>doc</span><span>ipaddress</span>
-      <span>token</span><span>second</span><span>alphanumeric</span>
+      <span>id</span><span>uuid</span><span>boolean</span><span>integer</span><span>float</span>
+      <span>phone</span><span>zipcode</span><span>date</span><span>time</span><span>date-time</span>
+      <span>url</span><span>email</span><span>image</span><span>pdf</span><span>csv</span>
+      <span>doc</span><span>ipaddress</span><span>token</span><span>second</span><span>alphanumeric</span>
+      <span>word</span><span>desc</span>
     </div>
 
-    <h3>Example schema</h3>
+    <h3>What each type returns</h3>
+    <table>
+      <tr><th>Type</th><th>Returns</th></tr>
+      <tr><td><code>id</code> / <code>uuid</code></td><td>a random UUID (v4)</td></tr>
+      <tr><td><code>boolean</code></td><td><code>true</code> or <code>false</code></td></tr>
+      <tr><td><code>integer</code> / <code>int</code></td><td>a random integer, e.g. <code>int:3</code> = 3 digits (default 3)</td></tr>
+      <tr><td><code>float</code></td><td>a random decimal, e.g. <code>float:3.2</code> = up to 3 integer digits + 2 decimals</td></tr>
+      <tr><td><code>phone</code></td><td>a phone number like <code>123-456-7890</code></td></tr>
+      <tr><td><code>zipcode</code></td><td>a 5-digit zip code</td></tr>
+      <tr><td><code>date</code></td><td>a date, default format <code>DD/MM/YYYY</code> (see offsets below)</td></tr>
+      <tr><td><code>time</code></td><td>a time like <code>7:43 PM</code></td></tr>
+      <tr><td><code>date-time</code></td><td>an ISO date-time, e.g. <code>2026-10-04T11:23:45.000Z</code> (see offsets below)</td></tr>
+      <tr><td><code>url</code></td><td>a website URL, e.g. <code>https://www.xyz.com</code></td></tr>
+      <tr><td><code>email</code></td><td>an email address</td></tr>
+      <tr><td><code>image</code> / <code>pdf</code> / <code>csv</code> / <code>doc</code></td><td>a URL to a random local asset of that type</td></tr>
+      <tr><td><code>ipaddress</code></td><td>an IPv4 address like <code>192.168.1.10</code></td></tr>
+      <tr><td><code>second</code></td><td>the current epoch time in <strong>milliseconds</strong></td></tr>
+      <tr><td><code>alphanumeric</code></td><td>a random mix of letters and digits</td></tr>
+      <tr><td><code>word</code></td><td>a random lowercase word</td></tr>
+      <tr><td><code>desc</code></td><td>a longer random text block</td></tr>
+      <tr><td><code>token</code></td><td>a JWT signed with the project secret (see the token section below)</td></tr>
+    </table>
+
+    <h3>date &amp; date-time offsets</h3>
+    <p>
+      <code>date</code> and <code>date-time</code> accept an optional day offset after <code>:</code>.
+      For <code>date</code>, the input is <code>format|offset</code> &mdash; the <code>|offset</code> part is optional:
+    </p>
+    <ul>
+      <li><code>"date"</code> &mdash; today's date, default format <code>DD/MM/YYYY</code></li>
+      <li><code>"date:5"</code> &mdash; 5 days in the future (default format)</li>
+      <li><code>"date:-5"</code> &mdash; 5 days in the past (default format)</li>
+      <li><code>"date:0"</code> &mdash; today (same as no offset)</li>
+      <li><code>"date:YYYY-MM-DD|-2"</code> &mdash; custom format, 2 days in the past</li>
+      <li><code>"date:MM/DD/YY"</code> &mdash; custom format, today</li>
+      <li><code>"date-time"</code> / <code>"date-time:0"</code> &mdash; today with a random time</li>
+      <li><code>"date-time:3"</code> &mdash; 3 days in the future with a random time</li>
+      <li><code>"date-time:-2"</code> &mdash; 2 days in the past with a random time</li>
+    </ul>
+    <p>Supported format tokens: <code>DD</code> (day), <code>MM</code> (month), <code>YYYY</code> (year), <code>YY</code> (2-digit year).</p>
+
+    <h3>Fixed values &amp; random options</h3>
+    <ul>
+      <li><code>"country": "Bangladesh"</code> &mdash; returned exactly as written.</li>
+      <li><code>"status": "active|inactive|pending"</code> &mdash; one of the values is picked at random. The separator is <code>|</code> (pipe).</li>
+    </ul>
+    <div class="warn">
+      Commas are <strong>not</strong> a separator &mdash; <code>"a,b,c"</code> is returned literally as one value.
+      Use <code>|</code> for options.
+    </div>
+
+    <h3>Chaining types with <code>&gt;</code></h3>
+    <p>
+      Multiple types can be chained with <code>&gt;</code> &mdash; the generated values are concatenated
+      into a single string:
+    </p>
+    <ul>
+      <li><code>"01&gt;5|6|7|8|9&gt;int:8"</code> &mdash; starts with <code>01</code>, then a random digit from 5&ndash;9, then an 8-digit number (a Bangladeshi mobile number).</li>
+      <li><code>"pre-&gt;uuid"</code> &mdash; <code>pre-</code> followed by a UUID.</li>
+    </ul>
+    <div class="warn">
+      Because <code>&gt;</code> chains concatenate, <code>date</code> uses <code>|</code> (not <code>&gt;</code>)
+      for its format/offset separator.
+    </div>
+
+    <h3>Arrays &mdash; every form</h3>
+    <ul>
+      <li><code>["word"]</code> &mdash; an array of 1&ndash;10 random words.</li>
+      <li><code>[{"id": "uuid", "body": "desc"}]</code> &mdash; an array of 1&ndash;10 objects.</li>
+      <li><code>[["a", "b"]]</code> &mdash; an array where each item is a single-item array, randomly <code>"a"</code> or <code>"b"</code>.</li>
+      <li><code>{"__type": "array", "__range": "3", "__property": "int:2"}</code> &mdash; exactly 3 two-digit integers.</li>
+      <li><code>{"__type": "array", "__range": "2,4", "__property": {...}}</code> &mdash; 2&ndash;4 objects (random count).</li>
+    </ul>
+    <p>
+      <code>__range</code> can be a single number (fixed length), a <code>min,max</code> pair (random length), or
+      omitted (random length 1&ndash;10). <code>__property</code> can be a return-type, a fixed value, or an object.
+    </p>
+
+    <h3>Objects &mdash; every form</h3>
+    <ul>
+      <li><code>{"nested": {"deep": {"email": "email"}}}</code> &mdash; plain nested objects, generated recursively.</li>
+      <li><code>{"wrapped": {"__type": "boolean"}}</code> &mdash; the <code>__type</code> wrapper for any return-type.</li>
+      <li><code>{"__type": "array", ...}</code> &mdash; array with <code>__range</code> and <code>__property</code> (above).</li>
+      <li><code>{"__type": "token", "__property": {...}}</code> &mdash; the <code>__property</code> object is generated first, then signed into a JWT.</li>
+    </ul>
+    <div class="warn">
+      <code>token</code> <strong>must</strong> have a non-empty <code>__property</code> payload, otherwise generation fails.
+    </div>
+
+    <h3>Kitchen-sink example &mdash; every edge case at once</h3>
     <pre>{
-  "name": "title",
-  "email": "email",
-  "phone": "phone",
-  "active": "boolean",
-  "posts": {
+  "id": "id",
+  "uuidValue": "uuid",
+  "flag": "boolean",
+  "age": "int:2",
+  "price": "float:3.2",
+  "phoneNumber": "phone",
+  "bangladeshiPhone": "01&gt;5|6|7|8|9&gt;int:8",
+  "postal": "zipcode",
+  "today": "date",
+  "futureDate": "date:7",
+  "pastDate": "date:-3",
+  "customPastDate": "date:YYYY-MM-DD|-30",
+  "shortDate": "date:MM/DD/YY",
+  "clock": "time",
+  "createdAt": "date-time",
+  "expiresAt": "date-time:10",
+  "website": "url",
+  "emailAddress": "email",
+  "avatar": "image",
+  "report": "pdf",
+  "sheet": "csv",
+  "document": "doc",
+  "machineIp": "ipaddress",
+  "epochMs": "second",
+  "code": "alphanumeric",
+  "nickname": "word",
+  "description": "desc",
+  "fixedCountry": "Bangladesh",
+  "randomStatus": "active|inactive|pending",
+  "commaIsLiteral": "a,b,c",
+  "simpleList": ["word"],
+  "listOfLists": [["a", "b"]],
+  "objectList": [{ "name": "word", "age": "int:2" }],
+  "nestedObject": {
+    "level1": {
+      "level2": { "deep": "email" }
+    }
+  },
+  "wrapped": { "__type": "boolean" },
+  "fixedSizeArray": {
     "__type": "array",
-    "__range": "10,15",
+    "__range": "3",
+    "__property": "int:2"
+  },
+  "randomSizeArray": {
+    "__type": "array",
+    "__range": "2,4",
     "__property": {
-      "id": "uuid",
-      "body": "textarea"
+      "id": "id",
+      "body": "desc"
+    }
+  },
+  "jwt": {
+    "__type": "token",
+    "__property": {
+      "userId": "id",
+      "role": "admin"
     }
   }
 }</pre>
-    <div class="note">
-      You can also use fixed values (<code>"country": "Bangladesh"</code>) or a comma-separated list of options
-      (<code>"status": "active,inactive,pending"</code>) to pick one randomly.
-    </div>
+
+    <h3>Edge cases &amp; gotchas</h3>
+    <ul>
+      <li><strong>Unknown types become fixed values</strong> &mdash; anything that isn't a known return-type is returned literally (e.g. <code>"hello world"</code>, <code>"custom-type"</code>).</li>
+      <li><strong>Empty schema</strong> &mdash; <code>{}</code> produces an empty object <code>{}</code>.</li>
+      <li><strong><code>"__auth"</code> keys are skipped</strong> &mdash; a key whose value is exactly <code>"__auth"</code> is not included in the output (it is the internal auth flag).</li>
+      <li><strong>Removed types</strong> &mdash; <code>text</code>, <code>title</code> and <code>textarea</code> no longer exist; use <code>word</code> and <code>desc</code> instead.</li>
+      <li><strong>Comma vs pipe</strong> &mdash; options must be separated with <code>|</code>; commas are kept literally.</li>
+      <li><strong>Reserved project names</strong> &mdash; <code>health-check</code>, <code>__project</code>, <code>__route</code> cannot be used as project names.</li>
+      <li><strong>File URLs</strong> &mdash; <code>image</code>, <code>pdf</code>, <code>csv</code> and <code>doc</code> return URLs that point to this server's <code>/assets</code> folder.</li>
+    </ul>
 
     <h2>Preview sample response</h2>
     <p>
       Select a route, then click <strong>Sample Response</strong> to see the generated data. You can edit the result
-      and use <strong>Stringify JSON</strong> (compact) or <strong>Beautify JSON</strong> (pretty-print) to format it.
+      and use the <strong>Stringify JSON</strong> (compact) or <strong>Beautify JSON</strong> (pretty-print) buttons to format it.
+    </p>
+
+    <h2>Authenticate option</h2>
+    <p>
+      The <strong>Authenticate</strong> checkbox stores an <code>__auth</code> flag with the route (visible as
+      <code>options.__auth</code> in the saved route data). Use it to mark routes that require authentication
+      in your client tests.
     </p>
   </div>
 </body>

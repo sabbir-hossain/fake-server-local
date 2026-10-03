@@ -6,7 +6,7 @@ import { Options, Params } from "../types/type";
 
 dotenv.config();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 9920;
 
 const pdfGenerator = () => {
   return `http://localhost:${port}/assets/${randomArrayData(pdfFileList)}`;
@@ -29,15 +29,24 @@ const booleanGenerator = () => {
 };
 
 const integerGenerator = (digit='3'):  number => {
-  const [start, end = -1] = digit.split(",").map(num => num && num.trim() !== '' ? parseInt(num, 10) : -1);
-  return end > -1 
-    ? randomNumberGenerator(end, start) 
+  const input = `${digit}`.trim();
+  // fall back to 3 digits when no/invalid input is given
+  const parts = (input === '' ? '3' : input).split(',');
+  const start = parts[0] && !isNaN(parseInt(parts[0], 10)) ? parseInt(parts[0], 10) : 3;
+  const end = parts[1] && !isNaN(parseInt(parts[1], 10)) ? parseInt(parts[1], 10) : -1;
+  return end > -1
+    ? randomNumberGenerator(end, start)
     : randomNumberGenerator(Math.pow(10, start) - 1, Math.pow(10, start - 1));
 };
 
 const floatGenerator = (digit='3.2'):  number => {
-  const [intPart, decimalPart = '0'] = digit.split(".");
-  return Number(`${integerGenerator(intPart)}.${integerGenerator(decimalPart)}`);
+  const input = `${digit}`.trim();
+  // fall back to 3.2 when no/invalid input is given
+  const parts = (input === '' ? '3.2' : input).split('.');
+  const intPart = parts[0] && !isNaN(parseInt(parts[0], 10)) ? parts[0] : '3';
+  const decimalPart = parts[1] && !isNaN(parseInt(parts[1], 10)) ? parts[1] : '2';
+  const result = Number(`${integerGenerator(intPart)}.${integerGenerator(decimalPart)}`);
+  return Number.isNaN(result) ? 0.0 : result;
 };
 
 const zipCodeGenerator = () => {
@@ -54,12 +63,58 @@ const emailNameGenerator = () => {
   return `${wordGenerator()}@${randomArrayData(emailDomainList)}`;
 };
 
-const dateGenerator = () => {
-  const year = new Date().getFullYear();
-  return `${randomNumberGenerator(12, 1)}/${randomNumberGenerator(
-    28,
-    1
-  )}/${randomNumberGenerator(year, year - 25)}`;
+const parseDayOffset = (input: string): number => {
+  const parsed = parseInt(`${input}`.trim(), 10);
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+const shiftDateByDays = (days: number): Date => {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return date;
+};
+
+const formatDate = (date: Date, format: string): string => {
+  const day = `${date.getDate()}`.padStart(2, "0");
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const year = `${date.getFullYear()}`;
+  const shortYear = year.slice(-2);
+  return format
+    .replace("YYYY", year)
+    .replace("YY", shortYear)
+    .replace("DD", day)
+    .replace("MM", month);
+};
+
+/**
+ * Accepts an input string, split on "|":
+ * - "format|offset" (e.g. "DD/MM/YYYY|5", "YYYY-MM-DD|-2")
+ * - "offset" only (e.g. "5") -> default format DD/MM/YYYY with the offset
+ * Offset logic matches dateTimeGenerator:
+ * 0 (or empty) = today, positive = future, negative = past (in days).
+ */
+const dateGenerator = (input = "") => {
+  const parts = `${input}`.split("|");
+  const first = (parts[0] || "").trim();
+  const second = (parts[1] || "").trim();
+
+  let format = "DD/MM/YYYY";
+  let offset = 0;
+
+  const firstIsNumber = first !== "" && !Number.isNaN(parseInt(first, 10));
+  if (firstIsNumber) {
+    // only a number was given: default format + offset logic
+    offset = parseInt(first, 10);
+  } else {
+    if (first !== "") {
+      format = first;
+    }
+    if (second !== "" && !Number.isNaN(parseInt(second, 10))) {
+      offset = parseInt(second, 10);
+    }
+  }
+
+  return formatDate(shiftDateByDays(offset), format);
 };
 
 const timeGenerator = () => {
@@ -68,15 +123,26 @@ const timeGenerator = () => {
   }`;
 };
 
-const dateTimeGenerator = () => {
-  return new Date(`${dateGenerator()} ${timeGenerator()}`).toISOString();
+/**
+ * Accepts an input string: a positive number (future date), a negative
+ * number (past date) or zero (today). The time is always random.
+ */
+const dateTimeGenerator = (input = "") => {
+  const offset = parseDayOffset(input);
+  const date = shiftDateByDays(offset);
+  date.setHours(
+    randomNumberGenerator(23, 0),
+    randomNumberGenerator(59, 0),
+    randomNumberGenerator(59, 0)
+  );
+  return date.toISOString();
 };
 
 const secondGenerator = () => {
   return new Date(dateGenerator()).valueOf()
 }
 
-export const getRandomName = (max=9): string => 
+export const getRandomName = (max=9): string =>
   Array.from({ length: randomNumberGenerator(max, 3) }, () => randomArrayData(smallCharList)).join("")
 
 const wordGenerator = () => {
@@ -100,11 +166,11 @@ const textAreaGenerator = (__range = ""): string => {
   let result = '';
   for (let i = 0; i < limit; i++) {
     const text = `${
-      booleanGenerator() && i % 7 === 0 
+      booleanGenerator() && i % 7 === 0
         ? allowed_block_text(titleGenerator())
         : titleGenerator()
     }`;
-    result += `${text}${randomArrayData(allowed_end_of_line)}`;  
+    result += `${text}${randomArrayData(allowed_end_of_line)}`;
   }
   return result;
 };
@@ -140,11 +206,8 @@ const alphanumericGenerator = ({ size = 25 }) => alphanumericCharList.sort((a, b
 export default {
   default: wordGenerator,
   word: wordGenerator,
-  text: wordGenerator,
   id: uuidGenerator,
-  title: titleGenerator,
   desc: textAreaGenerator,
-  textarea: textAreaGenerator,
   boolean: booleanGenerator,
   int: integerGenerator,
   integer: integerGenerator,

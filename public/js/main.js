@@ -214,3 +214,53 @@ function displayElement(element) {
   element.classList.add("display");
   element.classList.remove("display-none");
 }
+
+/* ---------- hover tooltip for elements with [data-tooltip] ---------- */
+
+let tooltipElement = null;
+
+function showTooltip(target, text) {
+  if (!tooltipElement) {
+    tooltipElement = document.createElement("div");
+    tooltipElement.className = "app-tooltip";
+    document.body.appendChild(tooltipElement);
+  }
+  tooltipElement.textContent = text || "";
+
+  const rect = target.getBoundingClientRect();
+  const margin = 8;
+  const maxWidth = 340;
+  let left = rect.left;
+  if (left + maxWidth > window.innerWidth - margin) {
+    left = Math.max(margin, window.innerWidth - margin - maxWidth);
+  }
+  tooltipElement.style.left = `${left}px`;
+  tooltipElement.style.top = `${rect.bottom + margin}px`;
+  tooltipElement.classList.add("is-visible");
+}
+
+function hideTooltip() {
+  if (tooltipElement) {
+    tooltipElement.classList.remove("is-visible");
+  }
+}
+
+document.addEventListener("mouseover", (event) => {
+  const target = event.target && event.target.closest
+    ? event.target.closest("[data-tooltip]")
+    : null;
+  if (target) {
+    showTooltip(target, target.getAttribute("data-tooltip"));
+  } else {
+    hideTooltip();
+  }
+});
+
+document.addEventListener("mouseout", (event) => {
+  const target = event.target && event.target.closest
+    ? event.target.closest("[data-tooltip]")
+    : null;
+  if (target) {
+    hideTooltip();
+  }
+});

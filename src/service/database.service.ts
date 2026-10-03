@@ -75,7 +75,8 @@ export default class DatabaseService {
         const routePathArray = route.name.split('/');
         let routeFound = true;
         for(let i = 0; i<routeArray.length; i++) {
-          if (routePathArray[i][0] !== ':' && routePathArray[i] !== routeArray[i]) {
+          if (routePathArray[i] === undefined ||
+            (routePathArray[i][0] !== ':' && routePathArray[i] !== routeArray[i])) {
             routeFound = false;
             break;
           }
