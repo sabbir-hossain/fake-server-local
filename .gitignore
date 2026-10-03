@@ -15,5 +15,6 @@ dist/
 
 src/data/*
 !src/data/.gitkeep
+!src/data/store.json
 
 .nyc_output
