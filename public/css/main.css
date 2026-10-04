@@ -63,7 +63,7 @@ section {
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 
@@ -326,6 +326,7 @@ button, input, optgroup, select, textarea {
 
   section {
     height: auto;
+    align-self: flex-start;
   }
 
   .route-options {
